@@ -34,14 +34,14 @@
 			tableLayoutPanel1 = new TableLayoutPanel();
 			tableLayoutPanel2 = new TableLayoutPanel();
 			label18 = new Label();
-			editDeviceBtn1 = new Button();
+			editDeviceBtnLeft = new Button();
 			label10 = new Label();
-			editComplectBtn1 = new Button();
-			complectsLBox1 = new ListBox();
-			buildingsLBox1 = new ListBox();
-			cabinetsLBox1 = new ListBox();
-			editBuildingBtn1 = new Button();
-			editCabinetBtn1 = new Button();
+			editComplectBtnLeft = new Button();
+			complectsLBoxLeft = new ListBox();
+			buildingsLBoxLeft = new ListBox();
+			cabinetsLBoxLeft = new ListBox();
+			editBuildingBtnLeft = new Button();
+			editCabinetBtnLeft = new Button();
 			label1 = new Label();
 			label2 = new Label();
 			devicesLView1 = new ListView();
@@ -51,16 +51,16 @@
 			searchTBox2 = new TextBox();
 			label8 = new Label();
 			label20 = new Label();
-			editDeviceBtn2 = new Button();
+			editDeviceBtnRight = new Button();
 			label12 = new Label();
-			editComplectBtn2 = new Button();
-			complectsLBox2 = new ListBox();
+			editComplectBtnRight = new Button();
+			complectsLBoxRight = new ListBox();
 			label6 = new Label();
 			label5 = new Label();
-			buildingsLBox2 = new ListBox();
-			cabinetsLBox2 = new ListBox();
-			editBuildingBtn2 = new Button();
-			editCabinetBtn2 = new Button();
+			buildingsLBoxRight = new ListBox();
+			cabinetsLBoxRight = new ListBox();
+			editBuildingBtnRight = new Button();
+			editCabinetBtnRight = new Button();
 			devicesLView2 = new ListView();
 			tableLayoutPanel4 = new TableLayoutPanel();
 			moveDeviceToLeftBtn = new Button();
@@ -100,6 +100,8 @@
 			button13 = new Button();
 			tableLayoutPanel10 = new TableLayoutPanel();
 			tableLayoutPanel11 = new TableLayoutPanel();
+			menuStrip1 = new MenuStrip();
+			refreshToolStripMenuItem = new ToolStripMenuItem();
 			tabControl1.SuspendLayout();
 			tabPage1.SuspendLayout();
 			tableLayoutPanel1.SuspendLayout();
@@ -114,6 +116,7 @@
 			tableLayoutPanel7.SuspendLayout();
 			tableLayoutPanel8.SuspendLayout();
 			tableLayoutPanel9.SuspendLayout();
+			menuStrip1.SuspendLayout();
 			SuspendLayout();
 			// 
 			// tabControl1
@@ -121,10 +124,10 @@
 			tabControl1.Controls.Add(tabPage1);
 			tabControl1.Controls.Add(tabPage4);
 			tabControl1.Dock = DockStyle.Fill;
-			tabControl1.Location = new Point(0, 0);
+			tabControl1.Location = new Point(0, 24);
 			tabControl1.Name = "tabControl1";
 			tabControl1.SelectedIndex = 0;
-			tabControl1.Size = new Size(984, 461);
+			tabControl1.Size = new Size(984, 437);
 			tabControl1.TabIndex = 0;
 			// 
 			// tabPage1
@@ -133,7 +136,7 @@
 			tabPage1.Location = new Point(4, 24);
 			tabPage1.Name = "tabPage1";
 			tabPage1.Padding = new Padding(3);
-			tabPage1.Size = new Size(976, 433);
+			tabPage1.Size = new Size(976, 409);
 			tabPage1.TabIndex = 0;
 			tabPage1.Text = "Перемещение техники";
 			tabPage1.UseVisualStyleBackColor = true;
@@ -152,7 +155,7 @@
 			tableLayoutPanel1.Name = "tableLayoutPanel1";
 			tableLayoutPanel1.RowCount = 1;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.Size = new Size(970, 427);
+			tableLayoutPanel1.Size = new Size(970, 403);
 			tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
@@ -163,14 +166,14 @@
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
 			tableLayoutPanel2.Controls.Add(label18, 3, 1);
-			tableLayoutPanel2.Controls.Add(editDeviceBtn1, 3, 2);
+			tableLayoutPanel2.Controls.Add(editDeviceBtnLeft, 3, 2);
 			tableLayoutPanel2.Controls.Add(label10, 2, 1);
-			tableLayoutPanel2.Controls.Add(editComplectBtn1, 2, 2);
-			tableLayoutPanel2.Controls.Add(complectsLBox1, 2, 3);
-			tableLayoutPanel2.Controls.Add(buildingsLBox1, 0, 3);
-			tableLayoutPanel2.Controls.Add(cabinetsLBox1, 1, 3);
-			tableLayoutPanel2.Controls.Add(editBuildingBtn1, 0, 2);
-			tableLayoutPanel2.Controls.Add(editCabinetBtn1, 1, 2);
+			tableLayoutPanel2.Controls.Add(editComplectBtnLeft, 2, 2);
+			tableLayoutPanel2.Controls.Add(complectsLBoxLeft, 2, 3);
+			tableLayoutPanel2.Controls.Add(buildingsLBoxLeft, 0, 3);
+			tableLayoutPanel2.Controls.Add(cabinetsLBoxLeft, 1, 3);
+			tableLayoutPanel2.Controls.Add(editBuildingBtnLeft, 0, 2);
+			tableLayoutPanel2.Controls.Add(editCabinetBtnLeft, 1, 2);
 			tableLayoutPanel2.Controls.Add(label1, 0, 1);
 			tableLayoutPanel2.Controls.Add(label2, 1, 1);
 			tableLayoutPanel2.Controls.Add(devicesLView1, 3, 3);
@@ -184,7 +187,7 @@
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel2.Size = new Size(419, 421);
+			tableLayoutPanel2.Size = new Size(419, 397);
 			tableLayoutPanel2.TabIndex = 0;
 			// 
 			// label18
@@ -197,17 +200,17 @@
 			label18.TabIndex = 11;
 			label18.Text = "Единицы техники";
 			// 
-			// editDeviceBtn1
+			// editDeviceBtnLeft
 			// 
-			editDeviceBtn1.Anchor = AnchorStyles.None;
-			editDeviceBtn1.AutoSize = true;
-			editDeviceBtn1.Enabled = false;
-			editDeviceBtn1.Location = new Point(315, 62);
-			editDeviceBtn1.Name = "editDeviceBtn1";
-			editDeviceBtn1.Size = new Size(101, 25);
-			editDeviceBtn1.TabIndex = 10;
-			editDeviceBtn1.Text = "editDeviceBtn1";
-			editDeviceBtn1.UseVisualStyleBackColor = true;
+			editDeviceBtnLeft.Anchor = AnchorStyles.None;
+			editDeviceBtnLeft.AutoSize = true;
+			editDeviceBtnLeft.Enabled = false;
+			editDeviceBtnLeft.Location = new Point(315, 62);
+			editDeviceBtnLeft.Name = "editDeviceBtn1";
+			editDeviceBtnLeft.Size = new Size(101, 25);
+			editDeviceBtnLeft.TabIndex = 10;
+			editDeviceBtnLeft.Text = "editDeviceBtn1";
+			editDeviceBtnLeft.UseVisualStyleBackColor = true;
 			// 
 			// label10
 			// 
@@ -219,75 +222,75 @@
 			label10.TabIndex = 8;
 			label10.Text = "Комплекты";
 			// 
-			// editComplectBtn1
+			// editComplectBtnLeft
 			// 
-			editComplectBtn1.Anchor = AnchorStyles.None;
-			editComplectBtn1.AutoSize = true;
-			editComplectBtn1.Enabled = false;
-			editComplectBtn1.Location = new Point(211, 62);
-			editComplectBtn1.Name = "editComplectBtn1";
-			editComplectBtn1.Size = new Size(98, 25);
-			editComplectBtn1.TabIndex = 7;
-			editComplectBtn1.Text = "editComplectBtn1";
-			editComplectBtn1.UseVisualStyleBackColor = true;
-			editComplectBtn1.Click += editComplectBtn1_Click;
+			editComplectBtnLeft.Anchor = AnchorStyles.None;
+			editComplectBtnLeft.AutoSize = true;
+			editComplectBtnLeft.Enabled = false;
+			editComplectBtnLeft.Location = new Point(211, 62);
+			editComplectBtnLeft.Name = "editComplectBtnLeft";
+			editComplectBtnLeft.Size = new Size(98, 25);
+			editComplectBtnLeft.TabIndex = 7;
+			editComplectBtnLeft.Text = "editComplectBtn1";
+			editComplectBtnLeft.UseVisualStyleBackColor = true;
+			editComplectBtnLeft.Click += editComplectBtn_Click;
 			// 
-			// complectsLBox1
+			// complectsLBoxLeft
 			// 
-			complectsLBox1.Dock = DockStyle.Fill;
-			complectsLBox1.FormattingEnabled = true;
-			complectsLBox1.ItemHeight = 15;
-			complectsLBox1.Location = new Point(211, 93);
-			complectsLBox1.Name = "complectsLBox1";
-			complectsLBox1.Size = new Size(98, 325);
-			complectsLBox1.TabIndex = 6;
+			complectsLBoxLeft.Dock = DockStyle.Fill;
+			complectsLBoxLeft.FormattingEnabled = true;
+			complectsLBoxLeft.ItemHeight = 15;
+			complectsLBoxLeft.Location = new Point(211, 93);
+			complectsLBoxLeft.Name = "complectsLBoxLeft";
+			complectsLBoxLeft.Size = new Size(98, 301);
+			complectsLBoxLeft.TabIndex = 6;
 			// 
-			// buildingsLBox1
+			// buildingsLBoxLeft
 			// 
-			buildingsLBox1.Dock = DockStyle.Fill;
-			buildingsLBox1.FormattingEnabled = true;
-			buildingsLBox1.ItemHeight = 15;
-			buildingsLBox1.Location = new Point(3, 93);
-			buildingsLBox1.Name = "buildingsLBox1";
-			buildingsLBox1.Size = new Size(98, 325);
-			buildingsLBox1.TabIndex = 0;
-			buildingsLBox1.SelectedIndexChanged += buildingsLBox1_SelectedIndexChanged;
+			buildingsLBoxLeft.Dock = DockStyle.Fill;
+			buildingsLBoxLeft.FormattingEnabled = true;
+			buildingsLBoxLeft.ItemHeight = 15;
+			buildingsLBoxLeft.Location = new Point(3, 93);
+			buildingsLBoxLeft.Name = "buildingsLBoxLeft";
+			buildingsLBoxLeft.Size = new Size(98, 301);
+			buildingsLBoxLeft.TabIndex = 0;
+			buildingsLBoxLeft.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
 			// 
-			// cabinetsLBox1
+			// cabinetsLBoxLeft
 			// 
-			cabinetsLBox1.Dock = DockStyle.Fill;
-			cabinetsLBox1.FormattingEnabled = true;
-			cabinetsLBox1.ItemHeight = 15;
-			cabinetsLBox1.Location = new Point(107, 93);
-			cabinetsLBox1.Name = "cabinetsLBox1";
-			cabinetsLBox1.Size = new Size(98, 325);
-			cabinetsLBox1.TabIndex = 1;
-			cabinetsLBox1.SelectedIndexChanged += cabinetsLBox1_SelectedIndexChanged;
+			cabinetsLBoxLeft.Dock = DockStyle.Fill;
+			cabinetsLBoxLeft.FormattingEnabled = true;
+			cabinetsLBoxLeft.ItemHeight = 15;
+			cabinetsLBoxLeft.Location = new Point(107, 93);
+			cabinetsLBoxLeft.Name = "cabinetsLBoxLeft";
+			cabinetsLBoxLeft.Size = new Size(98, 301);
+			cabinetsLBoxLeft.TabIndex = 1;
+			cabinetsLBoxLeft.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
 			// 
-			// editBuildingBtn1
+			// editBuildingBtnLeft
 			// 
-			editBuildingBtn1.Anchor = AnchorStyles.None;
-			editBuildingBtn1.AutoSize = true;
-			editBuildingBtn1.Location = new Point(3, 62);
-			editBuildingBtn1.Name = "editBuildingBtn1";
-			editBuildingBtn1.Size = new Size(98, 25);
-			editBuildingBtn1.TabIndex = 2;
-			editBuildingBtn1.Text = "editBuildingBtn1";
-			editBuildingBtn1.UseVisualStyleBackColor = true;
-			editBuildingBtn1.Click += editBuildingBtn1_Click;
+			editBuildingBtnLeft.Anchor = AnchorStyles.None;
+			editBuildingBtnLeft.AutoSize = true;
+			editBuildingBtnLeft.Location = new Point(3, 62);
+			editBuildingBtnLeft.Name = "editBuildingBtnLeft";
+			editBuildingBtnLeft.Size = new Size(98, 25);
+			editBuildingBtnLeft.TabIndex = 2;
+			editBuildingBtnLeft.Text = "editBuildingBtn1";
+			editBuildingBtnLeft.UseVisualStyleBackColor = true;
+			editBuildingBtnLeft.Click += editBuildingBtn_Click;
 			// 
-			// editCabinetBtn1
+			// editCabinetBtnLeft
 			// 
-			editCabinetBtn1.Anchor = AnchorStyles.None;
-			editCabinetBtn1.AutoSize = true;
-			editCabinetBtn1.Enabled = false;
-			editCabinetBtn1.Location = new Point(107, 62);
-			editCabinetBtn1.Name = "editCabinetBtn1";
-			editCabinetBtn1.Size = new Size(98, 25);
-			editCabinetBtn1.TabIndex = 3;
-			editCabinetBtn1.Text = "editCabinetBtn1";
-			editCabinetBtn1.UseVisualStyleBackColor = true;
-			editCabinetBtn1.Click += editCabinetBtn1_Click;
+			editCabinetBtnLeft.Anchor = AnchorStyles.None;
+			editCabinetBtnLeft.AutoSize = true;
+			editCabinetBtnLeft.Enabled = false;
+			editCabinetBtnLeft.Location = new Point(107, 62);
+			editCabinetBtnLeft.Name = "editCabinetBtnLeft";
+			editCabinetBtnLeft.Size = new Size(98, 25);
+			editCabinetBtnLeft.TabIndex = 3;
+			editCabinetBtnLeft.Text = "editCabinetBtn1";
+			editCabinetBtnLeft.UseVisualStyleBackColor = true;
+			editCabinetBtnLeft.Click += editCabinetBtn_Click;
 			// 
 			// label1
 			// 
@@ -314,7 +317,7 @@
 			devicesLView1.Dock = DockStyle.Fill;
 			devicesLView1.Location = new Point(315, 93);
 			devicesLView1.Name = "devicesLView1";
-			devicesLView1.Size = new Size(101, 325);
+			devicesLView1.Size = new Size(101, 301);
 			devicesLView1.TabIndex = 12;
 			devicesLView1.UseCompatibleStateImageBehavior = false;
 			devicesLView1.View = View.Details;
@@ -348,16 +351,16 @@
 			tableLayoutPanel3.Controls.Add(searchTBox2, 1, 0);
 			tableLayoutPanel3.Controls.Add(label8, 0, 0);
 			tableLayoutPanel3.Controls.Add(label20, 3, 1);
-			tableLayoutPanel3.Controls.Add(editDeviceBtn2, 3, 2);
+			tableLayoutPanel3.Controls.Add(editDeviceBtnRight, 3, 2);
 			tableLayoutPanel3.Controls.Add(label12, 2, 1);
-			tableLayoutPanel3.Controls.Add(editComplectBtn2, 2, 2);
-			tableLayoutPanel3.Controls.Add(complectsLBox2, 2, 3);
+			tableLayoutPanel3.Controls.Add(editComplectBtnRight, 2, 2);
+			tableLayoutPanel3.Controls.Add(complectsLBoxRight, 2, 3);
 			tableLayoutPanel3.Controls.Add(label6, 1, 1);
 			tableLayoutPanel3.Controls.Add(label5, 0, 1);
-			tableLayoutPanel3.Controls.Add(buildingsLBox2, 0, 3);
-			tableLayoutPanel3.Controls.Add(cabinetsLBox2, 1, 3);
-			tableLayoutPanel3.Controls.Add(editBuildingBtn2, 0, 2);
-			tableLayoutPanel3.Controls.Add(editCabinetBtn2, 1, 2);
+			tableLayoutPanel3.Controls.Add(buildingsLBoxRight, 0, 3);
+			tableLayoutPanel3.Controls.Add(cabinetsLBoxRight, 1, 3);
+			tableLayoutPanel3.Controls.Add(editBuildingBtnRight, 0, 2);
+			tableLayoutPanel3.Controls.Add(editCabinetBtnRight, 1, 2);
 			tableLayoutPanel3.Controls.Add(devicesLView2, 3, 3);
 			tableLayoutPanel3.Dock = DockStyle.Fill;
 			tableLayoutPanel3.Location = new Point(547, 3);
@@ -367,7 +370,7 @@
 			tableLayoutPanel3.RowStyles.Add(new RowStyle());
 			tableLayoutPanel3.RowStyles.Add(new RowStyle());
 			tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel3.Size = new Size(420, 421);
+			tableLayoutPanel3.Size = new Size(420, 397);
 			tableLayoutPanel3.TabIndex = 1;
 			// 
 			// searchTBox2
@@ -399,17 +402,17 @@
 			label20.TabIndex = 12;
 			label20.Text = "Единицы техники";
 			// 
-			// editDeviceBtn2
+			// editDeviceBtnRight
 			// 
-			editDeviceBtn2.Anchor = AnchorStyles.None;
-			editDeviceBtn2.AutoSize = true;
-			editDeviceBtn2.Enabled = false;
-			editDeviceBtn2.Location = new Point(318, 62);
-			editDeviceBtn2.Name = "editDeviceBtn2";
-			editDeviceBtn2.Size = new Size(99, 25);
-			editDeviceBtn2.TabIndex = 11;
-			editDeviceBtn2.Text = "editDeviceBtn2";
-			editDeviceBtn2.UseVisualStyleBackColor = true;
+			editDeviceBtnRight.Anchor = AnchorStyles.None;
+			editDeviceBtnRight.AutoSize = true;
+			editDeviceBtnRight.Enabled = false;
+			editDeviceBtnRight.Location = new Point(318, 62);
+			editDeviceBtnRight.Name = "editDeviceBtn2";
+			editDeviceBtnRight.Size = new Size(99, 25);
+			editDeviceBtnRight.TabIndex = 11;
+			editDeviceBtnRight.Text = "editDeviceBtn2";
+			editDeviceBtnRight.UseVisualStyleBackColor = true;
 			// 
 			// label12
 			// 
@@ -421,28 +424,28 @@
 			label12.TabIndex = 9;
 			label12.Text = "Комплекты";
 			// 
-			// editComplectBtn2
+			// editComplectBtnRight
 			// 
-			editComplectBtn2.Anchor = AnchorStyles.None;
-			editComplectBtn2.AutoSize = true;
-			editComplectBtn2.Enabled = false;
-			editComplectBtn2.Location = new Point(213, 62);
-			editComplectBtn2.Name = "editComplectBtn2";
-			editComplectBtn2.Size = new Size(99, 25);
-			editComplectBtn2.TabIndex = 8;
-			editComplectBtn2.Text = "editComplectBtn2";
-			editComplectBtn2.UseVisualStyleBackColor = true;
-			editComplectBtn2.Click += editComplectBtn2_Click;
+			editComplectBtnRight.Anchor = AnchorStyles.None;
+			editComplectBtnRight.AutoSize = true;
+			editComplectBtnRight.Enabled = false;
+			editComplectBtnRight.Location = new Point(213, 62);
+			editComplectBtnRight.Name = "editComplectBtnRight";
+			editComplectBtnRight.Size = new Size(99, 25);
+			editComplectBtnRight.TabIndex = 8;
+			editComplectBtnRight.Text = "editComplectBtn2";
+			editComplectBtnRight.UseVisualStyleBackColor = true;
+			editComplectBtnRight.Click += editComplectBtn_Click;
 			// 
-			// complectsLBox2
+			// complectsLBoxRight
 			// 
-			complectsLBox2.Dock = DockStyle.Fill;
-			complectsLBox2.FormattingEnabled = true;
-			complectsLBox2.ItemHeight = 15;
-			complectsLBox2.Location = new Point(213, 93);
-			complectsLBox2.Name = "complectsLBox2";
-			complectsLBox2.Size = new Size(99, 325);
-			complectsLBox2.TabIndex = 7;
+			complectsLBoxRight.Dock = DockStyle.Fill;
+			complectsLBoxRight.FormattingEnabled = true;
+			complectsLBoxRight.ItemHeight = 15;
+			complectsLBoxRight.Location = new Point(213, 93);
+			complectsLBoxRight.Name = "complectsLBoxRight";
+			complectsLBoxRight.Size = new Size(99, 301);
+			complectsLBoxRight.TabIndex = 7;
 			// 
 			// label6
 			// 
@@ -464,59 +467,59 @@
 			label5.TabIndex = 5;
 			label5.Text = "Здания";
 			// 
-			// buildingsLBox2
+			// buildingsLBoxRight
 			// 
-			buildingsLBox2.Dock = DockStyle.Fill;
-			buildingsLBox2.FormattingEnabled = true;
-			buildingsLBox2.ItemHeight = 15;
-			buildingsLBox2.Location = new Point(3, 93);
-			buildingsLBox2.Name = "buildingsLBox2";
-			buildingsLBox2.Size = new Size(99, 325);
-			buildingsLBox2.TabIndex = 0;
-			buildingsLBox2.SelectedIndexChanged += buildingsLBox2_SelectedIndexChanged;
+			buildingsLBoxRight.Dock = DockStyle.Fill;
+			buildingsLBoxRight.FormattingEnabled = true;
+			buildingsLBoxRight.ItemHeight = 15;
+			buildingsLBoxRight.Location = new Point(3, 93);
+			buildingsLBoxRight.Name = "buildingsLBoxRight";
+			buildingsLBoxRight.Size = new Size(99, 301);
+			buildingsLBoxRight.TabIndex = 0;
+			buildingsLBoxRight.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
 			// 
-			// cabinetsLBox2
+			// cabinetsLBoxRight
 			// 
-			cabinetsLBox2.Dock = DockStyle.Fill;
-			cabinetsLBox2.FormattingEnabled = true;
-			cabinetsLBox2.ItemHeight = 15;
-			cabinetsLBox2.Location = new Point(108, 93);
-			cabinetsLBox2.Name = "cabinetsLBox2";
-			cabinetsLBox2.Size = new Size(99, 325);
-			cabinetsLBox2.TabIndex = 1;
-			cabinetsLBox2.SelectedIndexChanged += cabinetsLBox2_SelectedIndexChanged;
+			cabinetsLBoxRight.Dock = DockStyle.Fill;
+			cabinetsLBoxRight.FormattingEnabled = true;
+			cabinetsLBoxRight.ItemHeight = 15;
+			cabinetsLBoxRight.Location = new Point(108, 93);
+			cabinetsLBoxRight.Name = "cabinetsLBoxRight";
+			cabinetsLBoxRight.Size = new Size(99, 301);
+			cabinetsLBoxRight.TabIndex = 1;
+			cabinetsLBoxRight.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
 			// 
-			// editBuildingBtn2
+			// editBuildingBtnRight
 			// 
-			editBuildingBtn2.Anchor = AnchorStyles.None;
-			editBuildingBtn2.AutoSize = true;
-			editBuildingBtn2.Location = new Point(3, 62);
-			editBuildingBtn2.Name = "editBuildingBtn2";
-			editBuildingBtn2.Size = new Size(99, 25);
-			editBuildingBtn2.TabIndex = 2;
-			editBuildingBtn2.Text = "editBuildingBtn2";
-			editBuildingBtn2.UseVisualStyleBackColor = true;
-			editBuildingBtn2.Click += editBuildingBtn2_Click;
+			editBuildingBtnRight.Anchor = AnchorStyles.None;
+			editBuildingBtnRight.AutoSize = true;
+			editBuildingBtnRight.Location = new Point(3, 62);
+			editBuildingBtnRight.Name = "editBuildingBtnRight";
+			editBuildingBtnRight.Size = new Size(99, 25);
+			editBuildingBtnRight.TabIndex = 2;
+			editBuildingBtnRight.Text = "editBuildingBtn2";
+			editBuildingBtnRight.UseVisualStyleBackColor = true;
+			editBuildingBtnRight.Click += editBuildingBtn_Click;
 			// 
-			// editCabinetBtn2
+			// editCabinetBtnRight
 			// 
-			editCabinetBtn2.Anchor = AnchorStyles.None;
-			editCabinetBtn2.AutoSize = true;
-			editCabinetBtn2.Enabled = false;
-			editCabinetBtn2.Location = new Point(108, 62);
-			editCabinetBtn2.Name = "editCabinetBtn2";
-			editCabinetBtn2.Size = new Size(99, 25);
-			editCabinetBtn2.TabIndex = 3;
-			editCabinetBtn2.Text = "editCabinetBtn2";
-			editCabinetBtn2.UseVisualStyleBackColor = true;
-			editCabinetBtn2.Click += editCabinetBtn2_Click;
+			editCabinetBtnRight.Anchor = AnchorStyles.None;
+			editCabinetBtnRight.AutoSize = true;
+			editCabinetBtnRight.Enabled = false;
+			editCabinetBtnRight.Location = new Point(108, 62);
+			editCabinetBtnRight.Name = "editCabinetBtn2";
+			editCabinetBtnRight.Size = new Size(99, 25);
+			editCabinetBtnRight.TabIndex = 3;
+			editCabinetBtnRight.Text = "editCabinetBtn2";
+			editCabinetBtnRight.UseVisualStyleBackColor = true;
+			editCabinetBtnRight.Click += editCabinetBtn_Click;
 			// 
 			// devicesLView2
 			// 
 			devicesLView2.Dock = DockStyle.Fill;
 			devicesLView2.Location = new Point(318, 93);
 			devicesLView2.Name = "devicesLView2";
-			devicesLView2.Size = new Size(99, 325);
+			devicesLView2.Size = new Size(99, 301);
 			devicesLView2.TabIndex = 13;
 			devicesLView2.UseCompatibleStateImageBehavior = false;
 			// 
@@ -532,7 +535,7 @@
 			tableLayoutPanel4.Controls.Add(moveComplectToRightBtn, 0, 3);
 			tableLayoutPanel4.Controls.Add(moveCabinetToRightBtn, 0, 0);
 			tableLayoutPanel4.Controls.Add(moveCabinetToLeftBtn, 0, 1);
-			tableLayoutPanel4.Location = new Point(428, 89);
+			tableLayoutPanel4.Location = new Point(428, 77);
 			tableLayoutPanel4.Name = "tableLayoutPanel4";
 			tableLayoutPanel4.RowCount = 8;
 			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
@@ -622,7 +625,7 @@
 			tabPage4.Location = new Point(4, 24);
 			tabPage4.Name = "tabPage4";
 			tabPage4.Padding = new Padding(3);
-			tabPage4.Size = new Size(976, 433);
+			tabPage4.Size = new Size(976, 409);
 			tabPage4.TabIndex = 3;
 			tabPage4.Text = "Прочие настройки";
 			tabPage4.UseVisualStyleBackColor = true;
@@ -641,7 +644,7 @@
 			tableLayoutPanel18.Name = "tableLayoutPanel18";
 			tableLayoutPanel18.RowCount = 1;
 			tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel18.Size = new Size(970, 427);
+			tableLayoutPanel18.Size = new Size(970, 403);
 			tableLayoutPanel18.TabIndex = 0;
 			// 
 			// tableLayoutPanel21
@@ -658,7 +661,7 @@
 			tableLayoutPanel21.RowStyles.Add(new RowStyle());
 			tableLayoutPanel21.RowStyles.Add(new RowStyle());
 			tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel21.Size = new Size(317, 421);
+			tableLayoutPanel21.Size = new Size(317, 397);
 			tableLayoutPanel21.TabIndex = 2;
 			// 
 			// namesLBox
@@ -668,7 +671,7 @@
 			namesLBox.ItemHeight = 15;
 			namesLBox.Location = new Point(3, 49);
 			namesLBox.Name = "namesLBox";
-			namesLBox.Size = new Size(311, 369);
+			namesLBox.Size = new Size(311, 345);
 			namesLBox.TabIndex = 0;
 			// 
 			// nameEditBtn
@@ -706,7 +709,7 @@
 			tableLayoutPanel19.RowStyles.Add(new RowStyle());
 			tableLayoutPanel19.RowStyles.Add(new RowStyle());
 			tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel19.Size = new Size(317, 421);
+			tableLayoutPanel19.Size = new Size(317, 397);
 			tableLayoutPanel19.TabIndex = 0;
 			// 
 			// typesLBox
@@ -716,7 +719,7 @@
 			typesLBox.ItemHeight = 15;
 			typesLBox.Location = new Point(3, 49);
 			typesLBox.Name = "typesLBox";
-			typesLBox.Size = new Size(311, 369);
+			typesLBox.Size = new Size(311, 345);
 			typesLBox.TabIndex = 0;
 			// 
 			// typeEditBtn
@@ -754,7 +757,7 @@
 			tableLayoutPanel20.RowStyles.Add(new RowStyle());
 			tableLayoutPanel20.RowStyles.Add(new RowStyle());
 			tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel20.Size = new Size(318, 421);
+			tableLayoutPanel20.Size = new Size(318, 397);
 			tableLayoutPanel20.TabIndex = 1;
 			// 
 			// providersLBox
@@ -764,7 +767,7 @@
 			providersLBox.ItemHeight = 15;
 			providersLBox.Location = new Point(3, 49);
 			providersLBox.Name = "providersLBox";
-			providersLBox.Size = new Size(312, 369);
+			providersLBox.Size = new Size(312, 345);
 			providersLBox.TabIndex = 0;
 			// 
 			// providerEditBtn
@@ -974,13 +977,31 @@
 			tableLayoutPanel11.Size = new Size(200, 100);
 			tableLayoutPanel11.TabIndex = 0;
 			// 
+			// menuStrip1
+			// 
+			menuStrip1.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem });
+			menuStrip1.Location = new Point(0, 0);
+			menuStrip1.Name = "menuStrip1";
+			menuStrip1.Size = new Size(984, 24);
+			menuStrip1.TabIndex = 1;
+			menuStrip1.Text = "menuStrip1";
+			// 
+			// refreshToolStripMenuItem
+			// 
+			refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+			refreshToolStripMenuItem.Size = new Size(73, 20);
+			refreshToolStripMenuItem.Text = "Обновить";
+			refreshToolStripMenuItem.Click += refreshToolStripMenuItem_Click;
+			// 
 			// MainForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(984, 461);
 			Controls.Add(tabControl1);
+			Controls.Add(menuStrip1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
+			MainMenuStrip = menuStrip1;
 			Name = "MainForm";
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Инвентаризация";
@@ -1007,7 +1028,10 @@
 			tableLayoutPanel8.PerformLayout();
 			tableLayoutPanel9.ResumeLayout(false);
 			tableLayoutPanel9.PerformLayout();
+			menuStrip1.ResumeLayout(false);
+			menuStrip1.PerformLayout();
 			ResumeLayout(false);
+			PerformLayout();
 		}
 
 		#endregion
@@ -1037,14 +1061,14 @@
 		private TableLayoutPanel tableLayoutPanel4;
 		private Button moveCabinetToRightBtn;
 		private Button moveCabinetToLeftBtn;
-		private ListBox buildingsLBox1;
-		private ListBox cabinetsLBox1;
-		private ListBox buildingsLBox2;
-		private ListBox cabinetsLBox2;
-		private Button editBuildingBtn1;
-		private Button editCabinetBtn1;
-		private Button editBuildingBtn2;
-		private Button editCabinetBtn2;
+		private ListBox buildingsLBoxLeft;
+		private ListBox cabinetsLBoxLeft;
+		private ListBox buildingsLBoxRight;
+		private ListBox cabinetsLBoxRight;
+		private Button editBuildingBtnLeft;
+		private Button editCabinetBtnLeft;
+		private Button editBuildingBtnRight;
+		private Button editCabinetBtnRight;
 		private TabPage tabPage4;
 		private TableLayoutPanel tableLayoutPanel18;
 		private TableLayoutPanel tableLayoutPanel19;
@@ -1064,24 +1088,26 @@
 		private Label label21;
 		private Label label23;
 		private Label label10;
-		private Button editComplectBtn1;
-		private ListBox complectsLBox1;
+		private Button editComplectBtnLeft;
+		private ListBox complectsLBoxLeft;
 		private Label label18;
-		private Button editDeviceBtn1;
+		private Button editDeviceBtnLeft;
 		private Button moveComplectToLeftBtn;
 		private Button moveComplectToRightBtn;
 		private Label label12;
-		private Button editComplectBtn2;
-		private ListBox complectsLBox2;
+		private Button editComplectBtnRight;
+		private ListBox complectsLBoxRight;
 		private Button moveDeviceToLeftBtn;
 		private Button moveDeviceToRightBtn;
 		private Label label20;
-		private Button editDeviceBtn2;
+		private Button editDeviceBtnRight;
 		private ListView devicesLView1;
 		private ListView devicesLView2;
 		private Label label7;
 		private TextBox searchTBox1;
 		private Label label8;
 		private TextBox searchTBox2;
+		private MenuStrip menuStrip1;
+		private ToolStripMenuItem refreshToolStripMenuItem;
 	}
 }

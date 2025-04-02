@@ -9,191 +9,220 @@ namespace Hardware
 		public MainForm()
 		{
 			InitializeComponent();
-			context = new ApplicationContext();
+			context = ApplicationContext.Instanse();
+			Init();
+		}
+
+		private void Init()
+		{
 			InitializeButtons();
-			RefreshBuildings();
-			RefreshCabinets();
+			RefreshAll();
 		}
 
 		private void InitializeButtons()
 		{
-			editBuildingBtn1.Text = "Добавить\nизменить";
-			editBuildingBtn2.Text = "Добавить\nизменить";
-			editCabinetBtn1.Text = "Добавить\nизменить";
-			editCabinetBtn2.Text = "Добавить\nизменить";
-			editComplectBtn1.Text = "Добавить\nизменить";
-			editComplectBtn2.Text = "Добавить\nизменить";
-			editDeviceBtn1.Text = "Добавить\nизменить";
-			editDeviceBtn2.Text = "Добавить\nизменить";
+			editBuildingBtnLeft.Text = "Добавить\nизменить";
+			editBuildingBtnRight.Text = "Добавить\nизменить";
+			editCabinetBtnLeft.Text = "Добавить\nизменить";
+			editCabinetBtnRight.Text = "Добавить\nизменить";
+			editComplectBtnLeft.Text = "Добавить\nизменить";
+			editComplectBtnRight.Text = "Добавить\nизменить";
+			editDeviceBtnLeft.Text = "Добавить\nизменить";
+			editDeviceBtnRight.Text = "Добавить\nизменить";
 		}
+
+		private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			RefreshAll();
+		}
+
+		private void RefreshAll()
+		{
+			RefreshBuildings();
+			RefreshCabinets();
+			RefreshComplects();
+		}
+
 		private void RefreshBuildings()
 		{
-			int b1 = buildingsLBox1.SelectedIndex;
-			int b2 = buildingsLBox2.SelectedIndex;
-
-			var buildings = context.Buildings.ToList();
-
-			buildingsLBox1.DataSource = buildings.ToList();
-			buildingsLBox1.DisplayMember = "Name";
-			buildingsLBox2.DataSource = buildings.ToList();
-			buildingsLBox2.DisplayMember = "Name";
-
-			if (b1 != -1 && b1 < buildingsLBox1.Items.Count)
-				buildingsLBox1.SelectedIndex = b1;
-			if (b2 != -1 && b2 < buildingsLBox2.Items.Count)
-				buildingsLBox2.SelectedIndex = b2;
+			RefreshBuildingsLBoxLeft();
+			RefreshBuildingsLBoxRight();
 		}
 
-		private void CheckEditButtonsEnabling()
+		private void RefreshBuildingsLBoxLeft()
 		{
-			if (buildingsLBox1.SelectedIndex != -1)
-			{
-				editCabinetBtn1.Enabled = true;
-				cabinetsLBox1.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBox1.SelectedItem).ToList();
-				cabinetsLBox1.DisplayMember = "Name";
-			}
-			else
-				editCabinetBtn1.Enabled = false;
-
-			if (buildingsLBox2.SelectedIndex != -1)
-			{
-				editCabinetBtn2.Enabled = true;
-				cabinetsLBox2.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBox2.SelectedItem).ToList();
-				cabinetsLBox2.DisplayMember = "Name";
-			}
-			else
-				editCabinetBtn2.Enabled = false;
-
-			if (cabinetsLBox1.SelectedIndex != -1)
-			{
-				editComplectBtn1.Enabled = true;
-				complectsLBox1.DataSource = context.Complects.Where(c => c.Cabinet == complectsLBox1.SelectedItem).ToList();
-				complectsLBox1.DisplayMember = "Name";
-			}
-			else
-				editComplectBtn1.Enabled = false;
-
-			if (cabinetsLBox2.SelectedIndex != -1)
-			{
-				editComplectBtn2.Enabled = true;
-				complectsLBox2.DataSource = context.Complects.Where(c => c.Cabinet == complectsLBox2.SelectedItem).ToList();
-				complectsLBox2.DisplayMember = "Name";
-			}
-			else
-				editComplectBtn2.Enabled = false;
+			var selectedItem = buildingsLBoxLeft.SelectedItem;
+			buildingsLBoxLeft.DataSource = context.Buildings.ToList();
+			buildingsLBoxLeft.DisplayMember = "Name";
+			if (selectedItem is not null)
+				if (buildingsLBoxLeft.Items.Contains(selectedItem))
+					buildingsLBoxLeft.SelectedItem = selectedItem;
+			SwitchEditCabinetBtnLeft();
 		}
 
-		private async void editBuildingBtn1_Click(object sender, EventArgs e)
+		private void RefreshBuildingsLBoxRight()
 		{
-			Building? building = null;
-			if (buildingsLBox1.SelectedIndex != -1)
-				building = (Building)buildingsLBox1.SelectedItem;
-			var form = new EditBuildingForm(context, building);
+			var selectedItem = buildingsLBoxRight.SelectedItem;
+			buildingsLBoxRight.DataSource = context.Buildings.ToList();
+			buildingsLBoxRight.DisplayMember = "Name";
+			if (selectedItem is not null)
+				if (buildingsLBoxRight.Items.Contains(selectedItem))
+					buildingsLBoxRight.SelectedItem = selectedItem;
+			SwitchEditCabinetBtnRight();
+		}
+
+		private void SwitchEditCabinetBtnLeft()
+		{
+			if (buildingsLBoxLeft.SelectedIndex != -1)
+				editCabinetBtnLeft.Enabled = true;
+			else
+				editCabinetBtnLeft.Enabled = false;
+		}
+
+		private void SwitchEditCabinetBtnRight()
+		{
+			if (buildingsLBoxRight.SelectedIndex != -1)
+				editCabinetBtnRight.Enabled = true;
+			else
+				editCabinetBtnRight.Enabled = false;
+		}
+
+		private void editBuildingBtn_Click(object sender, EventArgs e)
+		{
+			if (((Button)sender) == editBuildingBtnLeft)
+			{
+				var building = (Building?)buildingsLBoxLeft.SelectedItem;
+				EditBuilding(building);
+			}
+			else if (((Button)sender) == editBuildingBtnRight)
+			{
+				var building = (Building?)buildingsLBoxRight.SelectedItem;
+				EditBuilding(building);
+			}
+		}
+
+		private void EditBuilding(Building? building)
+		{
+			var form = new EditBuildingForm(building);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
-				RefreshBuildings();
+				RefreshAll();
 		}
 
-		private async void editBuildingBtn2_Click(object sender, EventArgs e)
+		private void buildingsLBox_SelectedValueChanged(object sender, EventArgs e)
 		{
-			Building? building = null;
-			if (buildingsLBox2.SelectedIndex != -1)
-				building = (Building)buildingsLBox2.SelectedItem;
-			var form = new EditBuildingForm(context, building);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshBuildings();
-		}
-
-		private void buildingsLBox1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			CheckEditButtonsEnabling();
-			CheckMoveCabinetsPossibility();
-		}
-
-		private void buildingsLBox2_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			CheckEditButtonsEnabling();
-			CheckMoveCabinetsPossibility();
+			if (((ListBox)sender) == buildingsLBoxLeft)
+				RefreshCabinetsLBoxLeft();
+			else if (((ListBox)sender) == buildingsLBoxRight)
+				RefreshCabinetsLBoxRight();
 		}
 
 		private void RefreshCabinets()
 		{
-			int c1 = cabinetsLBox1.SelectedIndex;
-			int c2 = cabinetsLBox2.SelectedIndex;
-
-			var cabinets = context.Cabinets.ToList();
-
-			if (buildingsLBox1.SelectedIndex != -1)
-			{
-				cabinetsLBox1.DataSource = cabinets.Where(c => c.Building == buildingsLBox1.SelectedItem).ToList();
-				cabinetsLBox1.DisplayMember = "Name";
-			}
-			if (buildingsLBox2.SelectedIndex != -1)
-			{
-				cabinetsLBox2.DataSource = cabinets.Where(c => c.Building == buildingsLBox2.SelectedItem).ToList();
-				cabinetsLBox2.DisplayMember = "Name";
-			}
-
-			if (c1 != -1 && c1 < cabinetsLBox1.Items.Count)
-				cabinetsLBox1.SelectedIndex = c1;
-			if (c2 != -1 && c2 < cabinetsLBox2.Items.Count)
-				cabinetsLBox2.SelectedIndex = c2;
+			RefreshCabinetsLBoxLeft();
+			RefreshCabinetsLBoxRight();
 		}
 
-		private void editCabinetBtn1_Click(object sender, EventArgs e)
+		private void RefreshCabinetsLBoxLeft()
 		{
-			Cabinet? cabinet = null;
-			Building building = (Building)buildingsLBox1.SelectedItem;
-			if (cabinetsLBox1.SelectedIndex != -1)
-				cabinet = (Cabinet)cabinetsLBox1.SelectedItem;
-			var form = new EditCabinetForm(context, cabinet, building);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshCabinets();
+			var selectedItem = cabinetsLBoxLeft.SelectedItem;
+			cabinetsLBoxLeft.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxLeft.SelectedItem).ToList();
+			cabinetsLBoxLeft.DisplayMember = "Name";
+			if (selectedItem is not null)
+				if (cabinetsLBoxLeft.Items.Contains(selectedItem))
+					cabinetsLBoxLeft.SelectedItem = selectedItem;
+			SwitchEditComplectBtnLeft();
+			SwitchMoveCabinetBtns();
 		}
 
-		private void editCabinetBtn2_Click(object sender, EventArgs e)
+		private void RefreshCabinetsLBoxRight()
 		{
-			Cabinet? cabinet = null;
-			Building building = (Building)buildingsLBox2.SelectedItem;
-			if (cabinetsLBox2.SelectedIndex != -1)
-				cabinet = (Cabinet)cabinetsLBox2.SelectedItem;
-			var form = new EditCabinetForm(context, cabinet, building);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshCabinets();
+			var selectedItem = cabinetsLBoxRight.SelectedItem;
+			cabinetsLBoxRight.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxRight.SelectedItem).ToList();
+			cabinetsLBoxRight.DisplayMember = "Name";
+			if (selectedItem is not null)
+				if (cabinetsLBoxRight.Items.Contains(selectedItem))
+					cabinetsLBoxRight.SelectedItem = selectedItem;
+			SwitchEditComplectBtnRight();
+			SwitchMoveCabinetBtns();
 		}
 
-		private void cabinetsLBox1_SelectedIndexChanged(object sender, EventArgs e)
+		private void SwitchEditComplectBtnLeft()
 		{
-			CheckEditButtonsEnabling();
-			CheckMoveCabinetsPossibility();
+			if (cabinetsLBoxLeft.SelectedIndex != -1)
+				editComplectBtnLeft.Enabled = true;
+			else
+				editComplectBtnLeft.Enabled = false;
 		}
 
-		private void cabinetsLBox2_SelectedIndexChanged(object sender, EventArgs e)
+		private void SwitchEditComplectBtnRight()
 		{
-			CheckEditButtonsEnabling();
-			CheckMoveCabinetsPossibility();
+			if (cabinetsLBoxRight.SelectedIndex != -1)
+				editComplectBtnRight.Enabled = true;
+			else
+				editComplectBtnRight.Enabled = false;
 		}
 
-		private void CheckMoveCabinetsPossibility()
+		private void SwitchMoveCabinetBtns()
 		{
-			if (cabinetsLBox1.SelectedIndex != -1 && buildingsLBox1.SelectedIndex != buildingsLBox2.SelectedIndex)
+			SwitchMoveCabinetToLeftBtn();
+			SwitchMoveCabinetToRightBtn();
+		}
+
+		private void SwitchMoveCabinetToRightBtn()
+		{
+			if (cabinetsLBoxLeft.SelectedIndex != -1 && buildingsLBoxLeft.SelectedItem != buildingsLBoxRight.SelectedItem)
 				moveCabinetToRightBtn.Enabled = true;
 			else
 				moveCabinetToRightBtn.Enabled = false;
-			if (cabinetsLBox2.SelectedIndex != -1 && buildingsLBox1.SelectedIndex != buildingsLBox2.SelectedIndex)
+		}
+
+		private void SwitchMoveCabinetToLeftBtn()
+		{
+			if (cabinetsLBoxRight.SelectedIndex != -1 && buildingsLBoxLeft.SelectedItem != buildingsLBoxRight.SelectedItem)
 				moveCabinetToLeftBtn.Enabled = true;
 			else
 				moveCabinetToLeftBtn.Enabled = false;
 		}
 
+		private void editCabinetBtn_Click(object sender, EventArgs e)
+		{
+			if (((Button)sender) == editCabinetBtnLeft)
+			{
+				var cabinet = (Cabinet?)cabinetsLBoxLeft.SelectedItem;
+				var building = cabinet is null ? (Building)buildingsLBoxLeft.SelectedItem : cabinet.Building;
+				EditCabinet(cabinet, building);
+			}
+			else if (((Button)sender) == editCabinetBtnRight)
+			{
+				var cabinet = (Cabinet?)cabinetsLBoxLeft.SelectedItem;
+				var building = cabinet is null ? (Building)buildingsLBoxLeft.SelectedItem : cabinet.Building;
+				EditCabinet(cabinet, building);
+			}
+		}
+
+		private void EditCabinet(Cabinet? cabinet, Building building)
+		{
+			var form = new EditCabinetForm(cabinet, building);
+			var result = form.ShowDialog();
+			if (result == DialogResult.OK)
+				RefreshAll();
+
+		}
+
+		private void cabinetsLBox_SelectedValueChanged(object sender, EventArgs e)
+		{
+			if (((ListBox)sender) == cabinetsLBoxLeft)
+				RefreshComplectsLBoxLeft();
+			else if (((ListBox)sender) == cabinetsLBoxRight)
+				RefreshComplectsLBoxRight();
+		}
+
 		private async void moveCabinetToRightBtn_Click(object sender, EventArgs e)
 		{
-			Cabinet cabinet = (Cabinet)cabinetsLBox1.SelectedItem;
+			Cabinet cabinet = (Cabinet)cabinetsLBoxLeft.SelectedItem;
 			var before = $"{cabinet.Building.Name} -> {cabinet.Name}";
-			Building building = (Building)buildingsLBox2.SelectedItem;
+			Building building = (Building)buildingsLBoxRight.SelectedItem;
 			cabinet.Building = building;
 			var history = new History() { Before = before, After = $"{cabinet.Building.Name} -> {cabinet.Name}" };
 			await context.History.AddAsync(history);
@@ -208,14 +237,14 @@ namespace Hardware
 				success = false;
 			}
 			if (success)
-				RefreshCabinets();
+				RefreshAll();
 		}
 
 		private async void moveCabinetToLeftBtn_Click(object sender, EventArgs e)
 		{
-			Cabinet cabinet = (Cabinet)cabinetsLBox2.SelectedItem;
+			Cabinet cabinet = (Cabinet)cabinetsLBoxRight.SelectedItem;
 			var before = $"{cabinet.Building.Name} -> {cabinet.Name}";
-			Building building = (Building)buildingsLBox1.SelectedItem;
+			Building building = (Building)buildingsLBoxLeft.SelectedItem;
 			cabinet.Building = building;
 			var history = new History() { Before = before, After = $"{cabinet.Building.Name} -> {cabinet.Name}" };
 			await context.History.AddAsync(history);
@@ -230,57 +259,75 @@ namespace Hardware
 				success = false;
 			}
 			if (success)
-				RefreshCabinets();
+				RefreshAll();
 		}
-
-
 
 		private void RefreshComplects()
 		{
-			int c1 = complectsLBox1.SelectedIndex;
-			int c2 = complectsLBox2.SelectedIndex;
-
-			var complects = context.Complects.ToList();
-
-			if (cabinetsLBox1.SelectedIndex != -1)
-			{
-				complectsLBox1.DataSource = complects.Where(c => c.Cabinet == cabinetsLBox1.SelectedItem).ToList();
-				complectsLBox1.DisplayMember = "Name";
-			}
-			if (cabinetsLBox2.SelectedIndex != -1)
-			{
-				complectsLBox2.DataSource = complects.Where(c => c.Cabinet == cabinetsLBox2.SelectedItem).ToList();
-				complectsLBox2.DisplayMember = "Name";
-			}
-
-			if (c1 != -1 && c1 < complectsLBox1.Items.Count)
-				complectsLBox1.SelectedIndex = c1;
-			if (c2 != -1 && c2 < complectsLBox2.Items.Count)
-				complectsLBox2.SelectedIndex = c2;
+			RefreshComplectsLBoxLeft();
+			RefreshComplectsLBoxRight();
 		}
 
-		private void editComplectBtn1_Click(object sender, EventArgs e)
+		private void RefreshComplectsLBoxLeft()
 		{
-			Complect? complect = null;
-			Cabinet cabinet = (Cabinet)cabinetsLBox1.SelectedItem;
-			if (complectsLBox1.SelectedIndex != -1)
-				complect = (Complect)complectsLBox1.SelectedItem;
-			var form = new EditComplectForm(context, complect, cabinet);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshComplects();
+			var selectedItem = complectsLBoxLeft.SelectedItem;
+			complectsLBoxLeft.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxLeft.SelectedItem).ToList();
+			complectsLBoxLeft.DisplayMember = "Name";
+			if (selectedItem is not null)
+				if (complectsLBoxLeft.Items.Contains(selectedItem))
+					complectsLBoxLeft.SelectedItem = selectedItem;
+			SwitchEditDeviceBtnLeft();
 		}
 
-		private void editComplectBtn2_Click(object sender, EventArgs e)
+		private void SwitchEditDeviceBtnLeft()
 		{
-			Complect? complect = null;
-			Cabinet cabinet = (Cabinet)cabinetsLBox2.SelectedItem;
-			if (complectsLBox2.SelectedIndex != -1)
-				complect = (Complect)complectsLBox2.SelectedItem;
-			var form = new EditComplectForm(context, complect, cabinet);
+			if (complectsLBoxLeft.SelectedIndex != -1)
+				editDeviceBtnLeft.Enabled = true;
+			else
+				editDeviceBtnLeft.Enabled = false;
+		}
+
+		private void RefreshComplectsLBoxRight()
+		{
+			var selectedItem = complectsLBoxRight.SelectedItem;
+			complectsLBoxRight.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxRight.SelectedItem).ToList();
+			complectsLBoxRight.DisplayMember = "Name";
+			if (selectedItem is not null)
+				if (complectsLBoxRight.Items.Contains(selectedItem))
+					complectsLBoxRight.SelectedItem = selectedItem;
+			SwitchEditDeviceBtnRight();
+		}
+
+		private void SwitchEditDeviceBtnRight()
+		{
+			if (complectsLBoxRight.SelectedIndex != -1)
+				editDeviceBtnRight.Enabled = true;
+			else
+				editDeviceBtnRight.Enabled = false;
+		}
+
+		private void editComplectBtn_Click(object sender, EventArgs e)
+		{
+			if (((Button)sender) == editComplectBtnLeft)
+			{
+				var complect = (Complect?)complectsLBoxLeft.SelectedItem;
+				var cabinet = complect is null ? (Cabinet)cabinetsLBoxLeft.SelectedItem : complect.Cabinet;
+				EditComplect(complect, cabinet);
+			}
+			else if (((Button)sender) == editComplectBtnRight)
+			{
+				var complect = (Complect?)complectsLBoxRight.SelectedItem;
+				var cabinet = complect is null ? (Cabinet)cabinetsLBoxRight.SelectedItem : complect.Cabinet;
+				EditComplect(complect, cabinet);
+			}
+		}
+
+		private void EditComplect(Complect? complect, Cabinet cabinet)
+		{
+			var form = new EditComplectForm(complect, cabinet);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
-				RefreshComplects();
+				RefreshAll();
 		}
 	}
 }

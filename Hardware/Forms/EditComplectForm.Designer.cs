@@ -39,11 +39,13 @@
 			idTBox = new TextBox();
 			nameTBox = new TextBox();
 			buildingCBox = new ComboBox();
+			editBuildingBtn = new Button();
+			editCabinetBtn = new Button();
 			tableLayoutPanel3 = new TableLayoutPanel();
 			addBtn = new Button();
 			editBtn = new Button();
 			removeBtn = new Button();
-			button1 = new Button();
+			cancelBtn = new Button();
 			tableLayoutPanel1.SuspendLayout();
 			tableLayoutPanel2.SuspendLayout();
 			tableLayoutPanel3.SuspendLayout();
@@ -61,13 +63,14 @@
 			tableLayoutPanel1.RowCount = 2;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle());
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.Size = new Size(384, 171);
+			tableLayoutPanel1.Size = new Size(434, 171);
 			tableLayoutPanel1.TabIndex = 2;
 			// 
 			// tableLayoutPanel2
 			// 
 			tableLayoutPanel2.AutoSize = true;
-			tableLayoutPanel2.ColumnCount = 2;
+			tableLayoutPanel2.ColumnCount = 3;
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
 			tableLayoutPanel2.Controls.Add(label4, 0, 2);
@@ -78,6 +81,8 @@
 			tableLayoutPanel2.Controls.Add(idTBox, 1, 0);
 			tableLayoutPanel2.Controls.Add(nameTBox, 1, 3);
 			tableLayoutPanel2.Controls.Add(buildingCBox, 1, 1);
+			tableLayoutPanel2.Controls.Add(editBuildingBtn, 2, 1);
+			tableLayoutPanel2.Controls.Add(editCabinetBtn, 2, 2);
 			tableLayoutPanel2.Dock = DockStyle.Fill;
 			tableLayoutPanel2.Location = new Point(3, 3);
 			tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -86,15 +91,14 @@
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			tableLayoutPanel2.Size = new Size(378, 116);
+			tableLayoutPanel2.Size = new Size(428, 120);
 			tableLayoutPanel2.TabIndex = 0;
 			// 
 			// label4
 			// 
 			label4.Anchor = AnchorStyles.Right;
 			label4.AutoSize = true;
-			label4.Location = new Point(10, 65);
+			label4.Location = new Point(10, 68);
 			label4.Name = "label4";
 			label4.Size = new Size(52, 15);
 			label4.TabIndex = 7;
@@ -104,7 +108,7 @@
 			// 
 			cabinetCBox.Dock = DockStyle.Fill;
 			cabinetCBox.FormattingEnabled = true;
-			cabinetCBox.Location = new Point(68, 61);
+			cabinetCBox.Location = new Point(68, 63);
 			cabinetCBox.Name = "cabinetCBox";
 			cabinetCBox.Size = new Size(307, 23);
 			cabinetCBox.TabIndex = 6;
@@ -113,7 +117,7 @@
 			// 
 			label3.Anchor = AnchorStyles.Right;
 			label3.AutoSize = true;
-			label3.Location = new Point(3, 94);
+			label3.Location = new Point(3, 98);
 			label3.Name = "label3";
 			label3.Size = new Size(59, 15);
 			label3.TabIndex = 4;
@@ -133,7 +137,7 @@
 			// 
 			label2.Anchor = AnchorStyles.Right;
 			label2.AutoSize = true;
-			label2.Location = new Point(16, 36);
+			label2.Location = new Point(16, 37);
 			label2.Name = "label2";
 			label2.Size = new Size(46, 15);
 			label2.TabIndex = 1;
@@ -151,7 +155,7 @@
 			// nameTBox
 			// 
 			nameTBox.Dock = DockStyle.Fill;
-			nameTBox.Location = new Point(68, 90);
+			nameTBox.Location = new Point(68, 94);
 			nameTBox.Name = "nameTBox";
 			nameTBox.Size = new Size(307, 23);
 			nameTBox.TabIndex = 3;
@@ -164,6 +168,33 @@
 			buildingCBox.Name = "buildingCBox";
 			buildingCBox.Size = new Size(307, 23);
 			buildingCBox.TabIndex = 5;
+			buildingCBox.SelectedIndexChanged += buildingCBox_SelectedIndexChanged;
+			// 
+			// editBuildingBtn
+			// 
+			editBuildingBtn.Anchor = AnchorStyles.None;
+			editBuildingBtn.AutoSize = true;
+			editBuildingBtn.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			editBuildingBtn.Location = new Point(390, 32);
+			editBuildingBtn.Name = "editBuildingBtn";
+			editBuildingBtn.Size = new Size(25, 25);
+			editBuildingBtn.TabIndex = 8;
+			editBuildingBtn.Text = "+";
+			editBuildingBtn.UseVisualStyleBackColor = true;
+			editBuildingBtn.Click += editBuildingBtn_Click;
+			// 
+			// editCabinetBtn
+			// 
+			editCabinetBtn.Anchor = AnchorStyles.None;
+			editCabinetBtn.AutoSize = true;
+			editCabinetBtn.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			editCabinetBtn.Location = new Point(390, 63);
+			editCabinetBtn.Name = "editCabinetBtn";
+			editCabinetBtn.Size = new Size(25, 25);
+			editCabinetBtn.TabIndex = 9;
+			editCabinetBtn.Text = "+";
+			editCabinetBtn.UseVisualStyleBackColor = true;
+			editCabinetBtn.Click += editCabinetBtn_Click;
 			// 
 			// tableLayoutPanel3
 			// 
@@ -176,62 +207,66 @@
 			tableLayoutPanel3.Controls.Add(addBtn, 0, 0);
 			tableLayoutPanel3.Controls.Add(editBtn, 1, 0);
 			tableLayoutPanel3.Controls.Add(removeBtn, 2, 0);
-			tableLayoutPanel3.Controls.Add(button1, 3, 0);
+			tableLayoutPanel3.Controls.Add(cancelBtn, 3, 0);
 			tableLayoutPanel3.Dock = DockStyle.Fill;
-			tableLayoutPanel3.Location = new Point(3, 125);
+			tableLayoutPanel3.Location = new Point(3, 129);
 			tableLayoutPanel3.Name = "tableLayoutPanel3";
 			tableLayoutPanel3.RowCount = 1;
 			tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel3.Size = new Size(378, 43);
+			tableLayoutPanel3.Size = new Size(428, 39);
 			tableLayoutPanel3.TabIndex = 1;
 			// 
 			// addBtn
 			// 
 			addBtn.Anchor = AnchorStyles.None;
-			addBtn.Location = new Point(9, 10);
+			addBtn.Location = new Point(16, 8);
 			addBtn.Name = "addBtn";
 			addBtn.Size = new Size(75, 23);
 			addBtn.TabIndex = 0;
 			addBtn.Text = "Добавить";
 			addBtn.UseVisualStyleBackColor = true;
+			addBtn.Click += addBtn_Click;
 			// 
 			// editBtn
 			// 
 			editBtn.Anchor = AnchorStyles.None;
 			editBtn.Enabled = false;
-			editBtn.Location = new Point(103, 10);
+			editBtn.Location = new Point(123, 8);
 			editBtn.Name = "editBtn";
 			editBtn.Size = new Size(75, 23);
 			editBtn.TabIndex = 1;
 			editBtn.Text = "Изменить";
 			editBtn.UseVisualStyleBackColor = true;
+			editBtn.Click += editBtn_Click;
 			// 
 			// removeBtn
 			// 
 			removeBtn.Anchor = AnchorStyles.None;
 			removeBtn.Enabled = false;
-			removeBtn.Location = new Point(197, 10);
+			removeBtn.Location = new Point(230, 8);
 			removeBtn.Name = "removeBtn";
 			removeBtn.Size = new Size(75, 23);
 			removeBtn.TabIndex = 2;
 			removeBtn.Text = "Удалить";
 			removeBtn.UseVisualStyleBackColor = true;
+			removeBtn.Click += removeBtn_Click;
 			// 
-			// button1
+			// cancelBtn
 			// 
-			button1.Anchor = AnchorStyles.None;
-			button1.Location = new Point(292, 10);
-			button1.Name = "button1";
-			button1.Size = new Size(75, 23);
-			button1.TabIndex = 3;
-			button1.Text = "Отмена";
-			button1.UseVisualStyleBackColor = true;
+			cancelBtn.Anchor = AnchorStyles.None;
+			cancelBtn.Location = new Point(337, 8);
+			cancelBtn.Name = "cancelBtn";
+			cancelBtn.Size = new Size(75, 23);
+			cancelBtn.TabIndex = 3;
+			cancelBtn.Text = "Отмена";
+			cancelBtn.UseVisualStyleBackColor = true;
+			cancelBtn.Click += cancelBtn_Click;
 			// 
 			// EditComplectForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(384, 171);
+			ClientSize = new Size(434, 171);
 			Controls.Add(tableLayoutPanel1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "EditComplectForm";
@@ -261,6 +296,8 @@
 		private Button addBtn;
 		private Button editBtn;
 		private Button removeBtn;
-		private Button button1;
+		private Button cancelBtn;
+		private Button editBuildingBtn;
+		private Button editCabinetBtn;
 	}
 }

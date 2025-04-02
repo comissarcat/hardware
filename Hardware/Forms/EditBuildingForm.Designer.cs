@@ -57,7 +57,7 @@
 			tableLayoutPanel1.RowCount = 2;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle());
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.Size = new Size(384, 111);
+			tableLayoutPanel1.Size = new Size(434, 111);
 			tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
@@ -76,7 +76,7 @@
 			tableLayoutPanel2.RowCount = 2;
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.Size = new Size(378, 58);
+			tableLayoutPanel2.Size = new Size(428, 58);
 			tableLayoutPanel2.TabIndex = 0;
 			// 
 			// label1
@@ -105,7 +105,7 @@
 			idTBox.Location = new Point(68, 3);
 			idTBox.Name = "idTBox";
 			idTBox.ReadOnly = true;
-			idTBox.Size = new Size(307, 23);
+			idTBox.Size = new Size(357, 23);
 			idTBox.TabIndex = 2;
 			// 
 			// nameTBox
@@ -113,7 +113,7 @@
 			nameTBox.Dock = DockStyle.Fill;
 			nameTBox.Location = new Point(68, 32);
 			nameTBox.Name = "nameTBox";
-			nameTBox.Size = new Size(307, 23);
+			nameTBox.Size = new Size(357, 23);
 			nameTBox.TabIndex = 3;
 			// 
 			// tableLayoutPanel3
@@ -133,13 +133,13 @@
 			tableLayoutPanel3.Name = "tableLayoutPanel3";
 			tableLayoutPanel3.RowCount = 1;
 			tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel3.Size = new Size(378, 41);
+			tableLayoutPanel3.Size = new Size(428, 41);
 			tableLayoutPanel3.TabIndex = 1;
 			// 
 			// addBtn
 			// 
 			addBtn.Anchor = AnchorStyles.None;
-			addBtn.Location = new Point(9, 9);
+			addBtn.Location = new Point(16, 9);
 			addBtn.Name = "addBtn";
 			addBtn.Size = new Size(75, 23);
 			addBtn.TabIndex = 0;
@@ -151,7 +151,7 @@
 			// 
 			editBtn.Anchor = AnchorStyles.None;
 			editBtn.Enabled = false;
-			editBtn.Location = new Point(103, 9);
+			editBtn.Location = new Point(123, 9);
 			editBtn.Name = "editBtn";
 			editBtn.Size = new Size(75, 23);
 			editBtn.TabIndex = 1;
@@ -163,7 +163,7 @@
 			// 
 			removeBtn.Anchor = AnchorStyles.None;
 			removeBtn.Enabled = false;
-			removeBtn.Location = new Point(197, 9);
+			removeBtn.Location = new Point(230, 9);
 			removeBtn.Name = "removeBtn";
 			removeBtn.Size = new Size(75, 23);
 			removeBtn.TabIndex = 2;
@@ -174,7 +174,7 @@
 			// cancelBtn
 			// 
 			cancelBtn.Anchor = AnchorStyles.None;
-			cancelBtn.Location = new Point(292, 9);
+			cancelBtn.Location = new Point(337, 9);
 			cancelBtn.Name = "cancelBtn";
 			cancelBtn.Size = new Size(75, 23);
 			cancelBtn.TabIndex = 3;
@@ -186,7 +186,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(384, 111);
+			ClientSize = new Size(434, 111);
 			Controls.Add(tableLayoutPanel1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "EditBuildingForm";

@@ -5,12 +5,12 @@ namespace Hardware.Forms
 {
 	public partial class EditCabinetForm : Form
 	{
-		private readonly ApplicationContext context;
+		readonly ApplicationContext context;
 		private Cabinet? cabinet;
-		public EditCabinetForm(ApplicationContext context, Cabinet? cabinet, Building building)
+		public EditCabinetForm(Cabinet? cabinet, Building building)
 		{
 			InitializeComponent();
-			this.context = context;
+			context = ApplicationContext.Instanse();
 			DialogResult = DialogResult.Cancel;
 			buildingCBox.DataSource = context.Buildings.ToList();
 			buildingCBox.DisplayMember = "Name";
@@ -26,6 +26,17 @@ namespace Hardware.Forms
 					removeBtn.Enabled = true;
 			}
 			buildingCBox.SelectedItem = building;
+		}
+
+		private void RefreshBuildings()
+		{
+			int b = buildingCBox.SelectedIndex;
+
+			buildingCBox.DataSource = context.Buildings.ToList();
+			buildingCBox.DisplayMember = "Name";
+
+			if (b != -1 && b > buildingCBox.Items.Count)
+				buildingCBox.SelectedIndex = b;
 		}
 
 		private async Task<bool> AddCabinet()
@@ -45,19 +56,19 @@ namespace Hardware.Forms
 
 		private async Task<bool> EditCabinet()
 		{
-			List<string> b = [];
-			List<string> a = [];
+			List<string> before = [];
+			List<string> after = [];
 			var cabinetDevices = await context.Devices.Include(d => d.Complect.Cabinet.Building).Where(d => d.Complect.Cabinet == cabinet).ToListAsync();
 			if (cabinetDevices.Count > 0)
 			{
 				foreach (var device in cabinetDevices)
-					b.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
+					before.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
 				cabinet.Name = nameTBox.Text;
 				cabinet.Building = (Building)buildingCBox.SelectedItem;
 				foreach (var device in cabinetDevices)
-					a.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
+					after.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
 				for (int i = 0; i < cabinetDevices.Count; i++)
-					await context.History.AddAsync(new History() { Before = b[i], After = a[i] });
+					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
 				try
 				{
 					await context.SaveChangesAsync();
@@ -124,6 +135,16 @@ namespace Hardware.Forms
 		{
 			DialogResult = DialogResult.Cancel;
 			Close();
+		}
+
+		private void editBuildingBtn_Click(object sender, EventArgs e)
+		{
+
+			var building = (Building?)buildingCBox.SelectedItem;
+			var form = new EditBuildingForm(building);
+			var result = form.ShowDialog();
+			if (result == DialogResult.OK)
+				RefreshBuildings();
 		}
 	}
 }

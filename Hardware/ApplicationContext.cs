@@ -5,6 +5,13 @@ namespace Hardware
 {
 	public class ApplicationContext : DbContext
 	{
+		private static ApplicationContext? instanse = null;
+		private ApplicationContext() { }
+		public static ApplicationContext Instanse()
+		{
+			instanse ??= new ApplicationContext();
+			return instanse;
+		}
 		public DbSet<Building> Buildings { get; set; }
 		public DbSet<Cabinet> Cabinets { get; set; }
 		public DbSet<Complect> Complects { get; set; }
