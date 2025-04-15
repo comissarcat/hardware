@@ -83,17 +83,6 @@
 			editDeviceTypeBtn = new Button();
 			deviceNamesLabel = new Label();
 			deviceTypesLabel = new Label();
-			tableLayoutPanel7 = new TableLayoutPanel();
-			tableLayoutPanel8 = new TableLayoutPanel();
-			textBox5 = new TextBox();
-			textBox6 = new TextBox();
-			label3 = new Label();
-			tableLayoutPanel9 = new TableLayoutPanel();
-			label4 = new Label();
-			textBox7 = new TextBox();
-			textBox8 = new TextBox();
-			tableLayoutPanel10 = new TableLayoutPanel();
-			tableLayoutPanel11 = new TableLayoutPanel();
 			menuStrip = new MenuStrip();
 			refreshToolStripMenuItem = new ToolStripMenuItem();
 			tabControl.SuspendLayout();
@@ -107,9 +96,6 @@
 			deviceProvidersTLP.SuspendLayout();
 			deviceTypesNamesGBox.SuspendLayout();
 			deviceTypesNamesTLP.SuspendLayout();
-			tableLayoutPanel7.SuspendLayout();
-			tableLayoutPanel8.SuspendLayout();
-			tableLayoutPanel9.SuspendLayout();
 			menuStrip.SuspendLayout();
 			SuspendLayout();
 			// 
@@ -798,132 +784,6 @@
 			deviceTypesLabel.TabIndex = 2;
 			deviceTypesLabel.Text = "Типы техники";
 			// 
-			// tableLayoutPanel7
-			// 
-			tableLayoutPanel7.ColumnCount = 4;
-			tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel7.Controls.Add(tableLayoutPanel8, 0, 0);
-			tableLayoutPanel7.Controls.Add(tableLayoutPanel9, 1, 0);
-			tableLayoutPanel7.Controls.Add(tableLayoutPanel10, 2, 0);
-			tableLayoutPanel7.Location = new Point(0, 0);
-			tableLayoutPanel7.Name = "tableLayoutPanel7";
-			tableLayoutPanel7.RowCount = 1;
-			tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			tableLayoutPanel7.Size = new Size(200, 100);
-			tableLayoutPanel7.TabIndex = 0;
-			// 
-			// tableLayoutPanel8
-			// 
-			tableLayoutPanel8.ColumnCount = 3;
-			tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel8.Controls.Add(textBox5, 1, 1);
-			tableLayoutPanel8.Controls.Add(textBox6, 0, 1);
-			tableLayoutPanel8.Controls.Add(label3, 0, 0);
-			tableLayoutPanel8.Location = new Point(3, 3);
-			tableLayoutPanel8.Name = "tableLayoutPanel8";
-			tableLayoutPanel8.RowCount = 3;
-			tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel8.Size = new Size(44, 94);
-			tableLayoutPanel8.TabIndex = 0;
-			// 
-			// textBox5
-			// 
-			tableLayoutPanel8.SetColumnSpan(textBox5, 2);
-			textBox5.Location = new Point(17, 34);
-			textBox5.Name = "textBox5";
-			textBox5.Size = new Size(24, 23);
-			textBox5.TabIndex = 3;
-			// 
-			// textBox6
-			// 
-			textBox6.Location = new Point(3, 34);
-			textBox6.Name = "textBox6";
-			textBox6.Size = new Size(8, 23);
-			textBox6.TabIndex = 4;
-			// 
-			// label3
-			// 
-			label3.AutoSize = true;
-			label3.Location = new Point(3, 0);
-			label3.Name = "label3";
-			label3.Size = new Size(8, 31);
-			label3.TabIndex = 5;
-			label3.Text = "Здание";
-			// 
-			// tableLayoutPanel9
-			// 
-			tableLayoutPanel9.ColumnCount = 3;
-			tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel9.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel9.Controls.Add(label4, 0, 0);
-			tableLayoutPanel9.Controls.Add(textBox7, 0, 1);
-			tableLayoutPanel9.Controls.Add(textBox8, 1, 1);
-			tableLayoutPanel9.Location = new Point(53, 3);
-			tableLayoutPanel9.Name = "tableLayoutPanel9";
-			tableLayoutPanel9.RowCount = 3;
-			tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel9.Size = new Size(44, 94);
-			tableLayoutPanel9.TabIndex = 1;
-			// 
-			// label4
-			// 
-			label4.AutoSize = true;
-			label4.Location = new Point(3, 0);
-			label4.Name = "label4";
-			label4.Size = new Size(8, 31);
-			label4.TabIndex = 0;
-			label4.Text = "Кабинет";
-			// 
-			// textBox7
-			// 
-			textBox7.Location = new Point(3, 34);
-			textBox7.Name = "textBox7";
-			textBox7.Size = new Size(8, 23);
-			textBox7.TabIndex = 1;
-			// 
-			// textBox8
-			// 
-			textBox8.Location = new Point(17, 34);
-			textBox8.Name = "textBox8";
-			textBox8.Size = new Size(8, 23);
-			textBox8.TabIndex = 2;
-			// 
-			// tableLayoutPanel10
-			// 
-			tableLayoutPanel10.ColumnCount = 3;
-			tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel10.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-			tableLayoutPanel10.Location = new Point(103, 3);
-			tableLayoutPanel10.Name = "tableLayoutPanel10";
-			tableLayoutPanel10.RowCount = 3;
-			tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-			tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-			tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			tableLayoutPanel10.Size = new Size(44, 94);
-			tableLayoutPanel10.TabIndex = 2;
-			// 
-			// tableLayoutPanel11
-			// 
-			tableLayoutPanel11.ColumnCount = 3;
-			tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel11.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel11.Location = new Point(0, 0);
-			tableLayoutPanel11.Name = "tableLayoutPanel11";
-			tableLayoutPanel11.RowCount = 3;
-			tableLayoutPanel11.Size = new Size(200, 100);
-			tableLayoutPanel11.TabIndex = 0;
-			// 
 			// menuStrip
 			// 
 			menuStrip.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem });
@@ -969,11 +829,6 @@
 			deviceTypesNamesGBox.ResumeLayout(false);
 			deviceTypesNamesTLP.ResumeLayout(false);
 			deviceTypesNamesTLP.PerformLayout();
-			tableLayoutPanel7.ResumeLayout(false);
-			tableLayoutPanel8.ResumeLayout(false);
-			tableLayoutPanel8.PerformLayout();
-			tableLayoutPanel9.ResumeLayout(false);
-			tableLayoutPanel9.PerformLayout();
 			menuStrip.ResumeLayout(false);
 			menuStrip.PerformLayout();
 			ResumeLayout(false);
@@ -985,18 +840,7 @@
 		private TabControl tabControl;
 		private TabPage tabPage1;
 		private TableLayoutPanel devicesTLP;
-		private TableLayoutPanel devicesTLPLeft;
-		private TableLayoutPanel tableLayoutPanel7;
-		private TableLayoutPanel tableLayoutPanel8;
-		private TextBox textBox5;
-		private TextBox textBox6;
-		private Label label3;
-		private TableLayoutPanel tableLayoutPanel9;
-		private Label label4;
-		private TextBox textBox7;
-		private TextBox textBox8;
-		private TableLayoutPanel tableLayoutPanel10;
-		private TableLayoutPanel tableLayoutPanel11;
+		private TableLayoutPanel devicesTLPLeft;		
 		private TableLayoutPanel devicesTLPRight;
 		private TableLayoutPanel moveLeftRightBtnsTLP;
 		private Button moveCabinetToRightBtn;
