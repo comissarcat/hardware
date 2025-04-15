@@ -8,5 +8,9 @@
 		public DeviceName DeviceName { get; set; }
 		public Complect Complect { get; set; }
 		public DeviceProvider DeviceProvider { get; set; }
+		public override string ToString()
+		{
+			return $"{DeviceName.Name} {Serial} {Inventory}";
+		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace Hardware.Forms
 {
-	partial class EditComplectForm
+	partial class EditDeviceNameForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,19 +28,15 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditComplectForm));
 			tableLayoutPanel1 = new TableLayoutPanel();
 			tableLayoutPanel2 = new TableLayoutPanel();
-			label4 = new Label();
-			cabinetCBox = new ComboBox();
 			label3 = new Label();
 			label1 = new Label();
 			label2 = new Label();
 			idTBox = new TextBox();
 			nameTBox = new TextBox();
-			buildingCBox = new ComboBox();
+			typeCBox = new ComboBox();
 			editBuildingBtn = new Button();
-			editCabinetBtn = new Button();
 			tableLayoutPanel3 = new TableLayoutPanel();
 			addBtn = new Button();
 			editBtn = new Button();
@@ -63,7 +59,7 @@
 			tableLayoutPanel1.RowCount = 2;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle());
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.Size = new Size(534, 171);
+			tableLayoutPanel1.Size = new Size(534, 136);
 			tableLayoutPanel1.TabIndex = 2;
 			// 
 			// tableLayoutPanel2
@@ -73,51 +69,28 @@
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-			tableLayoutPanel2.Controls.Add(label4, 0, 2);
-			tableLayoutPanel2.Controls.Add(cabinetCBox, 1, 2);
-			tableLayoutPanel2.Controls.Add(label3, 0, 3);
+			tableLayoutPanel2.Controls.Add(label3, 0, 2);
 			tableLayoutPanel2.Controls.Add(label1, 0, 0);
 			tableLayoutPanel2.Controls.Add(label2, 0, 1);
 			tableLayoutPanel2.Controls.Add(idTBox, 1, 0);
-			tableLayoutPanel2.Controls.Add(nameTBox, 1, 3);
-			tableLayoutPanel2.Controls.Add(buildingCBox, 1, 1);
+			tableLayoutPanel2.Controls.Add(nameTBox, 1, 2);
+			tableLayoutPanel2.Controls.Add(typeCBox, 1, 1);
 			tableLayoutPanel2.Controls.Add(editBuildingBtn, 2, 1);
-			tableLayoutPanel2.Controls.Add(editCabinetBtn, 2, 2);
 			tableLayoutPanel2.Dock = DockStyle.Fill;
 			tableLayoutPanel2.Location = new Point(3, 3);
 			tableLayoutPanel2.Name = "tableLayoutPanel2";
-			tableLayoutPanel2.RowCount = 4;
+			tableLayoutPanel2.RowCount = 3;
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.Size = new Size(528, 120);
+			tableLayoutPanel2.Size = new Size(528, 89);
 			tableLayoutPanel2.TabIndex = 0;
-			// 
-			// label4
-			// 
-			label4.Anchor = AnchorStyles.Right;
-			label4.AutoSize = true;
-			label4.Location = new Point(10, 68);
-			label4.Name = "label4";
-			label4.Size = new Size(52, 15);
-			label4.TabIndex = 7;
-			label4.Text = "Кабинет";
-			// 
-			// cabinetCBox
-			// 
-			cabinetCBox.Dock = DockStyle.Fill;
-			cabinetCBox.FormattingEnabled = true;
-			cabinetCBox.Location = new Point(68, 63);
-			cabinetCBox.Name = "cabinetCBox";
-			cabinetCBox.Size = new Size(325, 23);
-			cabinetCBox.TabIndex = 6;
 			// 
 			// label3
 			// 
 			label3.Anchor = AnchorStyles.Right;
 			label3.AutoSize = true;
-			label3.Location = new Point(3, 98);
+			label3.Location = new Point(3, 67);
 			label3.Name = "label3";
 			label3.Size = new Size(59, 15);
 			label3.TabIndex = 4;
@@ -137,11 +110,11 @@
 			// 
 			label2.Anchor = AnchorStyles.Right;
 			label2.AutoSize = true;
-			label2.Location = new Point(16, 37);
+			label2.Location = new Point(35, 37);
 			label2.Name = "label2";
-			label2.Size = new Size(46, 15);
+			label2.Size = new Size(27, 15);
 			label2.TabIndex = 1;
-			label2.Text = "Здание";
+			label2.Text = "Тип";
 			// 
 			// idTBox
 			// 
@@ -155,20 +128,19 @@
 			// nameTBox
 			// 
 			nameTBox.Dock = DockStyle.Fill;
-			nameTBox.Location = new Point(68, 94);
+			nameTBox.Location = new Point(68, 63);
 			nameTBox.Name = "nameTBox";
 			nameTBox.Size = new Size(325, 23);
 			nameTBox.TabIndex = 3;
 			// 
-			// buildingCBox
+			// typeCBox
 			// 
-			buildingCBox.Dock = DockStyle.Fill;
-			buildingCBox.FormattingEnabled = true;
-			buildingCBox.Location = new Point(68, 32);
-			buildingCBox.Name = "buildingCBox";
-			buildingCBox.Size = new Size(325, 23);
-			buildingCBox.TabIndex = 5;
-			buildingCBox.SelectedIndexChanged += buildingCBox_SelectedIndexChanged;
+			typeCBox.Dock = DockStyle.Fill;
+			typeCBox.FormattingEnabled = true;
+			typeCBox.Location = new Point(68, 32);
+			typeCBox.Name = "typeCBox";
+			typeCBox.Size = new Size(325, 23);
+			typeCBox.TabIndex = 5;
 			// 
 			// editBuildingBtn
 			// 
@@ -178,23 +150,10 @@
 			editBuildingBtn.Location = new Point(399, 32);
 			editBuildingBtn.Name = "editBuildingBtn";
 			editBuildingBtn.Size = new Size(126, 25);
-			editBuildingBtn.TabIndex = 8;
+			editBuildingBtn.TabIndex = 6;
 			editBuildingBtn.Text = "Добавить/изменить";
 			editBuildingBtn.UseVisualStyleBackColor = true;
-			editBuildingBtn.Click += editBuildingBtn_Click;
-			// 
-			// editCabinetBtn
-			// 
-			editCabinetBtn.Anchor = AnchorStyles.None;
-			editCabinetBtn.AutoSize = true;
-			editCabinetBtn.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			editCabinetBtn.Location = new Point(399, 63);
-			editCabinetBtn.Name = "editCabinetBtn";
-			editCabinetBtn.Size = new Size(126, 25);
-			editCabinetBtn.TabIndex = 9;
-			editCabinetBtn.Text = "Добавить/изменить";
-			editCabinetBtn.UseVisualStyleBackColor = true;
-			editCabinetBtn.Click += editCabinetBtn_Click;
+			editBuildingBtn.Click += editDeviceTypeBtn_Click;
 			// 
 			// tableLayoutPanel3
 			// 
@@ -209,17 +168,17 @@
 			tableLayoutPanel3.Controls.Add(removeBtn, 2, 0);
 			tableLayoutPanel3.Controls.Add(cancelBtn, 3, 0);
 			tableLayoutPanel3.Dock = DockStyle.Fill;
-			tableLayoutPanel3.Location = new Point(3, 129);
+			tableLayoutPanel3.Location = new Point(3, 98);
 			tableLayoutPanel3.Name = "tableLayoutPanel3";
 			tableLayoutPanel3.RowCount = 1;
-			tableLayoutPanel3.RowStyles.Add(new RowStyle());
-			tableLayoutPanel3.Size = new Size(528, 39);
+			tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			tableLayoutPanel3.Size = new Size(528, 35);
 			tableLayoutPanel3.TabIndex = 1;
 			// 
 			// addBtn
 			// 
 			addBtn.Anchor = AnchorStyles.None;
-			addBtn.Location = new Point(28, 8);
+			addBtn.Location = new Point(28, 6);
 			addBtn.Name = "addBtn";
 			addBtn.Size = new Size(75, 23);
 			addBtn.TabIndex = 0;
@@ -231,7 +190,7 @@
 			// 
 			editBtn.Anchor = AnchorStyles.None;
 			editBtn.Enabled = false;
-			editBtn.Location = new Point(160, 8);
+			editBtn.Location = new Point(160, 6);
 			editBtn.Name = "editBtn";
 			editBtn.Size = new Size(75, 23);
 			editBtn.TabIndex = 1;
@@ -243,7 +202,7 @@
 			// 
 			removeBtn.Anchor = AnchorStyles.None;
 			removeBtn.Enabled = false;
-			removeBtn.Location = new Point(292, 8);
+			removeBtn.Location = new Point(292, 6);
 			removeBtn.Name = "removeBtn";
 			removeBtn.Size = new Size(75, 23);
 			removeBtn.TabIndex = 2;
@@ -254,7 +213,7 @@
 			// cancelBtn
 			// 
 			cancelBtn.Anchor = AnchorStyles.None;
-			cancelBtn.Location = new Point(424, 8);
+			cancelBtn.Location = new Point(424, 6);
 			cancelBtn.Name = "cancelBtn";
 			cancelBtn.Size = new Size(75, 23);
 			cancelBtn.TabIndex = 3;
@@ -262,16 +221,15 @@
 			cancelBtn.UseVisualStyleBackColor = true;
 			cancelBtn.Click += cancelBtn_Click;
 			// 
-			// EditComplectForm
+			// EditDeviceNameForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(534, 171);
+			ClientSize = new Size(534, 136);
 			Controls.Add(tableLayoutPanel1);
-			Icon = (Icon)resources.GetObject("$this.Icon");
-			Name = "EditComplectForm";
+			Name = "EditDeviceNameForm";
 			StartPosition = FormStartPosition.CenterScreen;
-			Text = "Редактирование комплекта";
+			Text = "EditNameForm";
 			tableLayoutPanel1.ResumeLayout(false);
 			tableLayoutPanel1.PerformLayout();
 			tableLayoutPanel2.ResumeLayout(false);
@@ -284,20 +242,17 @@
 
 		private TableLayoutPanel tableLayoutPanel1;
 		private TableLayoutPanel tableLayoutPanel2;
-		private Label label4;
-		private ComboBox cabinetCBox;
 		private Label label3;
 		private Label label1;
 		private Label label2;
 		private TextBox idTBox;
 		private TextBox nameTBox;
-		private ComboBox buildingCBox;
+		private ComboBox typeCBox;
+		private Button editBuildingBtn;
 		private TableLayoutPanel tableLayoutPanel3;
 		private Button addBtn;
 		private Button editBtn;
 		private Button removeBtn;
 		private Button cancelBtn;
-		private Button editBuildingBtn;
-		private Button editCabinetBtn;
 	}
 }

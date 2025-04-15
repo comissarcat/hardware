@@ -33,6 +33,7 @@
 			tabPage1 = new TabPage();
 			tableLayoutPanel1 = new TableLayoutPanel();
 			tableLayoutPanel2 = new TableLayoutPanel();
+			devicesLBoxLeft = new ListBox();
 			label18 = new Label();
 			editDeviceBtnLeft = new Button();
 			label10 = new Label();
@@ -44,11 +45,11 @@
 			editCabinetBtnLeft = new Button();
 			label1 = new Label();
 			label2 = new Label();
-			devicesLView1 = new ListView();
 			label7 = new Label();
-			searchTBox1 = new TextBox();
+			searchTBoxLeft = new TextBox();
 			tableLayoutPanel3 = new TableLayoutPanel();
-			searchTBox2 = new TextBox();
+			devicesLBoxRight = new ListBox();
+			searchTBoxRight = new TextBox();
 			label8 = new Label();
 			label20 = new Label();
 			editDeviceBtnRight = new Button();
@@ -61,7 +62,6 @@
 			cabinetsLBoxRight = new ListBox();
 			editBuildingBtnRight = new Button();
 			editCabinetBtnRight = new Button();
-			devicesLView2 = new ListView();
 			tableLayoutPanel4 = new TableLayoutPanel();
 			moveDeviceToLeftBtn = new Button();
 			moveDeviceToRightBtn = new Button();
@@ -71,18 +71,18 @@
 			moveCabinetToLeftBtn = new Button();
 			tabPage4 = new TabPage();
 			tableLayoutPanel18 = new TableLayoutPanel();
-			tableLayoutPanel21 = new TableLayoutPanel();
-			namesLBox = new ListBox();
-			nameEditBtn = new Button();
-			label22 = new Label();
-			tableLayoutPanel19 = new TableLayoutPanel();
-			typesLBox = new ListBox();
-			typeEditBtn = new Button();
-			label21 = new Label();
 			tableLayoutPanel20 = new TableLayoutPanel();
-			providersLBox = new ListBox();
-			providerEditBtn = new Button();
+			deviceProvidersLBox = new ListBox();
+			editDeviceProviderBtn = new Button();
 			label23 = new Label();
+			groupBox1 = new GroupBox();
+			tableLayoutPanel19 = new TableLayoutPanel();
+			deviceNamesLBox = new ListBox();
+			deviceTypesLBox = new ListBox();
+			editDeviceNameBtn = new Button();
+			editDeviceTypeBtn = new Button();
+			label22 = new Label();
+			label21 = new Label();
 			tableLayoutPanel7 = new TableLayoutPanel();
 			tableLayoutPanel8 = new TableLayoutPanel();
 			button8 = new Button();
@@ -110,9 +110,9 @@
 			tableLayoutPanel4.SuspendLayout();
 			tabPage4.SuspendLayout();
 			tableLayoutPanel18.SuspendLayout();
-			tableLayoutPanel21.SuspendLayout();
-			tableLayoutPanel19.SuspendLayout();
 			tableLayoutPanel20.SuspendLayout();
+			groupBox1.SuspendLayout();
+			tableLayoutPanel19.SuspendLayout();
 			tableLayoutPanel7.SuspendLayout();
 			tableLayoutPanel8.SuspendLayout();
 			tableLayoutPanel9.SuspendLayout();
@@ -161,10 +161,11 @@
 			// tableLayoutPanel2
 			// 
 			tableLayoutPanel2.ColumnCount = 4;
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+			tableLayoutPanel2.Controls.Add(devicesLBoxLeft, 3, 3);
 			tableLayoutPanel2.Controls.Add(label18, 3, 1);
 			tableLayoutPanel2.Controls.Add(editDeviceBtnLeft, 3, 2);
 			tableLayoutPanel2.Controls.Add(label10, 2, 1);
@@ -176,9 +177,8 @@
 			tableLayoutPanel2.Controls.Add(editCabinetBtnLeft, 1, 2);
 			tableLayoutPanel2.Controls.Add(label1, 0, 1);
 			tableLayoutPanel2.Controls.Add(label2, 1, 1);
-			tableLayoutPanel2.Controls.Add(devicesLView1, 3, 3);
 			tableLayoutPanel2.Controls.Add(label7, 0, 0);
-			tableLayoutPanel2.Controls.Add(searchTBox1, 1, 0);
+			tableLayoutPanel2.Controls.Add(searchTBoxLeft, 1, 0);
 			tableLayoutPanel2.Dock = DockStyle.Fill;
 			tableLayoutPanel2.Location = new Point(3, 3);
 			tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -190,13 +190,24 @@
 			tableLayoutPanel2.Size = new Size(419, 397);
 			tableLayoutPanel2.TabIndex = 0;
 			// 
+			// devicesLBoxLeft
+			// 
+			devicesLBoxLeft.Dock = DockStyle.Fill;
+			devicesLBoxLeft.FormattingEnabled = true;
+			devicesLBoxLeft.ItemHeight = 15;
+			devicesLBoxLeft.Location = new Point(252, 78);
+			devicesLBoxLeft.Name = "devicesLBoxLeft";
+			devicesLBoxLeft.Size = new Size(164, 316);
+			devicesLBoxLeft.TabIndex = 15;
+			devicesLBoxLeft.SelectedValueChanged += devicesLBox_SelectedValueChanged;
+			// 
 			// label18
 			// 
 			label18.Anchor = AnchorStyles.None;
 			label18.AutoSize = true;
-			label18.Location = new Point(336, 29);
+			label18.Location = new Point(282, 29);
 			label18.Name = "label18";
-			label18.Size = new Size(59, 30);
+			label18.Size = new Size(103, 15);
 			label18.TabIndex = 11;
 			label18.Text = "Единицы техники";
 			// 
@@ -205,18 +216,19 @@
 			editDeviceBtnLeft.Anchor = AnchorStyles.None;
 			editDeviceBtnLeft.AutoSize = true;
 			editDeviceBtnLeft.Enabled = false;
-			editDeviceBtnLeft.Location = new Point(315, 62);
-			editDeviceBtnLeft.Name = "editDeviceBtn1";
-			editDeviceBtnLeft.Size = new Size(101, 25);
+			editDeviceBtnLeft.Location = new Point(286, 47);
+			editDeviceBtnLeft.Name = "editDeviceBtnLeft";
+			editDeviceBtnLeft.Size = new Size(96, 25);
 			editDeviceBtnLeft.TabIndex = 10;
 			editDeviceBtnLeft.Text = "editDeviceBtn1";
 			editDeviceBtnLeft.UseVisualStyleBackColor = true;
+			editDeviceBtnLeft.Click += editDeviceBtn_Click;
 			// 
 			// label10
 			// 
 			label10.Anchor = AnchorStyles.None;
 			label10.AutoSize = true;
-			label10.Location = new Point(225, 36);
+			label10.Location = new Point(172, 29);
 			label10.Name = "label10";
 			label10.Size = new Size(70, 15);
 			label10.TabIndex = 8;
@@ -227,9 +239,9 @@
 			editComplectBtnLeft.Anchor = AnchorStyles.None;
 			editComplectBtnLeft.AutoSize = true;
 			editComplectBtnLeft.Enabled = false;
-			editComplectBtnLeft.Location = new Point(211, 62);
+			editComplectBtnLeft.Location = new Point(169, 47);
 			editComplectBtnLeft.Name = "editComplectBtnLeft";
-			editComplectBtnLeft.Size = new Size(98, 25);
+			editComplectBtnLeft.Size = new Size(77, 25);
 			editComplectBtnLeft.TabIndex = 7;
 			editComplectBtnLeft.Text = "editComplectBtn1";
 			editComplectBtnLeft.UseVisualStyleBackColor = true;
@@ -240,19 +252,20 @@
 			complectsLBoxLeft.Dock = DockStyle.Fill;
 			complectsLBoxLeft.FormattingEnabled = true;
 			complectsLBoxLeft.ItemHeight = 15;
-			complectsLBoxLeft.Location = new Point(211, 93);
+			complectsLBoxLeft.Location = new Point(169, 78);
 			complectsLBoxLeft.Name = "complectsLBoxLeft";
-			complectsLBoxLeft.Size = new Size(98, 301);
+			complectsLBoxLeft.Size = new Size(77, 316);
 			complectsLBoxLeft.TabIndex = 6;
+			complectsLBoxLeft.SelectedValueChanged += complectsLBox_SelectedValueChanged;
 			// 
 			// buildingsLBoxLeft
 			// 
 			buildingsLBoxLeft.Dock = DockStyle.Fill;
 			buildingsLBoxLeft.FormattingEnabled = true;
 			buildingsLBoxLeft.ItemHeight = 15;
-			buildingsLBoxLeft.Location = new Point(3, 93);
+			buildingsLBoxLeft.Location = new Point(3, 78);
 			buildingsLBoxLeft.Name = "buildingsLBoxLeft";
-			buildingsLBoxLeft.Size = new Size(98, 301);
+			buildingsLBoxLeft.Size = new Size(77, 316);
 			buildingsLBoxLeft.TabIndex = 0;
 			buildingsLBoxLeft.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
 			// 
@@ -261,9 +274,9 @@
 			cabinetsLBoxLeft.Dock = DockStyle.Fill;
 			cabinetsLBoxLeft.FormattingEnabled = true;
 			cabinetsLBoxLeft.ItemHeight = 15;
-			cabinetsLBoxLeft.Location = new Point(107, 93);
+			cabinetsLBoxLeft.Location = new Point(86, 78);
 			cabinetsLBoxLeft.Name = "cabinetsLBoxLeft";
-			cabinetsLBoxLeft.Size = new Size(98, 301);
+			cabinetsLBoxLeft.Size = new Size(77, 316);
 			cabinetsLBoxLeft.TabIndex = 1;
 			cabinetsLBoxLeft.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
 			// 
@@ -271,9 +284,9 @@
 			// 
 			editBuildingBtnLeft.Anchor = AnchorStyles.None;
 			editBuildingBtnLeft.AutoSize = true;
-			editBuildingBtnLeft.Location = new Point(3, 62);
+			editBuildingBtnLeft.Location = new Point(3, 47);
 			editBuildingBtnLeft.Name = "editBuildingBtnLeft";
-			editBuildingBtnLeft.Size = new Size(98, 25);
+			editBuildingBtnLeft.Size = new Size(77, 25);
 			editBuildingBtnLeft.TabIndex = 2;
 			editBuildingBtnLeft.Text = "editBuildingBtn1";
 			editBuildingBtnLeft.UseVisualStyleBackColor = true;
@@ -284,9 +297,9 @@
 			editCabinetBtnLeft.Anchor = AnchorStyles.None;
 			editCabinetBtnLeft.AutoSize = true;
 			editCabinetBtnLeft.Enabled = false;
-			editCabinetBtnLeft.Location = new Point(107, 62);
+			editCabinetBtnLeft.Location = new Point(86, 47);
 			editCabinetBtnLeft.Name = "editCabinetBtnLeft";
-			editCabinetBtnLeft.Size = new Size(98, 25);
+			editCabinetBtnLeft.Size = new Size(77, 25);
 			editCabinetBtnLeft.TabIndex = 3;
 			editCabinetBtnLeft.Text = "editCabinetBtn1";
 			editCabinetBtnLeft.UseVisualStyleBackColor = true;
@@ -296,7 +309,7 @@
 			// 
 			label1.Anchor = AnchorStyles.None;
 			label1.AutoSize = true;
-			label1.Location = new Point(29, 36);
+			label1.Location = new Point(18, 29);
 			label1.Name = "label1";
 			label1.Size = new Size(46, 15);
 			label1.TabIndex = 4;
@@ -306,49 +319,41 @@
 			// 
 			label2.Anchor = AnchorStyles.None;
 			label2.AutoSize = true;
-			label2.Location = new Point(125, 36);
+			label2.Location = new Point(94, 29);
 			label2.Name = "label2";
 			label2.Size = new Size(61, 15);
 			label2.TabIndex = 5;
 			label2.Text = "Кабинеты";
 			// 
-			// devicesLView1
-			// 
-			devicesLView1.Dock = DockStyle.Fill;
-			devicesLView1.Location = new Point(315, 93);
-			devicesLView1.Name = "devicesLView1";
-			devicesLView1.Size = new Size(101, 301);
-			devicesLView1.TabIndex = 12;
-			devicesLView1.UseCompatibleStateImageBehavior = false;
-			devicesLView1.View = View.Details;
-			// 
 			// label7
 			// 
 			label7.Anchor = AnchorStyles.None;
 			label7.AutoSize = true;
-			label7.Location = new Point(31, 7);
+			label7.Location = new Point(20, 7);
 			label7.Name = "label7";
 			label7.Size = new Size(42, 15);
 			label7.TabIndex = 13;
 			label7.Text = "Поиск";
 			// 
-			// searchTBox1
+			// searchTBoxLeft
 			// 
-			tableLayoutPanel2.SetColumnSpan(searchTBox1, 3);
-			searchTBox1.Dock = DockStyle.Fill;
-			searchTBox1.Location = new Point(107, 3);
-			searchTBox1.Name = "searchTBox1";
-			searchTBox1.Size = new Size(309, 23);
-			searchTBox1.TabIndex = 14;
+			tableLayoutPanel2.SetColumnSpan(searchTBoxLeft, 3);
+			searchTBoxLeft.Dock = DockStyle.Fill;
+			searchTBoxLeft.Location = new Point(86, 3);
+			searchTBoxLeft.Name = "searchTBoxLeft";
+			searchTBoxLeft.Size = new Size(330, 23);
+			searchTBoxLeft.TabIndex = 14;
+			searchTBoxLeft.TextChanged += searchTBox_TextChanged;
 			// 
 			// tableLayoutPanel3
 			// 
 			tableLayoutPanel3.ColumnCount = 4;
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-			tableLayoutPanel3.Controls.Add(searchTBox2, 1, 0);
+			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+			tableLayoutPanel3.Controls.Add(devicesLBoxRight, 3, 3);
+			tableLayoutPanel3.Controls.Add(searchTBoxRight, 1, 0);
 			tableLayoutPanel3.Controls.Add(label8, 0, 0);
 			tableLayoutPanel3.Controls.Add(label20, 3, 1);
 			tableLayoutPanel3.Controls.Add(editDeviceBtnRight, 3, 2);
@@ -361,7 +366,6 @@
 			tableLayoutPanel3.Controls.Add(cabinetsLBoxRight, 1, 3);
 			tableLayoutPanel3.Controls.Add(editBuildingBtnRight, 0, 2);
 			tableLayoutPanel3.Controls.Add(editCabinetBtnRight, 1, 2);
-			tableLayoutPanel3.Controls.Add(devicesLView2, 3, 3);
 			tableLayoutPanel3.Dock = DockStyle.Fill;
 			tableLayoutPanel3.Location = new Point(547, 3);
 			tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -373,20 +377,32 @@
 			tableLayoutPanel3.Size = new Size(420, 397);
 			tableLayoutPanel3.TabIndex = 1;
 			// 
-			// searchTBox2
+			// devicesLBoxRight
 			// 
-			tableLayoutPanel3.SetColumnSpan(searchTBox2, 3);
-			searchTBox2.Dock = DockStyle.Fill;
-			searchTBox2.Location = new Point(108, 3);
-			searchTBox2.Name = "searchTBox2";
-			searchTBox2.Size = new Size(309, 23);
-			searchTBox2.TabIndex = 15;
+			devicesLBoxRight.Dock = DockStyle.Fill;
+			devicesLBoxRight.FormattingEnabled = true;
+			devicesLBoxRight.ItemHeight = 15;
+			devicesLBoxRight.Location = new Point(255, 78);
+			devicesLBoxRight.Name = "devicesLBoxRight";
+			devicesLBoxRight.Size = new Size(162, 316);
+			devicesLBoxRight.TabIndex = 16;
+			devicesLBoxRight.SelectedValueChanged += devicesLBox_SelectedValueChanged;
+			// 
+			// searchTBoxRight
+			// 
+			tableLayoutPanel3.SetColumnSpan(searchTBoxRight, 3);
+			searchTBoxRight.Dock = DockStyle.Fill;
+			searchTBoxRight.Location = new Point(87, 3);
+			searchTBoxRight.Name = "searchTBoxRight";
+			searchTBoxRight.Size = new Size(330, 23);
+			searchTBoxRight.TabIndex = 15;
+			searchTBoxRight.TextChanged += searchTBox_TextChanged;
 			// 
 			// label8
 			// 
 			label8.Anchor = AnchorStyles.None;
 			label8.AutoSize = true;
-			label8.Location = new Point(31, 7);
+			label8.Location = new Point(21, 7);
 			label8.Name = "label8";
 			label8.Size = new Size(42, 15);
 			label8.TabIndex = 14;
@@ -396,9 +412,9 @@
 			// 
 			label20.Anchor = AnchorStyles.None;
 			label20.AutoSize = true;
-			label20.Location = new Point(338, 29);
+			label20.Location = new Point(284, 29);
 			label20.Name = "label20";
-			label20.Size = new Size(59, 30);
+			label20.Size = new Size(103, 15);
 			label20.TabIndex = 12;
 			label20.Text = "Единицы техники";
 			// 
@@ -407,18 +423,19 @@
 			editDeviceBtnRight.Anchor = AnchorStyles.None;
 			editDeviceBtnRight.AutoSize = true;
 			editDeviceBtnRight.Enabled = false;
-			editDeviceBtnRight.Location = new Point(318, 62);
-			editDeviceBtnRight.Name = "editDeviceBtn2";
+			editDeviceBtnRight.Location = new Point(286, 47);
+			editDeviceBtnRight.Name = "editDeviceBtnRight";
 			editDeviceBtnRight.Size = new Size(99, 25);
 			editDeviceBtnRight.TabIndex = 11;
 			editDeviceBtnRight.Text = "editDeviceBtn2";
 			editDeviceBtnRight.UseVisualStyleBackColor = true;
+			editDeviceBtnRight.Click += editDeviceBtn_Click;
 			// 
 			// label12
 			// 
 			label12.Anchor = AnchorStyles.None;
 			label12.AutoSize = true;
-			label12.Location = new Point(227, 36);
+			label12.Location = new Point(175, 29);
 			label12.Name = "label12";
 			label12.Size = new Size(70, 15);
 			label12.TabIndex = 9;
@@ -429,9 +446,9 @@
 			editComplectBtnRight.Anchor = AnchorStyles.None;
 			editComplectBtnRight.AutoSize = true;
 			editComplectBtnRight.Enabled = false;
-			editComplectBtnRight.Location = new Point(213, 62);
+			editComplectBtnRight.Location = new Point(171, 47);
 			editComplectBtnRight.Name = "editComplectBtnRight";
-			editComplectBtnRight.Size = new Size(99, 25);
+			editComplectBtnRight.Size = new Size(78, 25);
 			editComplectBtnRight.TabIndex = 8;
 			editComplectBtnRight.Text = "editComplectBtn2";
 			editComplectBtnRight.UseVisualStyleBackColor = true;
@@ -442,16 +459,17 @@
 			complectsLBoxRight.Dock = DockStyle.Fill;
 			complectsLBoxRight.FormattingEnabled = true;
 			complectsLBoxRight.ItemHeight = 15;
-			complectsLBoxRight.Location = new Point(213, 93);
+			complectsLBoxRight.Location = new Point(171, 78);
 			complectsLBoxRight.Name = "complectsLBoxRight";
-			complectsLBoxRight.Size = new Size(99, 301);
+			complectsLBoxRight.Size = new Size(78, 316);
 			complectsLBoxRight.TabIndex = 7;
+			complectsLBoxRight.SelectedValueChanged += complectsLBox_SelectedValueChanged;
 			// 
 			// label6
 			// 
 			label6.Anchor = AnchorStyles.None;
 			label6.AutoSize = true;
-			label6.Location = new Point(127, 36);
+			label6.Location = new Point(95, 29);
 			label6.Name = "label6";
 			label6.Size = new Size(61, 15);
 			label6.TabIndex = 6;
@@ -461,7 +479,7 @@
 			// 
 			label5.Anchor = AnchorStyles.None;
 			label5.AutoSize = true;
-			label5.Location = new Point(29, 36);
+			label5.Location = new Point(19, 29);
 			label5.Name = "label5";
 			label5.Size = new Size(46, 15);
 			label5.TabIndex = 5;
@@ -472,9 +490,9 @@
 			buildingsLBoxRight.Dock = DockStyle.Fill;
 			buildingsLBoxRight.FormattingEnabled = true;
 			buildingsLBoxRight.ItemHeight = 15;
-			buildingsLBoxRight.Location = new Point(3, 93);
+			buildingsLBoxRight.Location = new Point(3, 78);
 			buildingsLBoxRight.Name = "buildingsLBoxRight";
-			buildingsLBoxRight.Size = new Size(99, 301);
+			buildingsLBoxRight.Size = new Size(78, 316);
 			buildingsLBoxRight.TabIndex = 0;
 			buildingsLBoxRight.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
 			// 
@@ -483,9 +501,9 @@
 			cabinetsLBoxRight.Dock = DockStyle.Fill;
 			cabinetsLBoxRight.FormattingEnabled = true;
 			cabinetsLBoxRight.ItemHeight = 15;
-			cabinetsLBoxRight.Location = new Point(108, 93);
+			cabinetsLBoxRight.Location = new Point(87, 78);
 			cabinetsLBoxRight.Name = "cabinetsLBoxRight";
-			cabinetsLBoxRight.Size = new Size(99, 301);
+			cabinetsLBoxRight.Size = new Size(78, 316);
 			cabinetsLBoxRight.TabIndex = 1;
 			cabinetsLBoxRight.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
 			// 
@@ -493,9 +511,9 @@
 			// 
 			editBuildingBtnRight.Anchor = AnchorStyles.None;
 			editBuildingBtnRight.AutoSize = true;
-			editBuildingBtnRight.Location = new Point(3, 62);
+			editBuildingBtnRight.Location = new Point(3, 47);
 			editBuildingBtnRight.Name = "editBuildingBtnRight";
-			editBuildingBtnRight.Size = new Size(99, 25);
+			editBuildingBtnRight.Size = new Size(78, 25);
 			editBuildingBtnRight.TabIndex = 2;
 			editBuildingBtnRight.Text = "editBuildingBtn2";
 			editBuildingBtnRight.UseVisualStyleBackColor = true;
@@ -506,22 +524,13 @@
 			editCabinetBtnRight.Anchor = AnchorStyles.None;
 			editCabinetBtnRight.AutoSize = true;
 			editCabinetBtnRight.Enabled = false;
-			editCabinetBtnRight.Location = new Point(108, 62);
-			editCabinetBtnRight.Name = "editCabinetBtn2";
-			editCabinetBtnRight.Size = new Size(99, 25);
+			editCabinetBtnRight.Location = new Point(87, 47);
+			editCabinetBtnRight.Name = "editCabinetBtnRight";
+			editCabinetBtnRight.Size = new Size(78, 25);
 			editCabinetBtnRight.TabIndex = 3;
 			editCabinetBtnRight.Text = "editCabinetBtn2";
 			editCabinetBtnRight.UseVisualStyleBackColor = true;
 			editCabinetBtnRight.Click += editCabinetBtn_Click;
-			// 
-			// devicesLView2
-			// 
-			devicesLView2.Dock = DockStyle.Fill;
-			devicesLView2.Location = new Point(318, 93);
-			devicesLView2.Name = "devicesLView2";
-			devicesLView2.Size = new Size(99, 301);
-			devicesLView2.TabIndex = 13;
-			devicesLView2.UseCompatibleStateImageBehavior = false;
 			// 
 			// tableLayoutPanel4
 			// 
@@ -559,6 +568,7 @@
 			moveDeviceToLeftBtn.TabIndex = 5;
 			moveDeviceToLeftBtn.Text = "<<< Устройство";
 			moveDeviceToLeftBtn.UseVisualStyleBackColor = true;
+			moveDeviceToLeftBtn.Click += moveDeviceToLeftBtn_Click;
 			// 
 			// moveDeviceToRightBtn
 			// 
@@ -570,6 +580,7 @@
 			moveDeviceToRightBtn.TabIndex = 4;
 			moveDeviceToRightBtn.Text = "Устройство >>>";
 			moveDeviceToRightBtn.UseVisualStyleBackColor = true;
+			moveDeviceToRightBtn.Click += moveDeviceToRightBtn_Click;
 			// 
 			// moveComplectToLeftBtn
 			// 
@@ -581,6 +592,7 @@
 			moveComplectToLeftBtn.TabIndex = 3;
 			moveComplectToLeftBtn.Text = "<<< Комплект";
 			moveComplectToLeftBtn.UseVisualStyleBackColor = true;
+			moveComplectToLeftBtn.Click += moveComplectToLeftBtn_Click;
 			// 
 			// moveComplectToRightBtn
 			// 
@@ -592,6 +604,7 @@
 			moveComplectToRightBtn.TabIndex = 2;
 			moveComplectToRightBtn.Text = "Комплект >>>";
 			moveComplectToRightBtn.UseVisualStyleBackColor = true;
+			moveComplectToRightBtn.Click += moveComplectToRightBtn_Click;
 			// 
 			// moveCabinetToRightBtn
 			// 
@@ -632,13 +645,11 @@
 			// 
 			// tableLayoutPanel18
 			// 
-			tableLayoutPanel18.ColumnCount = 3;
+			tableLayoutPanel18.ColumnCount = 2;
+			tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 66.6666641F));
 			tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel18.Controls.Add(tableLayoutPanel21, 0, 0);
-			tableLayoutPanel18.Controls.Add(tableLayoutPanel19, 0, 0);
 			tableLayoutPanel18.Controls.Add(tableLayoutPanel20, 1, 0);
+			tableLayoutPanel18.Controls.Add(groupBox1, 0, 0);
 			tableLayoutPanel18.Dock = DockStyle.Fill;
 			tableLayoutPanel18.Location = new Point(3, 3);
 			tableLayoutPanel18.Name = "tableLayoutPanel18";
@@ -647,108 +658,12 @@
 			tableLayoutPanel18.Size = new Size(970, 403);
 			tableLayoutPanel18.TabIndex = 0;
 			// 
-			// tableLayoutPanel21
-			// 
-			tableLayoutPanel21.ColumnCount = 1;
-			tableLayoutPanel21.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			tableLayoutPanel21.Controls.Add(namesLBox, 0, 1);
-			tableLayoutPanel21.Controls.Add(nameEditBtn, 0, 0);
-			tableLayoutPanel21.Controls.Add(label22, 0, 0);
-			tableLayoutPanel21.Dock = DockStyle.Fill;
-			tableLayoutPanel21.Location = new Point(326, 3);
-			tableLayoutPanel21.Name = "tableLayoutPanel21";
-			tableLayoutPanel21.RowCount = 3;
-			tableLayoutPanel21.RowStyles.Add(new RowStyle());
-			tableLayoutPanel21.RowStyles.Add(new RowStyle());
-			tableLayoutPanel21.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel21.Size = new Size(317, 397);
-			tableLayoutPanel21.TabIndex = 2;
-			// 
-			// namesLBox
-			// 
-			namesLBox.Dock = DockStyle.Fill;
-			namesLBox.FormattingEnabled = true;
-			namesLBox.ItemHeight = 15;
-			namesLBox.Location = new Point(3, 49);
-			namesLBox.Name = "namesLBox";
-			namesLBox.Size = new Size(311, 345);
-			namesLBox.TabIndex = 0;
-			// 
-			// nameEditBtn
-			// 
-			nameEditBtn.Anchor = AnchorStyles.None;
-			nameEditBtn.AutoSize = true;
-			nameEditBtn.Location = new Point(95, 18);
-			nameEditBtn.Name = "nameEditBtn";
-			nameEditBtn.Size = new Size(126, 25);
-			nameEditBtn.TabIndex = 1;
-			nameEditBtn.Text = "Добавить/изменить";
-			nameEditBtn.UseVisualStyleBackColor = true;
-			// 
-			// label22
-			// 
-			label22.Anchor = AnchorStyles.None;
-			label22.AutoSize = true;
-			label22.Location = new Point(105, 0);
-			label22.Name = "label22";
-			label22.Size = new Size(106, 15);
-			label22.TabIndex = 2;
-			label22.Text = "Названия техники";
-			// 
-			// tableLayoutPanel19
-			// 
-			tableLayoutPanel19.ColumnCount = 1;
-			tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			tableLayoutPanel19.Controls.Add(typesLBox, 0, 2);
-			tableLayoutPanel19.Controls.Add(typeEditBtn, 0, 0);
-			tableLayoutPanel19.Controls.Add(label21, 0, 0);
-			tableLayoutPanel19.Dock = DockStyle.Fill;
-			tableLayoutPanel19.Location = new Point(3, 3);
-			tableLayoutPanel19.Name = "tableLayoutPanel19";
-			tableLayoutPanel19.RowCount = 3;
-			tableLayoutPanel19.RowStyles.Add(new RowStyle());
-			tableLayoutPanel19.RowStyles.Add(new RowStyle());
-			tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel19.Size = new Size(317, 397);
-			tableLayoutPanel19.TabIndex = 0;
-			// 
-			// typesLBox
-			// 
-			typesLBox.Dock = DockStyle.Fill;
-			typesLBox.FormattingEnabled = true;
-			typesLBox.ItemHeight = 15;
-			typesLBox.Location = new Point(3, 49);
-			typesLBox.Name = "typesLBox";
-			typesLBox.Size = new Size(311, 345);
-			typesLBox.TabIndex = 0;
-			// 
-			// typeEditBtn
-			// 
-			typeEditBtn.Anchor = AnchorStyles.None;
-			typeEditBtn.AutoSize = true;
-			typeEditBtn.Location = new Point(95, 18);
-			typeEditBtn.Name = "typeEditBtn";
-			typeEditBtn.Size = new Size(126, 25);
-			typeEditBtn.TabIndex = 1;
-			typeEditBtn.Text = "Добавить/изменить";
-			typeEditBtn.UseVisualStyleBackColor = true;
-			// 
-			// label21
-			// 
-			label21.Anchor = AnchorStyles.None;
-			label21.AutoSize = true;
-			label21.Location = new Point(117, 0);
-			label21.Name = "label21";
-			label21.Size = new Size(83, 15);
-			label21.TabIndex = 2;
-			label21.Text = "Типы техники";
-			// 
 			// tableLayoutPanel20
 			// 
 			tableLayoutPanel20.ColumnCount = 1;
 			tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			tableLayoutPanel20.Controls.Add(providersLBox, 0, 1);
-			tableLayoutPanel20.Controls.Add(providerEditBtn, 0, 0);
+			tableLayoutPanel20.Controls.Add(deviceProvidersLBox, 0, 1);
+			tableLayoutPanel20.Controls.Add(editDeviceProviderBtn, 0, 0);
 			tableLayoutPanel20.Controls.Add(label23, 0, 0);
 			tableLayoutPanel20.Dock = DockStyle.Fill;
 			tableLayoutPanel20.Location = new Point(649, 3);
@@ -760,26 +675,27 @@
 			tableLayoutPanel20.Size = new Size(318, 397);
 			tableLayoutPanel20.TabIndex = 1;
 			// 
-			// providersLBox
+			// deviceProvidersLBox
 			// 
-			providersLBox.Dock = DockStyle.Fill;
-			providersLBox.FormattingEnabled = true;
-			providersLBox.ItemHeight = 15;
-			providersLBox.Location = new Point(3, 49);
-			providersLBox.Name = "providersLBox";
-			providersLBox.Size = new Size(312, 345);
-			providersLBox.TabIndex = 0;
+			deviceProvidersLBox.Dock = DockStyle.Fill;
+			deviceProvidersLBox.FormattingEnabled = true;
+			deviceProvidersLBox.ItemHeight = 15;
+			deviceProvidersLBox.Location = new Point(3, 49);
+			deviceProvidersLBox.Name = "deviceProvidersLBox";
+			deviceProvidersLBox.Size = new Size(312, 345);
+			deviceProvidersLBox.TabIndex = 0;
 			// 
-			// providerEditBtn
+			// editDeviceProviderBtn
 			// 
-			providerEditBtn.Anchor = AnchorStyles.None;
-			providerEditBtn.AutoSize = true;
-			providerEditBtn.Location = new Point(96, 18);
-			providerEditBtn.Name = "providerEditBtn";
-			providerEditBtn.Size = new Size(126, 25);
-			providerEditBtn.TabIndex = 1;
-			providerEditBtn.Text = "Добавить/изменить";
-			providerEditBtn.UseVisualStyleBackColor = true;
+			editDeviceProviderBtn.Anchor = AnchorStyles.None;
+			editDeviceProviderBtn.AutoSize = true;
+			editDeviceProviderBtn.Location = new Point(96, 18);
+			editDeviceProviderBtn.Name = "editDeviceProviderBtn";
+			editDeviceProviderBtn.Size = new Size(126, 25);
+			editDeviceProviderBtn.TabIndex = 1;
+			editDeviceProviderBtn.Text = "Добавить/изменить";
+			editDeviceProviderBtn.UseVisualStyleBackColor = true;
+			editDeviceProviderBtn.Click += deviceProviderEditBtn_Click;
 			// 
 			// label23
 			// 
@@ -790,6 +706,103 @@
 			label23.Size = new Size(78, 15);
 			label23.TabIndex = 2;
 			label23.Text = "Получено от";
+			// 
+			// groupBox1
+			// 
+			groupBox1.Controls.Add(tableLayoutPanel19);
+			groupBox1.Dock = DockStyle.Fill;
+			groupBox1.Location = new Point(3, 3);
+			groupBox1.Name = "groupBox1";
+			groupBox1.Size = new Size(640, 397);
+			groupBox1.TabIndex = 3;
+			groupBox1.TabStop = false;
+			groupBox1.Text = "Типы и названия";
+			// 
+			// tableLayoutPanel19
+			// 
+			tableLayoutPanel19.ColumnCount = 2;
+			tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			tableLayoutPanel19.Controls.Add(deviceNamesLBox, 1, 2);
+			tableLayoutPanel19.Controls.Add(deviceTypesLBox, 0, 2);
+			tableLayoutPanel19.Controls.Add(editDeviceNameBtn, 1, 1);
+			tableLayoutPanel19.Controls.Add(editDeviceTypeBtn, 0, 1);
+			tableLayoutPanel19.Controls.Add(label22, 1, 0);
+			tableLayoutPanel19.Controls.Add(label21, 0, 0);
+			tableLayoutPanel19.Dock = DockStyle.Fill;
+			tableLayoutPanel19.Location = new Point(3, 19);
+			tableLayoutPanel19.Name = "tableLayoutPanel19";
+			tableLayoutPanel19.RowCount = 3;
+			tableLayoutPanel19.RowStyles.Add(new RowStyle());
+			tableLayoutPanel19.RowStyles.Add(new RowStyle());
+			tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			tableLayoutPanel19.Size = new Size(634, 375);
+			tableLayoutPanel19.TabIndex = 0;
+			// 
+			// deviceNamesLBox
+			// 
+			deviceNamesLBox.Dock = DockStyle.Fill;
+			deviceNamesLBox.FormattingEnabled = true;
+			deviceNamesLBox.ItemHeight = 15;
+			deviceNamesLBox.Location = new Point(320, 49);
+			deviceNamesLBox.Name = "deviceNamesLBox";
+			deviceNamesLBox.Size = new Size(311, 323);
+			deviceNamesLBox.TabIndex = 3;
+			// 
+			// deviceTypesLBox
+			// 
+			deviceTypesLBox.Dock = DockStyle.Fill;
+			deviceTypesLBox.FormattingEnabled = true;
+			deviceTypesLBox.ItemHeight = 15;
+			deviceTypesLBox.Location = new Point(3, 49);
+			deviceTypesLBox.Name = "deviceTypesLBox";
+			deviceTypesLBox.Size = new Size(311, 323);
+			deviceTypesLBox.TabIndex = 0;
+			deviceTypesLBox.SelectedValueChanged += typesLBox_SelectedValueChanged;
+			// 
+			// editDeviceNameBtn
+			// 
+			editDeviceNameBtn.Anchor = AnchorStyles.None;
+			editDeviceNameBtn.AutoSize = true;
+			editDeviceNameBtn.Location = new Point(412, 18);
+			editDeviceNameBtn.Name = "editDeviceNameBtn";
+			editDeviceNameBtn.Size = new Size(126, 25);
+			editDeviceNameBtn.TabIndex = 1;
+			editDeviceNameBtn.Text = "Добавить/изменить";
+			editDeviceNameBtn.UseVisualStyleBackColor = true;
+			editDeviceNameBtn.Click += deviceNameEditBtn_Click;
+			// 
+			// editDeviceTypeBtn
+			// 
+			editDeviceTypeBtn.Anchor = AnchorStyles.None;
+			editDeviceTypeBtn.AutoSize = true;
+			editDeviceTypeBtn.Location = new Point(95, 18);
+			editDeviceTypeBtn.Name = "editDeviceTypeBtn";
+			editDeviceTypeBtn.Size = new Size(126, 25);
+			editDeviceTypeBtn.TabIndex = 1;
+			editDeviceTypeBtn.Text = "Добавить/изменить";
+			editDeviceTypeBtn.UseVisualStyleBackColor = true;
+			editDeviceTypeBtn.Click += deviceTypeEditBtn_Click;
+			// 
+			// label22
+			// 
+			label22.Anchor = AnchorStyles.None;
+			label22.AutoSize = true;
+			label22.Location = new Point(422, 0);
+			label22.Name = "label22";
+			label22.Size = new Size(106, 15);
+			label22.TabIndex = 2;
+			label22.Text = "Названия техники";
+			// 
+			// label21
+			// 
+			label21.Anchor = AnchorStyles.None;
+			label21.AutoSize = true;
+			label21.Location = new Point(117, 0);
+			label21.Name = "label21";
+			label21.Size = new Size(83, 15);
+			label21.TabIndex = 2;
+			label21.Text = "Типы техники";
 			// 
 			// tableLayoutPanel7
 			// 
@@ -1017,12 +1030,11 @@
 			tableLayoutPanel4.PerformLayout();
 			tabPage4.ResumeLayout(false);
 			tableLayoutPanel18.ResumeLayout(false);
-			tableLayoutPanel21.ResumeLayout(false);
-			tableLayoutPanel21.PerformLayout();
-			tableLayoutPanel19.ResumeLayout(false);
-			tableLayoutPanel19.PerformLayout();
 			tableLayoutPanel20.ResumeLayout(false);
 			tableLayoutPanel20.PerformLayout();
+			groupBox1.ResumeLayout(false);
+			tableLayoutPanel19.ResumeLayout(false);
+			tableLayoutPanel19.PerformLayout();
 			tableLayoutPanel7.ResumeLayout(false);
 			tableLayoutPanel8.ResumeLayout(false);
 			tableLayoutPanel8.PerformLayout();
@@ -1072,14 +1084,12 @@
 		private TabPage tabPage4;
 		private TableLayoutPanel tableLayoutPanel18;
 		private TableLayoutPanel tableLayoutPanel19;
-		private ListBox typesLBox;
-		private Button typeEditBtn;
+		private ListBox deviceTypesLBox;
+		private Button editDeviceTypeBtn;
 		private TableLayoutPanel tableLayoutPanel20;
-		private ListBox providersLBox;
-		private Button providerEditBtn;
-		private TableLayoutPanel tableLayoutPanel21;
-		private ListBox namesLBox;
-		private Button nameEditBtn;
+		private ListBox deviceProvidersLBox;
+		private Button editDeviceProviderBtn;
+		private Button editDeviceNameBtn;
 		private Label label1;
 		private Label label2;
 		private Label label6;
@@ -1101,13 +1111,15 @@
 		private Button moveDeviceToRightBtn;
 		private Label label20;
 		private Button editDeviceBtnRight;
-		private ListView devicesLView1;
-		private ListView devicesLView2;
 		private Label label7;
-		private TextBox searchTBox1;
+		private TextBox searchTBoxLeft;
 		private Label label8;
-		private TextBox searchTBox2;
+		private TextBox searchTBoxRight;
 		private MenuStrip menuStrip1;
 		private ToolStripMenuItem refreshToolStripMenuItem;
+		private GroupBox groupBox1;
+		private ListBox deviceNamesLBox;
+		private ListBox devicesLBoxLeft;
+		private ListBox devicesLBoxRight;
 	}
 }

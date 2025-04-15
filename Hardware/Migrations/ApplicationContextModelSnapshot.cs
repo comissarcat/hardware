@@ -73,9 +73,7 @@ namespace Hardware.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("User")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -107,7 +105,7 @@ namespace Hardware.Migrations
 
                     b.Property<string>("Serial")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -116,6 +114,9 @@ namespace Hardware.Migrations
                     b.HasIndex("DeviceNameId");
 
                     b.HasIndex("DeviceProviderId");
+
+                    b.HasIndex("Serial")
+                        .IsUnique();
 
                     b.ToTable("Devices");
                 });
@@ -193,9 +194,7 @@ namespace Hardware.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("ChangedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2025, 3, 19, 17, 12, 15, 927, DateTimeKind.Local).AddTicks(5990));
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 

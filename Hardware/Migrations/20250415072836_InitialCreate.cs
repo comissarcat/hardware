@@ -70,7 +70,7 @@ namespace Hardware.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     After = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ChangedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false, defaultValue: new DateTime(2025, 3, 19, 17, 12, 15, 927, DateTimeKind.Local).AddTicks(5990))
+                    ChangedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,9 +128,7 @@ namespace Hardware.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    User = table.Column<string>(type: "longtext", nullable: true)
+                    Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CabinetId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -152,7 +150,7 @@ namespace Hardware.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Serial = table.Column<string>(type: "longtext", nullable: false)
+                    Serial = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Inventory = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -213,6 +211,12 @@ namespace Hardware.Migrations
                 name: "IX_Devices_DeviceProviderId",
                 table: "Devices",
                 column: "DeviceProviderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Devices_Serial",
+                table: "Devices",
+                column: "Serial",
+                unique: true);
         }
 
         /// <inheritdoc />

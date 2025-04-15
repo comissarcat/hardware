@@ -27,7 +27,9 @@ namespace Hardware
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<History>().Property(h => h.ChangedAt).HasDefaultValue(DateTime.Now);
+			modelBuilder.Entity<Device>()
+				.HasIndex(d => d.Serial)
+				.IsUnique();
 		}
 	}
 }

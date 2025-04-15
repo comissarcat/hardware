@@ -13,30 +13,33 @@ namespace Hardware.Forms
 			context = ApplicationContext.Instanse();
 			DialogResult = DialogResult.Cancel;
 			buildingCBox.DataSource = context.Buildings.ToList();
-			buildingCBox.DisplayMember = "Name";
 			this.cabinet = cabinet;
 			if (this.cabinet is not null)
 			{
 				idTBox.Text = this.cabinet.Id.ToString();
 				nameTBox.Text = this.cabinet.Name;
+				buildingCBox.SelectedItem = this.cabinet.Building;
 				editBtn.Enabled = true;
-				building = cabinet.Building;
-				var cabinetDevices = context.Devices.Include(d => d.Complect.Cabinet).Where(d => d.Complect.Cabinet == cabinet).ToList();
-				if (cabinetDevices.Count == 0)
-					removeBtn.Enabled = true;
+				SwitchRemoveBtn();
 			}
 			buildingCBox.SelectedItem = building;
 		}
 
+		private void SwitchRemoveBtn()
+		{
+			var cabinetHasDevices = context.Devices.Include(d => d.Complect.Cabinet).Where(d => d.Complect.Cabinet == cabinet).Any();
+			removeBtn.Enabled = !cabinetHasDevices;
+		}
+
 		private void RefreshBuildings()
 		{
-			int b = buildingCBox.SelectedIndex;
+			var selectedItem = buildingCBox.SelectedItem;
 
 			buildingCBox.DataSource = context.Buildings.ToList();
-			buildingCBox.DisplayMember = "Name";
 
-			if (b != -1 && b > buildingCBox.Items.Count)
-				buildingCBox.SelectedIndex = b;
+			if (selectedItem is not null)
+				if (buildingCBox.Items.Contains(selectedItem))
+					buildingCBox.SelectedItem = selectedItem;
 		}
 
 		private async Task<bool> AddCabinet()
@@ -69,14 +72,19 @@ namespace Hardware.Forms
 					after.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
 				for (int i = 0; i < cabinetDevices.Count; i++)
 					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
-				try
-				{
-					await context.SaveChangesAsync();
-				}
-				catch
-				{
-					return false;
-				}
+			}
+			else
+			{
+				cabinet.Name = nameTBox.Text;
+				cabinet.Building = (Building)buildingCBox.SelectedItem;
+			}
+			try
+			{
+				await context.SaveChangesAsync();
+			}
+			catch
+			{
+				return false;
 			}
 			return true;
 		}

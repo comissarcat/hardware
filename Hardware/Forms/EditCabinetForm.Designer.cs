@@ -60,7 +60,7 @@
 			tableLayoutPanel1.RowCount = 2;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle());
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.Size = new Size(434, 136);
+			tableLayoutPanel1.Size = new Size(534, 136);
 			tableLayoutPanel1.TabIndex = 1;
 			// 
 			// tableLayoutPanel2
@@ -68,7 +68,7 @@
 			tableLayoutPanel2.AutoSize = true;
 			tableLayoutPanel2.ColumnCount = 3;
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
 			tableLayoutPanel2.Controls.Add(label3, 0, 2);
 			tableLayoutPanel2.Controls.Add(label1, 0, 0);
@@ -84,7 +84,7 @@
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.Size = new Size(428, 89);
+			tableLayoutPanel2.Size = new Size(528, 89);
 			tableLayoutPanel2.TabIndex = 0;
 			// 
 			// label3
@@ -123,7 +123,7 @@
 			idTBox.Location = new Point(68, 3);
 			idTBox.Name = "idTBox";
 			idTBox.ReadOnly = true;
-			idTBox.Size = new Size(307, 23);
+			idTBox.Size = new Size(325, 23);
 			idTBox.TabIndex = 2;
 			// 
 			// nameTBox
@@ -131,7 +131,7 @@
 			nameTBox.Dock = DockStyle.Fill;
 			nameTBox.Location = new Point(68, 63);
 			nameTBox.Name = "nameTBox";
-			nameTBox.Size = new Size(307, 23);
+			nameTBox.Size = new Size(325, 23);
 			nameTBox.TabIndex = 3;
 			// 
 			// buildingCBox
@@ -140,7 +140,7 @@
 			buildingCBox.FormattingEnabled = true;
 			buildingCBox.Location = new Point(68, 32);
 			buildingCBox.Name = "buildingCBox";
-			buildingCBox.Size = new Size(307, 23);
+			buildingCBox.Size = new Size(325, 23);
 			buildingCBox.TabIndex = 5;
 			// 
 			// editBuildingBtn
@@ -148,11 +148,11 @@
 			editBuildingBtn.Anchor = AnchorStyles.None;
 			editBuildingBtn.AutoSize = true;
 			editBuildingBtn.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			editBuildingBtn.Location = new Point(390, 32);
+			editBuildingBtn.Location = new Point(399, 32);
 			editBuildingBtn.Name = "editBuildingBtn";
-			editBuildingBtn.Size = new Size(25, 25);
+			editBuildingBtn.Size = new Size(126, 25);
 			editBuildingBtn.TabIndex = 6;
-			editBuildingBtn.Text = "+";
+			editBuildingBtn.Text = "Добавить/изменить";
 			editBuildingBtn.UseVisualStyleBackColor = true;
 			editBuildingBtn.Click += editBuildingBtn_Click;
 			// 
@@ -173,13 +173,13 @@
 			tableLayoutPanel3.Name = "tableLayoutPanel3";
 			tableLayoutPanel3.RowCount = 1;
 			tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel3.Size = new Size(428, 35);
+			tableLayoutPanel3.Size = new Size(528, 35);
 			tableLayoutPanel3.TabIndex = 1;
 			// 
 			// addBtn
 			// 
 			addBtn.Anchor = AnchorStyles.None;
-			addBtn.Location = new Point(16, 6);
+			addBtn.Location = new Point(28, 6);
 			addBtn.Name = "addBtn";
 			addBtn.Size = new Size(75, 23);
 			addBtn.TabIndex = 0;
@@ -191,7 +191,7 @@
 			// 
 			editBtn.Anchor = AnchorStyles.None;
 			editBtn.Enabled = false;
-			editBtn.Location = new Point(123, 6);
+			editBtn.Location = new Point(160, 6);
 			editBtn.Name = "editBtn";
 			editBtn.Size = new Size(75, 23);
 			editBtn.TabIndex = 1;
@@ -203,7 +203,7 @@
 			// 
 			removeBtn.Anchor = AnchorStyles.None;
 			removeBtn.Enabled = false;
-			removeBtn.Location = new Point(230, 6);
+			removeBtn.Location = new Point(292, 6);
 			removeBtn.Name = "removeBtn";
 			removeBtn.Size = new Size(75, 23);
 			removeBtn.TabIndex = 2;
@@ -214,7 +214,7 @@
 			// cancelBtn
 			// 
 			cancelBtn.Anchor = AnchorStyles.None;
-			cancelBtn.Location = new Point(337, 6);
+			cancelBtn.Location = new Point(424, 6);
 			cancelBtn.Name = "cancelBtn";
 			cancelBtn.Size = new Size(75, 23);
 			cancelBtn.TabIndex = 3;
@@ -226,7 +226,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(434, 136);
+			ClientSize = new Size(534, 136);
 			Controls.Add(tableLayoutPanel1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "EditCabinetForm";

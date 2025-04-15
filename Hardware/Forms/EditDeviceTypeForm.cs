@@ -3,20 +3,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hardware.Forms
 {
-	public partial class EditBuildingForm : Form
+	public partial class EditDeviceTypeForm : Form
 	{
 		private readonly ApplicationContext context;
-		private Building? building;
-		public EditBuildingForm(Building? building)
+		private DeviceType? deviceType;
+		public EditDeviceTypeForm(DeviceType? deviceType)
 		{
 			InitializeComponent();
 			context = ApplicationContext.Instanse();
 			DialogResult = DialogResult.Cancel;
-			this.building = building;
-			if (this.building is not null)
+			this.deviceType = deviceType;
+			if (this.deviceType is not null)
 			{
-				idTBox.Text = this.building.Id.ToString();
-				nameTBox.Text = this.building.Name;
+				idTBox.Text = this.deviceType.Id.ToString();
+				nameTBox.Text = this.deviceType.Name;
 				editBtn.Enabled = true;
 				SwitchRemoveBtn();
 			}
@@ -24,14 +24,14 @@ namespace Hardware.Forms
 
 		private void SwitchRemoveBtn()
 		{
-			var buildingHasDevices = context.Devices.Include(d => d.Complect.Cabinet.Building).Where(d => d.Complect.Cabinet.Building == building).Any();
-			removeBtn.Enabled = !buildingHasDevices;
+			var typeHasDevices = context.Devices.Include(d => d.DeviceName.DeviceType).Where(d => d.DeviceName.DeviceType == deviceType).Any();
+			removeBtn.Enabled = !typeHasDevices;
 		}
 
-		private async Task<bool> AddBuilding()
+		private async Task<bool> AddDeviceType()
 		{
-			building = new() { Name = nameTBox.Text };
-			await context.Buildings.AddAsync(building);
+			deviceType = new() { Name = nameTBox.Text };
+			await context.DeviceTypes.AddAsync(deviceType);
 			try
 			{
 				await context.SaveChangesAsync();
@@ -43,9 +43,9 @@ namespace Hardware.Forms
 			return true;
 		}
 
-		private async Task<bool> EditBuilding()
+		private async Task<bool> EditDeviceType()
 		{
-			building.Name = nameTBox.Text;
+			deviceType.Name = nameTBox.Text;
 			try
 			{
 				await context.SaveChangesAsync();
@@ -57,9 +57,9 @@ namespace Hardware.Forms
 			return true;
 		}
 
-		private async Task<bool> RemoveBuilding()
+		private async Task<bool> RemoveDeviceType()
 		{
-			context.Buildings.Remove(building);
+			context.DeviceTypes.Remove(deviceType);
 			try
 			{
 				await context.SaveChangesAsync();
@@ -73,7 +73,7 @@ namespace Hardware.Forms
 
 		private async void addBtn_Click(object sender, EventArgs e)
 		{
-			if (!await AddBuilding())
+			if (!await AddDeviceType())
 				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
 			else
 			{
@@ -85,7 +85,7 @@ namespace Hardware.Forms
 
 		private async void editBtn_Click(object sender, EventArgs e)
 		{
-			if (!await EditBuilding())
+			if (!await EditDeviceType())
 				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
 			else
 			{
@@ -97,7 +97,7 @@ namespace Hardware.Forms
 
 		private async void removeBtn_Click(object sender, EventArgs e)
 		{
-			if (!await RemoveBuilding())
+			if (!await RemoveDeviceType())
 				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
 			else
 			{
