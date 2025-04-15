@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditDeviceTypeForm));
 			tableLayoutPanel1 = new TableLayoutPanel();
 			tableLayoutPanel2 = new TableLayoutPanel();
 			label1 = new Label();
@@ -187,9 +188,10 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(434, 111);
 			Controls.Add(tableLayoutPanel1);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "EditDeviceTypeForm";
 			StartPosition = FormStartPosition.CenterScreen;
-			Text = "EditTypeForm";
+			Text = "Редактирование типа техники";
 			tableLayoutPanel1.ResumeLayout(false);
 			tableLayoutPanel1.PerformLayout();
 			tableLayoutPanel2.ResumeLayout(false);

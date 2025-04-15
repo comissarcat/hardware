@@ -191,7 +191,7 @@
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "EditDeviceProviderForm";
 			StartPosition = FormStartPosition.CenterScreen;
-			Text = "EditProviderForm";
+			Text = "Редактирование предоставителя техники";
 			tableLayoutPanel1.ResumeLayout(false);
 			tableLayoutPanel1.PerformLayout();
 			tableLayoutPanel2.ResumeLayout(false);

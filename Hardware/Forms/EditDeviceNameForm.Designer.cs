@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditDeviceNameForm));
 			tableLayoutPanel1 = new TableLayoutPanel();
 			tableLayoutPanel2 = new TableLayoutPanel();
 			label3 = new Label();
@@ -227,9 +228,10 @@
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(534, 136);
 			Controls.Add(tableLayoutPanel1);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "EditDeviceNameForm";
 			StartPosition = FormStartPosition.CenterScreen;
-			Text = "EditNameForm";
+			Text = "Редактирование названия техники";
 			tableLayoutPanel1.ResumeLayout(false);
 			tableLayoutPanel1.PerformLayout();
 			tableLayoutPanel2.ResumeLayout(false);
