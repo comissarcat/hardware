@@ -29,65 +29,62 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			tabControl1 = new TabControl();
+			tabControl = new TabControl();
 			tabPage1 = new TabPage();
-			tableLayoutPanel1 = new TableLayoutPanel();
-			tableLayoutPanel2 = new TableLayoutPanel();
+			devicesTLP = new TableLayoutPanel();
+			devicesTLPLeft = new TableLayoutPanel();
 			devicesLBoxLeft = new ListBox();
-			label18 = new Label();
+			devicesLabelLeft = new Label();
 			editDeviceBtnLeft = new Button();
-			label10 = new Label();
+			complectsLabelLeft = new Label();
 			editComplectBtnLeft = new Button();
 			complectsLBoxLeft = new ListBox();
 			buildingsLBoxLeft = new ListBox();
 			cabinetsLBoxLeft = new ListBox();
 			editBuildingBtnLeft = new Button();
 			editCabinetBtnLeft = new Button();
-			label1 = new Label();
-			label2 = new Label();
-			label7 = new Label();
+			buildingsLabelLeft = new Label();
+			cabinetsLabelLeft = new Label();
+			searchLabelLeft = new Label();
 			searchTBoxLeft = new TextBox();
-			tableLayoutPanel3 = new TableLayoutPanel();
+			devicesTLPRight = new TableLayoutPanel();
 			devicesLBoxRight = new ListBox();
 			searchTBoxRight = new TextBox();
-			label8 = new Label();
-			label20 = new Label();
+			searchLabelRight = new Label();
+			devicesLabelRight = new Label();
 			editDeviceBtnRight = new Button();
-			label12 = new Label();
+			complectsLabelRight = new Label();
 			editComplectBtnRight = new Button();
 			complectsLBoxRight = new ListBox();
-			label6 = new Label();
-			label5 = new Label();
+			cabinetsLabelRight = new Label();
+			buildingsLabelRight = new Label();
 			buildingsLBoxRight = new ListBox();
 			cabinetsLBoxRight = new ListBox();
 			editBuildingBtnRight = new Button();
 			editCabinetBtnRight = new Button();
-			tableLayoutPanel4 = new TableLayoutPanel();
+			moveLeftRightBtnsTLP = new TableLayoutPanel();
 			moveDeviceToLeftBtn = new Button();
 			moveDeviceToRightBtn = new Button();
 			moveComplectToLeftBtn = new Button();
 			moveComplectToRightBtn = new Button();
 			moveCabinetToRightBtn = new Button();
 			moveCabinetToLeftBtn = new Button();
-			tabPage4 = new TabPage();
-			tableLayoutPanel18 = new TableLayoutPanel();
-			tableLayoutPanel20 = new TableLayoutPanel();
+			tabPage2 = new TabPage();
+			deviceTypesNamesProvidersTLP = new TableLayoutPanel();
+			deviceProvidersTLP = new TableLayoutPanel();
 			deviceProvidersLBox = new ListBox();
 			editDeviceProviderBtn = new Button();
-			label23 = new Label();
-			groupBox1 = new GroupBox();
-			tableLayoutPanel19 = new TableLayoutPanel();
+			deviceProvidersLabel = new Label();
+			deviceTypesNamesGBox = new GroupBox();
+			deviceTypesNamesTLP = new TableLayoutPanel();
 			deviceNamesLBox = new ListBox();
 			deviceTypesLBox = new ListBox();
 			editDeviceNameBtn = new Button();
 			editDeviceTypeBtn = new Button();
-			label22 = new Label();
-			label21 = new Label();
+			deviceNamesLabel = new Label();
+			deviceTypesLabel = new Label();
 			tableLayoutPanel7 = new TableLayoutPanel();
 			tableLayoutPanel8 = new TableLayoutPanel();
-			button8 = new Button();
-			button9 = new Button();
-			button10 = new Button();
 			textBox5 = new TextBox();
 			textBox6 = new TextBox();
 			label3 = new Label();
@@ -95,44 +92,41 @@
 			label4 = new Label();
 			textBox7 = new TextBox();
 			textBox8 = new TextBox();
-			button11 = new Button();
-			button12 = new Button();
-			button13 = new Button();
 			tableLayoutPanel10 = new TableLayoutPanel();
 			tableLayoutPanel11 = new TableLayoutPanel();
-			menuStrip1 = new MenuStrip();
+			menuStrip = new MenuStrip();
 			refreshToolStripMenuItem = new ToolStripMenuItem();
-			tabControl1.SuspendLayout();
+			tabControl.SuspendLayout();
 			tabPage1.SuspendLayout();
-			tableLayoutPanel1.SuspendLayout();
-			tableLayoutPanel2.SuspendLayout();
-			tableLayoutPanel3.SuspendLayout();
-			tableLayoutPanel4.SuspendLayout();
-			tabPage4.SuspendLayout();
-			tableLayoutPanel18.SuspendLayout();
-			tableLayoutPanel20.SuspendLayout();
-			groupBox1.SuspendLayout();
-			tableLayoutPanel19.SuspendLayout();
+			devicesTLP.SuspendLayout();
+			devicesTLPLeft.SuspendLayout();
+			devicesTLPRight.SuspendLayout();
+			moveLeftRightBtnsTLP.SuspendLayout();
+			tabPage2.SuspendLayout();
+			deviceTypesNamesProvidersTLP.SuspendLayout();
+			deviceProvidersTLP.SuspendLayout();
+			deviceTypesNamesGBox.SuspendLayout();
+			deviceTypesNamesTLP.SuspendLayout();
 			tableLayoutPanel7.SuspendLayout();
 			tableLayoutPanel8.SuspendLayout();
 			tableLayoutPanel9.SuspendLayout();
-			menuStrip1.SuspendLayout();
+			menuStrip.SuspendLayout();
 			SuspendLayout();
 			// 
-			// tabControl1
+			// tabControl
 			// 
-			tabControl1.Controls.Add(tabPage1);
-			tabControl1.Controls.Add(tabPage4);
-			tabControl1.Dock = DockStyle.Fill;
-			tabControl1.Location = new Point(0, 24);
-			tabControl1.Name = "tabControl1";
-			tabControl1.SelectedIndex = 0;
-			tabControl1.Size = new Size(984, 437);
-			tabControl1.TabIndex = 0;
+			tabControl.Controls.Add(tabPage1);
+			tabControl.Controls.Add(tabPage2);
+			tabControl.Dock = DockStyle.Fill;
+			tabControl.Location = new Point(0, 24);
+			tabControl.Name = "tabControl";
+			tabControl.SelectedIndex = 0;
+			tabControl.Size = new Size(984, 437);
+			tabControl.TabIndex = 0;
 			// 
 			// tabPage1
 			// 
-			tabPage1.Controls.Add(tableLayoutPanel1);
+			tabPage1.Controls.Add(devicesTLP);
 			tabPage1.Location = new Point(4, 24);
 			tabPage1.Name = "tabPage1";
 			tabPage1.Padding = new Padding(3);
@@ -141,54 +135,54 @@
 			tabPage1.Text = "Перемещение техники";
 			tabPage1.UseVisualStyleBackColor = true;
 			// 
-			// tableLayoutPanel1
+			// devicesTLP
 			// 
-			tableLayoutPanel1.ColumnCount = 3;
-			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0000076F));
-			tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 0);
-			tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 2, 0);
-			tableLayoutPanel1.Controls.Add(tableLayoutPanel4, 1, 0);
-			tableLayoutPanel1.Dock = DockStyle.Fill;
-			tableLayoutPanel1.Location = new Point(3, 3);
-			tableLayoutPanel1.Name = "tableLayoutPanel1";
-			tableLayoutPanel1.RowCount = 1;
-			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.Size = new Size(970, 403);
-			tableLayoutPanel1.TabIndex = 0;
+			devicesTLP.ColumnCount = 3;
+			devicesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			devicesTLP.ColumnStyles.Add(new ColumnStyle());
+			devicesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.0000076F));
+			devicesTLP.Controls.Add(devicesTLPLeft, 0, 0);
+			devicesTLP.Controls.Add(devicesTLPRight, 2, 0);
+			devicesTLP.Controls.Add(moveLeftRightBtnsTLP, 1, 0);
+			devicesTLP.Dock = DockStyle.Fill;
+			devicesTLP.Location = new Point(3, 3);
+			devicesTLP.Name = "devicesTLP";
+			devicesTLP.RowCount = 1;
+			devicesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			devicesTLP.Size = new Size(970, 403);
+			devicesTLP.TabIndex = 0;
 			// 
-			// tableLayoutPanel2
+			// devicesTLPLeft
 			// 
-			tableLayoutPanel2.ColumnCount = 4;
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-			tableLayoutPanel2.Controls.Add(devicesLBoxLeft, 3, 3);
-			tableLayoutPanel2.Controls.Add(label18, 3, 1);
-			tableLayoutPanel2.Controls.Add(editDeviceBtnLeft, 3, 2);
-			tableLayoutPanel2.Controls.Add(label10, 2, 1);
-			tableLayoutPanel2.Controls.Add(editComplectBtnLeft, 2, 2);
-			tableLayoutPanel2.Controls.Add(complectsLBoxLeft, 2, 3);
-			tableLayoutPanel2.Controls.Add(buildingsLBoxLeft, 0, 3);
-			tableLayoutPanel2.Controls.Add(cabinetsLBoxLeft, 1, 3);
-			tableLayoutPanel2.Controls.Add(editBuildingBtnLeft, 0, 2);
-			tableLayoutPanel2.Controls.Add(editCabinetBtnLeft, 1, 2);
-			tableLayoutPanel2.Controls.Add(label1, 0, 1);
-			tableLayoutPanel2.Controls.Add(label2, 1, 1);
-			tableLayoutPanel2.Controls.Add(label7, 0, 0);
-			tableLayoutPanel2.Controls.Add(searchTBoxLeft, 1, 0);
-			tableLayoutPanel2.Dock = DockStyle.Fill;
-			tableLayoutPanel2.Location = new Point(3, 3);
-			tableLayoutPanel2.Name = "tableLayoutPanel2";
-			tableLayoutPanel2.RowCount = 4;
-			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel2.Size = new Size(419, 397);
-			tableLayoutPanel2.TabIndex = 0;
+			devicesTLPLeft.ColumnCount = 4;
+			devicesTLPLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			devicesTLPLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			devicesTLPLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			devicesTLPLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+			devicesTLPLeft.Controls.Add(searchLabelLeft, 0, 0);
+			devicesTLPLeft.Controls.Add(searchTBoxLeft, 1, 0);
+			devicesTLPLeft.Controls.Add(buildingsLabelLeft, 0, 1);
+			devicesTLPLeft.Controls.Add(cabinetsLabelLeft, 1, 1);
+			devicesTLPLeft.Controls.Add(complectsLabelLeft, 2, 1);
+			devicesTLPLeft.Controls.Add(devicesLabelLeft, 3, 1);
+			devicesTLPLeft.Controls.Add(editBuildingBtnLeft, 0, 2);
+			devicesTLPLeft.Controls.Add(editCabinetBtnLeft, 1, 2);
+			devicesTLPLeft.Controls.Add(editComplectBtnLeft, 2, 2);
+			devicesTLPLeft.Controls.Add(editDeviceBtnLeft, 3, 2);
+			devicesTLPLeft.Controls.Add(buildingsLBoxLeft, 0, 3);
+			devicesTLPLeft.Controls.Add(cabinetsLBoxLeft, 1, 3);
+			devicesTLPLeft.Controls.Add(complectsLBoxLeft, 2, 3);
+			devicesTLPLeft.Controls.Add(devicesLBoxLeft, 3, 3);
+			devicesTLPLeft.Dock = DockStyle.Fill;
+			devicesTLPLeft.Location = new Point(3, 3);
+			devicesTLPLeft.Name = "devicesTLPLeft";
+			devicesTLPLeft.RowCount = 4;
+			devicesTLPLeft.RowStyles.Add(new RowStyle());
+			devicesTLPLeft.RowStyles.Add(new RowStyle());
+			devicesTLPLeft.RowStyles.Add(new RowStyle());
+			devicesTLPLeft.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			devicesTLPLeft.Size = new Size(419, 397);
+			devicesTLPLeft.TabIndex = 0;
 			// 
 			// devicesLBoxLeft
 			// 
@@ -201,15 +195,15 @@
 			devicesLBoxLeft.TabIndex = 15;
 			devicesLBoxLeft.SelectedValueChanged += devicesLBox_SelectedValueChanged;
 			// 
-			// label18
+			// devicesLabelLeft
 			// 
-			label18.Anchor = AnchorStyles.None;
-			label18.AutoSize = true;
-			label18.Location = new Point(282, 29);
-			label18.Name = "label18";
-			label18.Size = new Size(103, 15);
-			label18.TabIndex = 11;
-			label18.Text = "Единицы техники";
+			devicesLabelLeft.Anchor = AnchorStyles.None;
+			devicesLabelLeft.AutoSize = true;
+			devicesLabelLeft.Location = new Point(282, 29);
+			devicesLabelLeft.Name = "devicesLabelLeft";
+			devicesLabelLeft.Size = new Size(103, 15);
+			devicesLabelLeft.TabIndex = 11;
+			devicesLabelLeft.Text = "Единицы техники";
 			// 
 			// editDeviceBtnLeft
 			// 
@@ -224,15 +218,15 @@
 			editDeviceBtnLeft.UseVisualStyleBackColor = true;
 			editDeviceBtnLeft.Click += editDeviceBtn_Click;
 			// 
-			// label10
+			// complectsLabelLeft
 			// 
-			label10.Anchor = AnchorStyles.None;
-			label10.AutoSize = true;
-			label10.Location = new Point(172, 29);
-			label10.Name = "label10";
-			label10.Size = new Size(70, 15);
-			label10.TabIndex = 8;
-			label10.Text = "Комплекты";
+			complectsLabelLeft.Anchor = AnchorStyles.None;
+			complectsLabelLeft.AutoSize = true;
+			complectsLabelLeft.Location = new Point(172, 29);
+			complectsLabelLeft.Name = "complectsLabelLeft";
+			complectsLabelLeft.Size = new Size(70, 15);
+			complectsLabelLeft.TabIndex = 8;
+			complectsLabelLeft.Text = "Комплекты";
 			// 
 			// editComplectBtnLeft
 			// 
@@ -305,39 +299,39 @@
 			editCabinetBtnLeft.UseVisualStyleBackColor = true;
 			editCabinetBtnLeft.Click += editCabinetBtn_Click;
 			// 
-			// label1
+			// buildingsLabelLeft
 			// 
-			label1.Anchor = AnchorStyles.None;
-			label1.AutoSize = true;
-			label1.Location = new Point(18, 29);
-			label1.Name = "label1";
-			label1.Size = new Size(46, 15);
-			label1.TabIndex = 4;
-			label1.Text = "Здания";
+			buildingsLabelLeft.Anchor = AnchorStyles.None;
+			buildingsLabelLeft.AutoSize = true;
+			buildingsLabelLeft.Location = new Point(18, 29);
+			buildingsLabelLeft.Name = "buildingsLabelLeft";
+			buildingsLabelLeft.Size = new Size(46, 15);
+			buildingsLabelLeft.TabIndex = 4;
+			buildingsLabelLeft.Text = "Здания";
 			// 
-			// label2
+			// cabinetsLabelLeft
 			// 
-			label2.Anchor = AnchorStyles.None;
-			label2.AutoSize = true;
-			label2.Location = new Point(94, 29);
-			label2.Name = "label2";
-			label2.Size = new Size(61, 15);
-			label2.TabIndex = 5;
-			label2.Text = "Кабинеты";
+			cabinetsLabelLeft.Anchor = AnchorStyles.None;
+			cabinetsLabelLeft.AutoSize = true;
+			cabinetsLabelLeft.Location = new Point(94, 29);
+			cabinetsLabelLeft.Name = "cabinetsLabelLeft";
+			cabinetsLabelLeft.Size = new Size(61, 15);
+			cabinetsLabelLeft.TabIndex = 5;
+			cabinetsLabelLeft.Text = "Кабинеты";
 			// 
-			// label7
+			// searchLabelLeft
 			// 
-			label7.Anchor = AnchorStyles.None;
-			label7.AutoSize = true;
-			label7.Location = new Point(20, 7);
-			label7.Name = "label7";
-			label7.Size = new Size(42, 15);
-			label7.TabIndex = 13;
-			label7.Text = "Поиск";
+			searchLabelLeft.Anchor = AnchorStyles.None;
+			searchLabelLeft.AutoSize = true;
+			searchLabelLeft.Location = new Point(20, 7);
+			searchLabelLeft.Name = "searchLabelLeft";
+			searchLabelLeft.Size = new Size(42, 15);
+			searchLabelLeft.TabIndex = 13;
+			searchLabelLeft.Text = "Поиск";
 			// 
 			// searchTBoxLeft
 			// 
-			tableLayoutPanel2.SetColumnSpan(searchTBoxLeft, 3);
+			devicesTLPLeft.SetColumnSpan(searchTBoxLeft, 3);
 			searchTBoxLeft.Dock = DockStyle.Fill;
 			searchTBoxLeft.Location = new Point(86, 3);
 			searchTBoxLeft.Name = "searchTBoxLeft";
@@ -345,37 +339,37 @@
 			searchTBoxLeft.TabIndex = 14;
 			searchTBoxLeft.TextChanged += searchTBox_TextChanged;
 			// 
-			// tableLayoutPanel3
+			// devicesTLPRight
 			// 
-			tableLayoutPanel3.ColumnCount = 4;
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-			tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-			tableLayoutPanel3.Controls.Add(devicesLBoxRight, 3, 3);
-			tableLayoutPanel3.Controls.Add(searchTBoxRight, 1, 0);
-			tableLayoutPanel3.Controls.Add(label8, 0, 0);
-			tableLayoutPanel3.Controls.Add(label20, 3, 1);
-			tableLayoutPanel3.Controls.Add(editDeviceBtnRight, 3, 2);
-			tableLayoutPanel3.Controls.Add(label12, 2, 1);
-			tableLayoutPanel3.Controls.Add(editComplectBtnRight, 2, 2);
-			tableLayoutPanel3.Controls.Add(complectsLBoxRight, 2, 3);
-			tableLayoutPanel3.Controls.Add(label6, 1, 1);
-			tableLayoutPanel3.Controls.Add(label5, 0, 1);
-			tableLayoutPanel3.Controls.Add(buildingsLBoxRight, 0, 3);
-			tableLayoutPanel3.Controls.Add(cabinetsLBoxRight, 1, 3);
-			tableLayoutPanel3.Controls.Add(editBuildingBtnRight, 0, 2);
-			tableLayoutPanel3.Controls.Add(editCabinetBtnRight, 1, 2);
-			tableLayoutPanel3.Dock = DockStyle.Fill;
-			tableLayoutPanel3.Location = new Point(547, 3);
-			tableLayoutPanel3.Name = "tableLayoutPanel3";
-			tableLayoutPanel3.RowCount = 4;
-			tableLayoutPanel3.RowStyles.Add(new RowStyle());
-			tableLayoutPanel3.RowStyles.Add(new RowStyle());
-			tableLayoutPanel3.RowStyles.Add(new RowStyle());
-			tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel3.Size = new Size(420, 397);
-			tableLayoutPanel3.TabIndex = 1;
+			devicesTLPRight.ColumnCount = 4;
+			devicesTLPRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			devicesTLPRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			devicesTLPRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+			devicesTLPRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+			devicesTLPRight.Controls.Add(searchLabelRight, 0, 0);
+			devicesTLPRight.Controls.Add(searchTBoxRight, 1, 0);
+			devicesTLPRight.Controls.Add(buildingsLabelRight, 0, 1);
+			devicesTLPRight.Controls.Add(cabinetsLabelRight, 1, 1);
+			devicesTLPRight.Controls.Add(complectsLabelRight, 2, 1);
+			devicesTLPRight.Controls.Add(devicesLabelRight, 3, 1);
+			devicesTLPRight.Controls.Add(editBuildingBtnRight, 0, 2);
+			devicesTLPRight.Controls.Add(editCabinetBtnRight, 1, 2);
+			devicesTLPRight.Controls.Add(editComplectBtnRight, 2, 2);
+			devicesTLPRight.Controls.Add(editDeviceBtnRight, 3, 2);
+			devicesTLPRight.Controls.Add(buildingsLBoxRight, 0, 3);
+			devicesTLPRight.Controls.Add(cabinetsLBoxRight, 1, 3);
+			devicesTLPRight.Controls.Add(complectsLBoxRight, 2, 3);
+			devicesTLPRight.Controls.Add(devicesLBoxRight, 3, 3);
+			devicesTLPRight.Dock = DockStyle.Fill;
+			devicesTLPRight.Location = new Point(547, 3);
+			devicesTLPRight.Name = "devicesTLPRight";
+			devicesTLPRight.RowCount = 4;
+			devicesTLPRight.RowStyles.Add(new RowStyle());
+			devicesTLPRight.RowStyles.Add(new RowStyle());
+			devicesTLPRight.RowStyles.Add(new RowStyle());
+			devicesTLPRight.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			devicesTLPRight.Size = new Size(420, 397);
+			devicesTLPRight.TabIndex = 1;
 			// 
 			// devicesLBoxRight
 			// 
@@ -390,7 +384,7 @@
 			// 
 			// searchTBoxRight
 			// 
-			tableLayoutPanel3.SetColumnSpan(searchTBoxRight, 3);
+			devicesTLPRight.SetColumnSpan(searchTBoxRight, 3);
 			searchTBoxRight.Dock = DockStyle.Fill;
 			searchTBoxRight.Location = new Point(87, 3);
 			searchTBoxRight.Name = "searchTBoxRight";
@@ -398,25 +392,25 @@
 			searchTBoxRight.TabIndex = 15;
 			searchTBoxRight.TextChanged += searchTBox_TextChanged;
 			// 
-			// label8
+			// searchLabelRight
 			// 
-			label8.Anchor = AnchorStyles.None;
-			label8.AutoSize = true;
-			label8.Location = new Point(21, 7);
-			label8.Name = "label8";
-			label8.Size = new Size(42, 15);
-			label8.TabIndex = 14;
-			label8.Text = "Поиск";
+			searchLabelRight.Anchor = AnchorStyles.None;
+			searchLabelRight.AutoSize = true;
+			searchLabelRight.Location = new Point(21, 7);
+			searchLabelRight.Name = "searchLabelRight";
+			searchLabelRight.Size = new Size(42, 15);
+			searchLabelRight.TabIndex = 14;
+			searchLabelRight.Text = "Поиск";
 			// 
-			// label20
+			// devicesLabelRight
 			// 
-			label20.Anchor = AnchorStyles.None;
-			label20.AutoSize = true;
-			label20.Location = new Point(284, 29);
-			label20.Name = "label20";
-			label20.Size = new Size(103, 15);
-			label20.TabIndex = 12;
-			label20.Text = "Единицы техники";
+			devicesLabelRight.Anchor = AnchorStyles.None;
+			devicesLabelRight.AutoSize = true;
+			devicesLabelRight.Location = new Point(284, 29);
+			devicesLabelRight.Name = "devicesLabelRight";
+			devicesLabelRight.Size = new Size(103, 15);
+			devicesLabelRight.TabIndex = 12;
+			devicesLabelRight.Text = "Единицы техники";
 			// 
 			// editDeviceBtnRight
 			// 
@@ -431,15 +425,15 @@
 			editDeviceBtnRight.UseVisualStyleBackColor = true;
 			editDeviceBtnRight.Click += editDeviceBtn_Click;
 			// 
-			// label12
+			// complectsLabelRight
 			// 
-			label12.Anchor = AnchorStyles.None;
-			label12.AutoSize = true;
-			label12.Location = new Point(175, 29);
-			label12.Name = "label12";
-			label12.Size = new Size(70, 15);
-			label12.TabIndex = 9;
-			label12.Text = "Комплекты";
+			complectsLabelRight.Anchor = AnchorStyles.None;
+			complectsLabelRight.AutoSize = true;
+			complectsLabelRight.Location = new Point(175, 29);
+			complectsLabelRight.Name = "complectsLabelRight";
+			complectsLabelRight.Size = new Size(70, 15);
+			complectsLabelRight.TabIndex = 9;
+			complectsLabelRight.Text = "Комплекты";
 			// 
 			// editComplectBtnRight
 			// 
@@ -465,25 +459,25 @@
 			complectsLBoxRight.TabIndex = 7;
 			complectsLBoxRight.SelectedValueChanged += complectsLBox_SelectedValueChanged;
 			// 
-			// label6
+			// cabinetsLabelRight
 			// 
-			label6.Anchor = AnchorStyles.None;
-			label6.AutoSize = true;
-			label6.Location = new Point(95, 29);
-			label6.Name = "label6";
-			label6.Size = new Size(61, 15);
-			label6.TabIndex = 6;
-			label6.Text = "Кабинеты";
+			cabinetsLabelRight.Anchor = AnchorStyles.None;
+			cabinetsLabelRight.AutoSize = true;
+			cabinetsLabelRight.Location = new Point(95, 29);
+			cabinetsLabelRight.Name = "cabinetsLabelRight";
+			cabinetsLabelRight.Size = new Size(61, 15);
+			cabinetsLabelRight.TabIndex = 6;
+			cabinetsLabelRight.Text = "Кабинеты";
 			// 
-			// label5
+			// buildingsLabelRight
 			// 
-			label5.Anchor = AnchorStyles.None;
-			label5.AutoSize = true;
-			label5.Location = new Point(19, 29);
-			label5.Name = "label5";
-			label5.Size = new Size(46, 15);
-			label5.TabIndex = 5;
-			label5.Text = "Здания";
+			buildingsLabelRight.Anchor = AnchorStyles.None;
+			buildingsLabelRight.AutoSize = true;
+			buildingsLabelRight.Location = new Point(19, 29);
+			buildingsLabelRight.Name = "buildingsLabelRight";
+			buildingsLabelRight.Size = new Size(46, 15);
+			buildingsLabelRight.TabIndex = 5;
+			buildingsLabelRight.Text = "Здания";
 			// 
 			// buildingsLBoxRight
 			// 
@@ -532,31 +526,31 @@
 			editCabinetBtnRight.UseVisualStyleBackColor = true;
 			editCabinetBtnRight.Click += editCabinetBtn_Click;
 			// 
-			// tableLayoutPanel4
+			// moveLeftRightBtnsTLP
 			// 
-			tableLayoutPanel4.Anchor = AnchorStyles.None;
-			tableLayoutPanel4.AutoSize = true;
-			tableLayoutPanel4.ColumnCount = 1;
-			tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			tableLayoutPanel4.Controls.Add(moveDeviceToLeftBtn, 0, 7);
-			tableLayoutPanel4.Controls.Add(moveDeviceToRightBtn, 0, 6);
-			tableLayoutPanel4.Controls.Add(moveComplectToLeftBtn, 0, 4);
-			tableLayoutPanel4.Controls.Add(moveComplectToRightBtn, 0, 3);
-			tableLayoutPanel4.Controls.Add(moveCabinetToRightBtn, 0, 0);
-			tableLayoutPanel4.Controls.Add(moveCabinetToLeftBtn, 0, 1);
-			tableLayoutPanel4.Location = new Point(428, 77);
-			tableLayoutPanel4.Name = "tableLayoutPanel4";
-			tableLayoutPanel4.RowCount = 8;
-			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
-			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
-			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
-			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
-			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
-			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
-			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
-			tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
-			tableLayoutPanel4.Size = new Size(113, 248);
-			tableLayoutPanel4.TabIndex = 2;
+			moveLeftRightBtnsTLP.Anchor = AnchorStyles.None;
+			moveLeftRightBtnsTLP.AutoSize = true;
+			moveLeftRightBtnsTLP.ColumnCount = 1;
+			moveLeftRightBtnsTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+			moveLeftRightBtnsTLP.Controls.Add(moveCabinetToRightBtn, 0, 0);
+			moveLeftRightBtnsTLP.Controls.Add(moveCabinetToLeftBtn, 0, 1);
+			moveLeftRightBtnsTLP.Controls.Add(moveComplectToRightBtn, 0, 3);
+			moveLeftRightBtnsTLP.Controls.Add(moveComplectToLeftBtn, 0, 4);
+			moveLeftRightBtnsTLP.Controls.Add(moveDeviceToRightBtn, 0, 6);
+			moveLeftRightBtnsTLP.Controls.Add(moveDeviceToLeftBtn, 0, 7);
+			moveLeftRightBtnsTLP.Location = new Point(428, 77);
+			moveLeftRightBtnsTLP.Name = "moveLeftRightBtnsTLP";
+			moveLeftRightBtnsTLP.RowCount = 8;
+			moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
+			moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
+			moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
+			moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
+			moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
+			moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
+			moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
+			moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
+			moveLeftRightBtnsTLP.Size = new Size(113, 248);
+			moveLeftRightBtnsTLP.TabIndex = 2;
 			// 
 			// moveDeviceToLeftBtn
 			// 
@@ -632,48 +626,48 @@
 			moveCabinetToLeftBtn.UseVisualStyleBackColor = true;
 			moveCabinetToLeftBtn.Click += moveCabinetToLeftBtn_Click;
 			// 
-			// tabPage4
+			// tabPage2
 			// 
-			tabPage4.Controls.Add(tableLayoutPanel18);
-			tabPage4.Location = new Point(4, 24);
-			tabPage4.Name = "tabPage4";
-			tabPage4.Padding = new Padding(3);
-			tabPage4.Size = new Size(976, 409);
-			tabPage4.TabIndex = 3;
-			tabPage4.Text = "Прочие настройки";
-			tabPage4.UseVisualStyleBackColor = true;
+			tabPage2.Controls.Add(deviceTypesNamesProvidersTLP);
+			tabPage2.Location = new Point(4, 24);
+			tabPage2.Name = "tabPage2";
+			tabPage2.Padding = new Padding(3);
+			tabPage2.Size = new Size(976, 409);
+			tabPage2.TabIndex = 3;
+			tabPage2.Text = "Прочие настройки";
+			tabPage2.UseVisualStyleBackColor = true;
 			// 
-			// tableLayoutPanel18
+			// deviceTypesNamesProvidersTLP
 			// 
-			tableLayoutPanel18.ColumnCount = 2;
-			tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 66.6666641F));
-			tableLayoutPanel18.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel18.Controls.Add(tableLayoutPanel20, 1, 0);
-			tableLayoutPanel18.Controls.Add(groupBox1, 0, 0);
-			tableLayoutPanel18.Dock = DockStyle.Fill;
-			tableLayoutPanel18.Location = new Point(3, 3);
-			tableLayoutPanel18.Name = "tableLayoutPanel18";
-			tableLayoutPanel18.RowCount = 1;
-			tableLayoutPanel18.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel18.Size = new Size(970, 403);
-			tableLayoutPanel18.TabIndex = 0;
+			deviceTypesNamesProvidersTLP.ColumnCount = 2;
+			deviceTypesNamesProvidersTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 66.6666641F));
+			deviceTypesNamesProvidersTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+			deviceTypesNamesProvidersTLP.Controls.Add(deviceTypesNamesGBox, 0, 0);
+			deviceTypesNamesProvidersTLP.Controls.Add(deviceProvidersTLP, 1, 0);
+			deviceTypesNamesProvidersTLP.Dock = DockStyle.Fill;
+			deviceTypesNamesProvidersTLP.Location = new Point(3, 3);
+			deviceTypesNamesProvidersTLP.Name = "deviceTypesNamesProvidersTLP";
+			deviceTypesNamesProvidersTLP.RowCount = 1;
+			deviceTypesNamesProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			deviceTypesNamesProvidersTLP.Size = new Size(970, 403);
+			deviceTypesNamesProvidersTLP.TabIndex = 0;
 			// 
-			// tableLayoutPanel20
+			// deviceProvidersTLP
 			// 
-			tableLayoutPanel20.ColumnCount = 1;
-			tableLayoutPanel20.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			tableLayoutPanel20.Controls.Add(deviceProvidersLBox, 0, 1);
-			tableLayoutPanel20.Controls.Add(editDeviceProviderBtn, 0, 0);
-			tableLayoutPanel20.Controls.Add(label23, 0, 0);
-			tableLayoutPanel20.Dock = DockStyle.Fill;
-			tableLayoutPanel20.Location = new Point(649, 3);
-			tableLayoutPanel20.Name = "tableLayoutPanel20";
-			tableLayoutPanel20.RowCount = 3;
-			tableLayoutPanel20.RowStyles.Add(new RowStyle());
-			tableLayoutPanel20.RowStyles.Add(new RowStyle());
-			tableLayoutPanel20.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel20.Size = new Size(318, 397);
-			tableLayoutPanel20.TabIndex = 1;
+			deviceProvidersTLP.ColumnCount = 1;
+			deviceProvidersTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+			deviceProvidersTLP.Controls.Add(deviceProvidersLabel, 0, 0);
+			deviceProvidersTLP.Controls.Add(editDeviceProviderBtn, 0, 1);
+			deviceProvidersTLP.Controls.Add(deviceProvidersLBox, 0, 2);
+			deviceProvidersTLP.Dock = DockStyle.Fill;
+			deviceProvidersTLP.Location = new Point(649, 3);
+			deviceProvidersTLP.Name = "deviceProvidersTLP";
+			deviceProvidersTLP.RowCount = 3;
+			deviceProvidersTLP.RowStyles.Add(new RowStyle());
+			deviceProvidersTLP.RowStyles.Add(new RowStyle());
+			deviceProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			deviceProvidersTLP.Size = new Size(318, 397);
+			deviceProvidersTLP.TabIndex = 1;
 			// 
 			// deviceProvidersLBox
 			// 
@@ -697,47 +691,47 @@
 			editDeviceProviderBtn.UseVisualStyleBackColor = true;
 			editDeviceProviderBtn.Click += deviceProviderEditBtn_Click;
 			// 
-			// label23
+			// deviceProvidersLabel
 			// 
-			label23.Anchor = AnchorStyles.None;
-			label23.AutoSize = true;
-			label23.Location = new Point(120, 0);
-			label23.Name = "label23";
-			label23.Size = new Size(78, 15);
-			label23.TabIndex = 2;
-			label23.Text = "Получено от";
+			deviceProvidersLabel.Anchor = AnchorStyles.None;
+			deviceProvidersLabel.AutoSize = true;
+			deviceProvidersLabel.Location = new Point(120, 0);
+			deviceProvidersLabel.Name = "deviceProvidersLabel";
+			deviceProvidersLabel.Size = new Size(78, 15);
+			deviceProvidersLabel.TabIndex = 2;
+			deviceProvidersLabel.Text = "Получено от";
 			// 
-			// groupBox1
+			// deviceTypesNamesGBox
 			// 
-			groupBox1.Controls.Add(tableLayoutPanel19);
-			groupBox1.Dock = DockStyle.Fill;
-			groupBox1.Location = new Point(3, 3);
-			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new Size(640, 397);
-			groupBox1.TabIndex = 3;
-			groupBox1.TabStop = false;
-			groupBox1.Text = "Типы и названия";
+			deviceTypesNamesGBox.Controls.Add(deviceTypesNamesTLP);
+			deviceTypesNamesGBox.Dock = DockStyle.Fill;
+			deviceTypesNamesGBox.Location = new Point(3, 3);
+			deviceTypesNamesGBox.Name = "deviceTypesNamesGBox";
+			deviceTypesNamesGBox.Size = new Size(640, 397);
+			deviceTypesNamesGBox.TabIndex = 3;
+			deviceTypesNamesGBox.TabStop = false;
+			deviceTypesNamesGBox.Text = "Типы и названия";
 			// 
-			// tableLayoutPanel19
+			// deviceTypesNamesTLP
 			// 
-			tableLayoutPanel19.ColumnCount = 2;
-			tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel19.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-			tableLayoutPanel19.Controls.Add(deviceNamesLBox, 1, 2);
-			tableLayoutPanel19.Controls.Add(deviceTypesLBox, 0, 2);
-			tableLayoutPanel19.Controls.Add(editDeviceNameBtn, 1, 1);
-			tableLayoutPanel19.Controls.Add(editDeviceTypeBtn, 0, 1);
-			tableLayoutPanel19.Controls.Add(label22, 1, 0);
-			tableLayoutPanel19.Controls.Add(label21, 0, 0);
-			tableLayoutPanel19.Dock = DockStyle.Fill;
-			tableLayoutPanel19.Location = new Point(3, 19);
-			tableLayoutPanel19.Name = "tableLayoutPanel19";
-			tableLayoutPanel19.RowCount = 3;
-			tableLayoutPanel19.RowStyles.Add(new RowStyle());
-			tableLayoutPanel19.RowStyles.Add(new RowStyle());
-			tableLayoutPanel19.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel19.Size = new Size(634, 375);
-			tableLayoutPanel19.TabIndex = 0;
+			deviceTypesNamesTLP.ColumnCount = 2;
+			deviceTypesNamesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			deviceTypesNamesTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+			deviceTypesNamesTLP.Controls.Add(deviceTypesLabel, 0, 0);
+			deviceTypesNamesTLP.Controls.Add(deviceNamesLabel, 1, 0);
+			deviceTypesNamesTLP.Controls.Add(editDeviceTypeBtn, 0, 1);
+			deviceTypesNamesTLP.Controls.Add(editDeviceNameBtn, 1, 1);
+			deviceTypesNamesTLP.Controls.Add(deviceTypesLBox, 0, 2);
+			deviceTypesNamesTLP.Controls.Add(deviceNamesLBox, 1, 2);
+			deviceTypesNamesTLP.Dock = DockStyle.Fill;
+			deviceTypesNamesTLP.Location = new Point(3, 19);
+			deviceTypesNamesTLP.Name = "deviceTypesNamesTLP";
+			deviceTypesNamesTLP.RowCount = 3;
+			deviceTypesNamesTLP.RowStyles.Add(new RowStyle());
+			deviceTypesNamesTLP.RowStyles.Add(new RowStyle());
+			deviceTypesNamesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			deviceTypesNamesTLP.Size = new Size(634, 375);
+			deviceTypesNamesTLP.TabIndex = 0;
 			// 
 			// deviceNamesLBox
 			// 
@@ -784,25 +778,25 @@
 			editDeviceTypeBtn.UseVisualStyleBackColor = true;
 			editDeviceTypeBtn.Click += deviceTypeEditBtn_Click;
 			// 
-			// label22
+			// deviceNamesLabel
 			// 
-			label22.Anchor = AnchorStyles.None;
-			label22.AutoSize = true;
-			label22.Location = new Point(422, 0);
-			label22.Name = "label22";
-			label22.Size = new Size(106, 15);
-			label22.TabIndex = 2;
-			label22.Text = "Названия техники";
+			deviceNamesLabel.Anchor = AnchorStyles.None;
+			deviceNamesLabel.AutoSize = true;
+			deviceNamesLabel.Location = new Point(422, 0);
+			deviceNamesLabel.Name = "deviceNamesLabel";
+			deviceNamesLabel.Size = new Size(106, 15);
+			deviceNamesLabel.TabIndex = 2;
+			deviceNamesLabel.Text = "Названия техники";
 			// 
-			// label21
+			// deviceTypesLabel
 			// 
-			label21.Anchor = AnchorStyles.None;
-			label21.AutoSize = true;
-			label21.Location = new Point(117, 0);
-			label21.Name = "label21";
-			label21.Size = new Size(83, 15);
-			label21.TabIndex = 2;
-			label21.Text = "Типы техники";
+			deviceTypesLabel.Anchor = AnchorStyles.None;
+			deviceTypesLabel.AutoSize = true;
+			deviceTypesLabel.Location = new Point(117, 0);
+			deviceTypesLabel.Name = "deviceTypesLabel";
+			deviceTypesLabel.Size = new Size(83, 15);
+			deviceTypesLabel.TabIndex = 2;
+			deviceTypesLabel.Text = "Типы техники";
 			// 
 			// tableLayoutPanel7
 			// 
@@ -827,9 +821,6 @@
 			tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
 			tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
 			tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-			tableLayoutPanel8.Controls.Add(button8, 0, 2);
-			tableLayoutPanel8.Controls.Add(button9, 1, 2);
-			tableLayoutPanel8.Controls.Add(button10, 2, 2);
 			tableLayoutPanel8.Controls.Add(textBox5, 1, 1);
 			tableLayoutPanel8.Controls.Add(textBox6, 0, 1);
 			tableLayoutPanel8.Controls.Add(label3, 0, 0);
@@ -841,33 +832,6 @@
 			tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
 			tableLayoutPanel8.Size = new Size(44, 94);
 			tableLayoutPanel8.TabIndex = 0;
-			// 
-			// button8
-			// 
-			button8.Location = new Point(3, 65);
-			button8.Name = "button8";
-			button8.Size = new Size(8, 23);
-			button8.TabIndex = 0;
-			button8.Text = "button8";
-			button8.UseVisualStyleBackColor = true;
-			// 
-			// button9
-			// 
-			button9.Location = new Point(17, 65);
-			button9.Name = "button9";
-			button9.Size = new Size(8, 23);
-			button9.TabIndex = 1;
-			button9.Text = "button9";
-			button9.UseVisualStyleBackColor = true;
-			// 
-			// button10
-			// 
-			button10.Location = new Point(31, 65);
-			button10.Name = "button10";
-			button10.Size = new Size(10, 23);
-			button10.TabIndex = 2;
-			button10.Text = "button10";
-			button10.UseVisualStyleBackColor = true;
 			// 
 			// textBox5
 			// 
@@ -902,9 +866,6 @@
 			tableLayoutPanel9.Controls.Add(label4, 0, 0);
 			tableLayoutPanel9.Controls.Add(textBox7, 0, 1);
 			tableLayoutPanel9.Controls.Add(textBox8, 1, 1);
-			tableLayoutPanel9.Controls.Add(button11, 0, 2);
-			tableLayoutPanel9.Controls.Add(button12, 1, 2);
-			tableLayoutPanel9.Controls.Add(button13, 2, 2);
 			tableLayoutPanel9.Location = new Point(53, 3);
 			tableLayoutPanel9.Name = "tableLayoutPanel9";
 			tableLayoutPanel9.RowCount = 3;
@@ -937,33 +898,6 @@
 			textBox8.Size = new Size(8, 23);
 			textBox8.TabIndex = 2;
 			// 
-			// button11
-			// 
-			button11.Location = new Point(3, 65);
-			button11.Name = "button11";
-			button11.Size = new Size(8, 23);
-			button11.TabIndex = 3;
-			button11.Text = "button11";
-			button11.UseVisualStyleBackColor = true;
-			// 
-			// button12
-			// 
-			button12.Location = new Point(17, 65);
-			button12.Name = "button12";
-			button12.Size = new Size(8, 23);
-			button12.TabIndex = 4;
-			button12.Text = "button12";
-			button12.UseVisualStyleBackColor = true;
-			// 
-			// button13
-			// 
-			button13.Location = new Point(31, 65);
-			button13.Name = "button13";
-			button13.Size = new Size(10, 23);
-			button13.TabIndex = 5;
-			button13.Text = "button13";
-			button13.UseVisualStyleBackColor = true;
-			// 
 			// tableLayoutPanel10
 			// 
 			tableLayoutPanel10.ColumnCount = 3;
@@ -990,14 +924,14 @@
 			tableLayoutPanel11.Size = new Size(200, 100);
 			tableLayoutPanel11.TabIndex = 0;
 			// 
-			// menuStrip1
+			// menuStrip
 			// 
-			menuStrip1.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem });
-			menuStrip1.Location = new Point(0, 0);
-			menuStrip1.Name = "menuStrip1";
-			menuStrip1.Size = new Size(984, 24);
-			menuStrip1.TabIndex = 1;
-			menuStrip1.Text = "menuStrip1";
+			menuStrip.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem });
+			menuStrip.Location = new Point(0, 0);
+			menuStrip.Name = "menuStrip";
+			menuStrip.Size = new Size(984, 24);
+			menuStrip.TabIndex = 1;
+			menuStrip.Text = "menuStrip1";
 			// 
 			// refreshToolStripMenuItem
 			// 
@@ -1011,52 +945,49 @@
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(984, 461);
-			Controls.Add(tabControl1);
-			Controls.Add(menuStrip1);
+			Controls.Add(tabControl);
+			Controls.Add(menuStrip);
 			Icon = (Icon)resources.GetObject("$this.Icon");
-			MainMenuStrip = menuStrip1;
+			MainMenuStrip = menuStrip;
 			Name = "MainForm";
 			StartPosition = FormStartPosition.CenterScreen;
 			Text = "Инвентаризация";
-			tabControl1.ResumeLayout(false);
+			tabControl.ResumeLayout(false);
 			tabPage1.ResumeLayout(false);
-			tableLayoutPanel1.ResumeLayout(false);
-			tableLayoutPanel1.PerformLayout();
-			tableLayoutPanel2.ResumeLayout(false);
-			tableLayoutPanel2.PerformLayout();
-			tableLayoutPanel3.ResumeLayout(false);
-			tableLayoutPanel3.PerformLayout();
-			tableLayoutPanel4.ResumeLayout(false);
-			tableLayoutPanel4.PerformLayout();
-			tabPage4.ResumeLayout(false);
-			tableLayoutPanel18.ResumeLayout(false);
-			tableLayoutPanel20.ResumeLayout(false);
-			tableLayoutPanel20.PerformLayout();
-			groupBox1.ResumeLayout(false);
-			tableLayoutPanel19.ResumeLayout(false);
-			tableLayoutPanel19.PerformLayout();
+			devicesTLP.ResumeLayout(false);
+			devicesTLP.PerformLayout();
+			devicesTLPLeft.ResumeLayout(false);
+			devicesTLPLeft.PerformLayout();
+			devicesTLPRight.ResumeLayout(false);
+			devicesTLPRight.PerformLayout();
+			moveLeftRightBtnsTLP.ResumeLayout(false);
+			moveLeftRightBtnsTLP.PerformLayout();
+			tabPage2.ResumeLayout(false);
+			deviceTypesNamesProvidersTLP.ResumeLayout(false);
+			deviceProvidersTLP.ResumeLayout(false);
+			deviceProvidersTLP.PerformLayout();
+			deviceTypesNamesGBox.ResumeLayout(false);
+			deviceTypesNamesTLP.ResumeLayout(false);
+			deviceTypesNamesTLP.PerformLayout();
 			tableLayoutPanel7.ResumeLayout(false);
 			tableLayoutPanel8.ResumeLayout(false);
 			tableLayoutPanel8.PerformLayout();
 			tableLayoutPanel9.ResumeLayout(false);
 			tableLayoutPanel9.PerformLayout();
-			menuStrip1.ResumeLayout(false);
-			menuStrip1.PerformLayout();
+			menuStrip.ResumeLayout(false);
+			menuStrip.PerformLayout();
 			ResumeLayout(false);
 			PerformLayout();
 		}
 
 		#endregion
 
-		private TabControl tabControl1;
+		private TabControl tabControl;
 		private TabPage tabPage1;
-		private TableLayoutPanel tableLayoutPanel1;
-		private TableLayoutPanel tableLayoutPanel2;
+		private TableLayoutPanel devicesTLP;
+		private TableLayoutPanel devicesTLPLeft;
 		private TableLayoutPanel tableLayoutPanel7;
 		private TableLayoutPanel tableLayoutPanel8;
-		private Button button8;
-		private Button button9;
-		private Button button10;
 		private TextBox textBox5;
 		private TextBox textBox6;
 		private Label label3;
@@ -1064,13 +995,10 @@
 		private Label label4;
 		private TextBox textBox7;
 		private TextBox textBox8;
-		private Button button11;
-		private Button button12;
-		private Button button13;
 		private TableLayoutPanel tableLayoutPanel10;
 		private TableLayoutPanel tableLayoutPanel11;
-		private TableLayoutPanel tableLayoutPanel3;
-		private TableLayoutPanel tableLayoutPanel4;
+		private TableLayoutPanel devicesTLPRight;
+		private TableLayoutPanel moveLeftRightBtnsTLP;
 		private Button moveCabinetToRightBtn;
 		private Button moveCabinetToLeftBtn;
 		private ListBox buildingsLBoxLeft;
@@ -1081,43 +1009,43 @@
 		private Button editCabinetBtnLeft;
 		private Button editBuildingBtnRight;
 		private Button editCabinetBtnRight;
-		private TabPage tabPage4;
-		private TableLayoutPanel tableLayoutPanel18;
-		private TableLayoutPanel tableLayoutPanel19;
+		private TabPage tabPage2;
+		private TableLayoutPanel deviceTypesNamesProvidersTLP;
+		private TableLayoutPanel deviceTypesNamesTLP;
 		private ListBox deviceTypesLBox;
 		private Button editDeviceTypeBtn;
-		private TableLayoutPanel tableLayoutPanel20;
+		private TableLayoutPanel deviceProvidersTLP;
 		private ListBox deviceProvidersLBox;
 		private Button editDeviceProviderBtn;
 		private Button editDeviceNameBtn;
-		private Label label1;
-		private Label label2;
-		private Label label6;
-		private Label label5;
-		private Label label22;
-		private Label label21;
-		private Label label23;
-		private Label label10;
+		private Label buildingsLabelLeft;
+		private Label cabinetsLabelLeft;
+		private Label cabinetsLabelRight;
+		private Label buildingsLabelRight;
+		private Label deviceNamesLabel;
+		private Label deviceTypesLabel;
+		private Label deviceProvidersLabel;
+		private Label complectsLabelLeft;
 		private Button editComplectBtnLeft;
 		private ListBox complectsLBoxLeft;
-		private Label label18;
+		private Label devicesLabelLeft;
 		private Button editDeviceBtnLeft;
 		private Button moveComplectToLeftBtn;
 		private Button moveComplectToRightBtn;
-		private Label label12;
+		private Label complectsLabelRight;
 		private Button editComplectBtnRight;
 		private ListBox complectsLBoxRight;
 		private Button moveDeviceToLeftBtn;
 		private Button moveDeviceToRightBtn;
-		private Label label20;
+		private Label devicesLabelRight;
 		private Button editDeviceBtnRight;
-		private Label label7;
+		private Label searchLabelLeft;
 		private TextBox searchTBoxLeft;
-		private Label label8;
+		private Label searchLabelRight;
 		private TextBox searchTBoxRight;
-		private MenuStrip menuStrip1;
+		private MenuStrip menuStrip;
 		private ToolStripMenuItem refreshToolStripMenuItem;
-		private GroupBox groupBox1;
+		private GroupBox deviceTypesNamesGBox;
 		private ListBox deviceNamesLBox;
 		private ListBox devicesLBoxLeft;
 		private ListBox devicesLBoxRight;
