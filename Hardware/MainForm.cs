@@ -17,6 +17,7 @@ namespace Hardware
 		private void Init()
 		{
 			InitializeButtons();
+			InitializeHistoryDGW();
 			RefreshAll();
 		}
 
@@ -793,6 +794,32 @@ namespace Hardware
 					deviceProvidersLBox.SelectedItem = selectedItem;
 			SwitchEditDeviceBtnLeft();
 			SwitchEditDeviceBtnRight();
+		}
+
+		// Блок работы с историей перемещений
+		private void InitializeHistoryDGW()
+		{
+			historyDGW.DataSource = context.History.ToList();
+			historyDGW.Columns[0].Visible = false;
+			historyDGW.Columns[1].HeaderText = "Было";
+			historyDGW.Columns[2].HeaderText = "Стало";
+			historyDGW.Columns[3].HeaderText = "Дата и время изменения";
+		}
+
+		private void RefreshHistoryDGW()
+		{
+			if (historySearchTBox.Text.Length == 0)
+				historyDGW.DataSource = context.History.ToList();
+			else
+			{
+				var text = historySearchTBox.Text.ToLower();
+				historyDGW.DataSource = context.History.Where(h => h.Before.ToLower().Contains(text) || h.After.ToLower().Contains(text)).ToList();
+			}
+		}
+
+		private void historySearchTBox_TextChanged(object sender, EventArgs e)
+		{
+			RefreshHistoryDGW();
 		}
 	}
 }

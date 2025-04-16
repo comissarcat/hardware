@@ -33,56 +33,61 @@
 			tabPage1 = new TabPage();
 			devicesTLP = new TableLayoutPanel();
 			devicesTLPLeft = new TableLayoutPanel();
-			devicesLBoxLeft = new ListBox();
-			devicesLabelLeft = new Label();
-			editDeviceBtnLeft = new Button();
-			complectsLabelLeft = new Label();
-			editComplectBtnLeft = new Button();
-			complectsLBoxLeft = new ListBox();
-			buildingsLBoxLeft = new ListBox();
-			cabinetsLBoxLeft = new ListBox();
-			editBuildingBtnLeft = new Button();
-			editCabinetBtnLeft = new Button();
-			buildingsLabelLeft = new Label();
-			cabinetsLabelLeft = new Label();
 			searchLabelLeft = new Label();
 			searchTBoxLeft = new TextBox();
+			buildingsLabelLeft = new Label();
+			cabinetsLabelLeft = new Label();
+			complectsLabelLeft = new Label();
+			devicesLabelLeft = new Label();
+			editBuildingBtnLeft = new Button();
+			editCabinetBtnLeft = new Button();
+			editComplectBtnLeft = new Button();
+			editDeviceBtnLeft = new Button();
+			buildingsLBoxLeft = new ListBox();
+			cabinetsLBoxLeft = new ListBox();
+			complectsLBoxLeft = new ListBox();
+			devicesLBoxLeft = new ListBox();
 			devicesTLPRight = new TableLayoutPanel();
-			devicesLBoxRight = new ListBox();
-			searchTBoxRight = new TextBox();
 			searchLabelRight = new Label();
-			devicesLabelRight = new Label();
-			editDeviceBtnRight = new Button();
-			complectsLabelRight = new Label();
-			editComplectBtnRight = new Button();
-			complectsLBoxRight = new ListBox();
-			cabinetsLabelRight = new Label();
+			searchTBoxRight = new TextBox();
 			buildingsLabelRight = new Label();
-			buildingsLBoxRight = new ListBox();
-			cabinetsLBoxRight = new ListBox();
+			cabinetsLabelRight = new Label();
+			complectsLabelRight = new Label();
+			devicesLabelRight = new Label();
 			editBuildingBtnRight = new Button();
 			editCabinetBtnRight = new Button();
+			editComplectBtnRight = new Button();
+			editDeviceBtnRight = new Button();
+			buildingsLBoxRight = new ListBox();
+			cabinetsLBoxRight = new ListBox();
+			complectsLBoxRight = new ListBox();
+			devicesLBoxRight = new ListBox();
 			moveLeftRightBtnsTLP = new TableLayoutPanel();
-			moveDeviceToLeftBtn = new Button();
-			moveDeviceToRightBtn = new Button();
-			moveComplectToLeftBtn = new Button();
-			moveComplectToRightBtn = new Button();
 			moveCabinetToRightBtn = new Button();
 			moveCabinetToLeftBtn = new Button();
+			moveComplectToRightBtn = new Button();
+			moveComplectToLeftBtn = new Button();
+			moveDeviceToRightBtn = new Button();
+			moveDeviceToLeftBtn = new Button();
 			tabPage2 = new TabPage();
 			deviceTypesNamesProvidersTLP = new TableLayoutPanel();
-			deviceProvidersTLP = new TableLayoutPanel();
-			deviceProvidersLBox = new ListBox();
-			editDeviceProviderBtn = new Button();
-			deviceProvidersLabel = new Label();
 			deviceTypesNamesGBox = new GroupBox();
 			deviceTypesNamesTLP = new TableLayoutPanel();
-			deviceNamesLBox = new ListBox();
-			deviceTypesLBox = new ListBox();
-			editDeviceNameBtn = new Button();
-			editDeviceTypeBtn = new Button();
-			deviceNamesLabel = new Label();
 			deviceTypesLabel = new Label();
+			deviceNamesLabel = new Label();
+			editDeviceTypeBtn = new Button();
+			editDeviceNameBtn = new Button();
+			deviceTypesLBox = new ListBox();
+			deviceNamesLBox = new ListBox();
+			deviceProvidersTLP = new TableLayoutPanel();
+			deviceProvidersLabel = new Label();
+			editDeviceProviderBtn = new Button();
+			deviceProvidersLBox = new ListBox();
+			tabPage3 = new TabPage();
+			tableLayoutPanel1 = new TableLayoutPanel();
+			historySearchTBox = new TextBox();
+			historySearchLabel = new Label();
+			historyDGW = new DataGridView();
 			menuStrip = new MenuStrip();
 			refreshToolStripMenuItem = new ToolStripMenuItem();
 			tabControl.SuspendLayout();
@@ -93,9 +98,12 @@
 			moveLeftRightBtnsTLP.SuspendLayout();
 			tabPage2.SuspendLayout();
 			deviceTypesNamesProvidersTLP.SuspendLayout();
-			deviceProvidersTLP.SuspendLayout();
 			deviceTypesNamesGBox.SuspendLayout();
 			deviceTypesNamesTLP.SuspendLayout();
+			deviceProvidersTLP.SuspendLayout();
+			tabPage3.SuspendLayout();
+			tableLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)historyDGW).BeginInit();
 			menuStrip.SuspendLayout();
 			SuspendLayout();
 			// 
@@ -103,6 +111,7 @@
 			// 
 			tabControl.Controls.Add(tabPage1);
 			tabControl.Controls.Add(tabPage2);
+			tabControl.Controls.Add(tabPage3);
 			tabControl.Dock = DockStyle.Fill;
 			tabControl.Location = new Point(0, 24);
 			tabControl.Name = "tabControl";
@@ -170,39 +179,45 @@
 			devicesTLPLeft.Size = new Size(419, 397);
 			devicesTLPLeft.TabIndex = 0;
 			// 
-			// devicesLBoxLeft
+			// searchLabelLeft
 			// 
-			devicesLBoxLeft.Dock = DockStyle.Fill;
-			devicesLBoxLeft.FormattingEnabled = true;
-			devicesLBoxLeft.ItemHeight = 15;
-			devicesLBoxLeft.Location = new Point(252, 78);
-			devicesLBoxLeft.Name = "devicesLBoxLeft";
-			devicesLBoxLeft.Size = new Size(164, 316);
-			devicesLBoxLeft.TabIndex = 15;
-			devicesLBoxLeft.SelectedValueChanged += devicesLBox_SelectedValueChanged;
+			searchLabelLeft.Anchor = AnchorStyles.None;
+			searchLabelLeft.AutoSize = true;
+			searchLabelLeft.Location = new Point(20, 7);
+			searchLabelLeft.Name = "searchLabelLeft";
+			searchLabelLeft.Size = new Size(42, 15);
+			searchLabelLeft.TabIndex = 13;
+			searchLabelLeft.Text = "Поиск";
 			// 
-			// devicesLabelLeft
+			// searchTBoxLeft
 			// 
-			devicesLabelLeft.Anchor = AnchorStyles.None;
-			devicesLabelLeft.AutoSize = true;
-			devicesLabelLeft.Location = new Point(282, 29);
-			devicesLabelLeft.Name = "devicesLabelLeft";
-			devicesLabelLeft.Size = new Size(103, 15);
-			devicesLabelLeft.TabIndex = 11;
-			devicesLabelLeft.Text = "Единицы техники";
+			devicesTLPLeft.SetColumnSpan(searchTBoxLeft, 3);
+			searchTBoxLeft.Dock = DockStyle.Fill;
+			searchTBoxLeft.Location = new Point(86, 3);
+			searchTBoxLeft.Name = "searchTBoxLeft";
+			searchTBoxLeft.Size = new Size(330, 23);
+			searchTBoxLeft.TabIndex = 14;
+			searchTBoxLeft.TextChanged += searchTBox_TextChanged;
 			// 
-			// editDeviceBtnLeft
+			// buildingsLabelLeft
 			// 
-			editDeviceBtnLeft.Anchor = AnchorStyles.None;
-			editDeviceBtnLeft.AutoSize = true;
-			editDeviceBtnLeft.Enabled = false;
-			editDeviceBtnLeft.Location = new Point(286, 47);
-			editDeviceBtnLeft.Name = "editDeviceBtnLeft";
-			editDeviceBtnLeft.Size = new Size(96, 25);
-			editDeviceBtnLeft.TabIndex = 10;
-			editDeviceBtnLeft.Text = "editDeviceBtn1";
-			editDeviceBtnLeft.UseVisualStyleBackColor = true;
-			editDeviceBtnLeft.Click += editDeviceBtn_Click;
+			buildingsLabelLeft.Anchor = AnchorStyles.None;
+			buildingsLabelLeft.AutoSize = true;
+			buildingsLabelLeft.Location = new Point(18, 29);
+			buildingsLabelLeft.Name = "buildingsLabelLeft";
+			buildingsLabelLeft.Size = new Size(46, 15);
+			buildingsLabelLeft.TabIndex = 4;
+			buildingsLabelLeft.Text = "Здания";
+			// 
+			// cabinetsLabelLeft
+			// 
+			cabinetsLabelLeft.Anchor = AnchorStyles.None;
+			cabinetsLabelLeft.AutoSize = true;
+			cabinetsLabelLeft.Location = new Point(94, 29);
+			cabinetsLabelLeft.Name = "cabinetsLabelLeft";
+			cabinetsLabelLeft.Size = new Size(61, 15);
+			cabinetsLabelLeft.TabIndex = 5;
+			cabinetsLabelLeft.Text = "Кабинеты";
 			// 
 			// complectsLabelLeft
 			// 
@@ -214,51 +229,15 @@
 			complectsLabelLeft.TabIndex = 8;
 			complectsLabelLeft.Text = "Комплекты";
 			// 
-			// editComplectBtnLeft
+			// devicesLabelLeft
 			// 
-			editComplectBtnLeft.Anchor = AnchorStyles.None;
-			editComplectBtnLeft.AutoSize = true;
-			editComplectBtnLeft.Enabled = false;
-			editComplectBtnLeft.Location = new Point(169, 47);
-			editComplectBtnLeft.Name = "editComplectBtnLeft";
-			editComplectBtnLeft.Size = new Size(77, 25);
-			editComplectBtnLeft.TabIndex = 7;
-			editComplectBtnLeft.Text = "editComplectBtn1";
-			editComplectBtnLeft.UseVisualStyleBackColor = true;
-			editComplectBtnLeft.Click += editComplectBtn_Click;
-			// 
-			// complectsLBoxLeft
-			// 
-			complectsLBoxLeft.Dock = DockStyle.Fill;
-			complectsLBoxLeft.FormattingEnabled = true;
-			complectsLBoxLeft.ItemHeight = 15;
-			complectsLBoxLeft.Location = new Point(169, 78);
-			complectsLBoxLeft.Name = "complectsLBoxLeft";
-			complectsLBoxLeft.Size = new Size(77, 316);
-			complectsLBoxLeft.TabIndex = 6;
-			complectsLBoxLeft.SelectedValueChanged += complectsLBox_SelectedValueChanged;
-			// 
-			// buildingsLBoxLeft
-			// 
-			buildingsLBoxLeft.Dock = DockStyle.Fill;
-			buildingsLBoxLeft.FormattingEnabled = true;
-			buildingsLBoxLeft.ItemHeight = 15;
-			buildingsLBoxLeft.Location = new Point(3, 78);
-			buildingsLBoxLeft.Name = "buildingsLBoxLeft";
-			buildingsLBoxLeft.Size = new Size(77, 316);
-			buildingsLBoxLeft.TabIndex = 0;
-			buildingsLBoxLeft.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
-			// 
-			// cabinetsLBoxLeft
-			// 
-			cabinetsLBoxLeft.Dock = DockStyle.Fill;
-			cabinetsLBoxLeft.FormattingEnabled = true;
-			cabinetsLBoxLeft.ItemHeight = 15;
-			cabinetsLBoxLeft.Location = new Point(86, 78);
-			cabinetsLBoxLeft.Name = "cabinetsLBoxLeft";
-			cabinetsLBoxLeft.Size = new Size(77, 316);
-			cabinetsLBoxLeft.TabIndex = 1;
-			cabinetsLBoxLeft.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
+			devicesLabelLeft.Anchor = AnchorStyles.None;
+			devicesLabelLeft.AutoSize = true;
+			devicesLabelLeft.Location = new Point(282, 29);
+			devicesLabelLeft.Name = "devicesLabelLeft";
+			devicesLabelLeft.Size = new Size(103, 15);
+			devicesLabelLeft.TabIndex = 11;
+			devicesLabelLeft.Text = "Единицы техники";
 			// 
 			// editBuildingBtnLeft
 			// 
@@ -285,45 +264,75 @@
 			editCabinetBtnLeft.UseVisualStyleBackColor = true;
 			editCabinetBtnLeft.Click += editCabinetBtn_Click;
 			// 
-			// buildingsLabelLeft
+			// editComplectBtnLeft
 			// 
-			buildingsLabelLeft.Anchor = AnchorStyles.None;
-			buildingsLabelLeft.AutoSize = true;
-			buildingsLabelLeft.Location = new Point(18, 29);
-			buildingsLabelLeft.Name = "buildingsLabelLeft";
-			buildingsLabelLeft.Size = new Size(46, 15);
-			buildingsLabelLeft.TabIndex = 4;
-			buildingsLabelLeft.Text = "Здания";
+			editComplectBtnLeft.Anchor = AnchorStyles.None;
+			editComplectBtnLeft.AutoSize = true;
+			editComplectBtnLeft.Enabled = false;
+			editComplectBtnLeft.Location = new Point(169, 47);
+			editComplectBtnLeft.Name = "editComplectBtnLeft";
+			editComplectBtnLeft.Size = new Size(77, 25);
+			editComplectBtnLeft.TabIndex = 7;
+			editComplectBtnLeft.Text = "editComplectBtn1";
+			editComplectBtnLeft.UseVisualStyleBackColor = true;
+			editComplectBtnLeft.Click += editComplectBtn_Click;
 			// 
-			// cabinetsLabelLeft
+			// editDeviceBtnLeft
 			// 
-			cabinetsLabelLeft.Anchor = AnchorStyles.None;
-			cabinetsLabelLeft.AutoSize = true;
-			cabinetsLabelLeft.Location = new Point(94, 29);
-			cabinetsLabelLeft.Name = "cabinetsLabelLeft";
-			cabinetsLabelLeft.Size = new Size(61, 15);
-			cabinetsLabelLeft.TabIndex = 5;
-			cabinetsLabelLeft.Text = "Кабинеты";
+			editDeviceBtnLeft.Anchor = AnchorStyles.None;
+			editDeviceBtnLeft.AutoSize = true;
+			editDeviceBtnLeft.Enabled = false;
+			editDeviceBtnLeft.Location = new Point(286, 47);
+			editDeviceBtnLeft.Name = "editDeviceBtnLeft";
+			editDeviceBtnLeft.Size = new Size(96, 25);
+			editDeviceBtnLeft.TabIndex = 10;
+			editDeviceBtnLeft.Text = "editDeviceBtn1";
+			editDeviceBtnLeft.UseVisualStyleBackColor = true;
+			editDeviceBtnLeft.Click += editDeviceBtn_Click;
 			// 
-			// searchLabelLeft
+			// buildingsLBoxLeft
 			// 
-			searchLabelLeft.Anchor = AnchorStyles.None;
-			searchLabelLeft.AutoSize = true;
-			searchLabelLeft.Location = new Point(20, 7);
-			searchLabelLeft.Name = "searchLabelLeft";
-			searchLabelLeft.Size = new Size(42, 15);
-			searchLabelLeft.TabIndex = 13;
-			searchLabelLeft.Text = "Поиск";
+			buildingsLBoxLeft.Dock = DockStyle.Fill;
+			buildingsLBoxLeft.FormattingEnabled = true;
+			buildingsLBoxLeft.ItemHeight = 15;
+			buildingsLBoxLeft.Location = new Point(3, 78);
+			buildingsLBoxLeft.Name = "buildingsLBoxLeft";
+			buildingsLBoxLeft.Size = new Size(77, 316);
+			buildingsLBoxLeft.TabIndex = 0;
+			buildingsLBoxLeft.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
 			// 
-			// searchTBoxLeft
+			// cabinetsLBoxLeft
 			// 
-			devicesTLPLeft.SetColumnSpan(searchTBoxLeft, 3);
-			searchTBoxLeft.Dock = DockStyle.Fill;
-			searchTBoxLeft.Location = new Point(86, 3);
-			searchTBoxLeft.Name = "searchTBoxLeft";
-			searchTBoxLeft.Size = new Size(330, 23);
-			searchTBoxLeft.TabIndex = 14;
-			searchTBoxLeft.TextChanged += searchTBox_TextChanged;
+			cabinetsLBoxLeft.Dock = DockStyle.Fill;
+			cabinetsLBoxLeft.FormattingEnabled = true;
+			cabinetsLBoxLeft.ItemHeight = 15;
+			cabinetsLBoxLeft.Location = new Point(86, 78);
+			cabinetsLBoxLeft.Name = "cabinetsLBoxLeft";
+			cabinetsLBoxLeft.Size = new Size(77, 316);
+			cabinetsLBoxLeft.TabIndex = 1;
+			cabinetsLBoxLeft.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
+			// 
+			// complectsLBoxLeft
+			// 
+			complectsLBoxLeft.Dock = DockStyle.Fill;
+			complectsLBoxLeft.FormattingEnabled = true;
+			complectsLBoxLeft.ItemHeight = 15;
+			complectsLBoxLeft.Location = new Point(169, 78);
+			complectsLBoxLeft.Name = "complectsLBoxLeft";
+			complectsLBoxLeft.Size = new Size(77, 316);
+			complectsLBoxLeft.TabIndex = 6;
+			complectsLBoxLeft.SelectedValueChanged += complectsLBox_SelectedValueChanged;
+			// 
+			// devicesLBoxLeft
+			// 
+			devicesLBoxLeft.Dock = DockStyle.Fill;
+			devicesLBoxLeft.FormattingEnabled = true;
+			devicesLBoxLeft.ItemHeight = 15;
+			devicesLBoxLeft.Location = new Point(252, 78);
+			devicesLBoxLeft.Name = "devicesLBoxLeft";
+			devicesLBoxLeft.Size = new Size(164, 316);
+			devicesLBoxLeft.TabIndex = 15;
+			devicesLBoxLeft.SelectedValueChanged += devicesLBox_SelectedValueChanged;
 			// 
 			// devicesTLPRight
 			// 
@@ -357,16 +366,15 @@
 			devicesTLPRight.Size = new Size(420, 397);
 			devicesTLPRight.TabIndex = 1;
 			// 
-			// devicesLBoxRight
+			// searchLabelRight
 			// 
-			devicesLBoxRight.Dock = DockStyle.Fill;
-			devicesLBoxRight.FormattingEnabled = true;
-			devicesLBoxRight.ItemHeight = 15;
-			devicesLBoxRight.Location = new Point(255, 78);
-			devicesLBoxRight.Name = "devicesLBoxRight";
-			devicesLBoxRight.Size = new Size(162, 316);
-			devicesLBoxRight.TabIndex = 16;
-			devicesLBoxRight.SelectedValueChanged += devicesLBox_SelectedValueChanged;
+			searchLabelRight.Anchor = AnchorStyles.None;
+			searchLabelRight.AutoSize = true;
+			searchLabelRight.Location = new Point(21, 7);
+			searchLabelRight.Name = "searchLabelRight";
+			searchLabelRight.Size = new Size(42, 15);
+			searchLabelRight.TabIndex = 14;
+			searchLabelRight.Text = "Поиск";
 			// 
 			// searchTBoxRight
 			// 
@@ -378,72 +386,15 @@
 			searchTBoxRight.TabIndex = 15;
 			searchTBoxRight.TextChanged += searchTBox_TextChanged;
 			// 
-			// searchLabelRight
+			// buildingsLabelRight
 			// 
-			searchLabelRight.Anchor = AnchorStyles.None;
-			searchLabelRight.AutoSize = true;
-			searchLabelRight.Location = new Point(21, 7);
-			searchLabelRight.Name = "searchLabelRight";
-			searchLabelRight.Size = new Size(42, 15);
-			searchLabelRight.TabIndex = 14;
-			searchLabelRight.Text = "Поиск";
-			// 
-			// devicesLabelRight
-			// 
-			devicesLabelRight.Anchor = AnchorStyles.None;
-			devicesLabelRight.AutoSize = true;
-			devicesLabelRight.Location = new Point(284, 29);
-			devicesLabelRight.Name = "devicesLabelRight";
-			devicesLabelRight.Size = new Size(103, 15);
-			devicesLabelRight.TabIndex = 12;
-			devicesLabelRight.Text = "Единицы техники";
-			// 
-			// editDeviceBtnRight
-			// 
-			editDeviceBtnRight.Anchor = AnchorStyles.None;
-			editDeviceBtnRight.AutoSize = true;
-			editDeviceBtnRight.Enabled = false;
-			editDeviceBtnRight.Location = new Point(286, 47);
-			editDeviceBtnRight.Name = "editDeviceBtnRight";
-			editDeviceBtnRight.Size = new Size(99, 25);
-			editDeviceBtnRight.TabIndex = 11;
-			editDeviceBtnRight.Text = "editDeviceBtn2";
-			editDeviceBtnRight.UseVisualStyleBackColor = true;
-			editDeviceBtnRight.Click += editDeviceBtn_Click;
-			// 
-			// complectsLabelRight
-			// 
-			complectsLabelRight.Anchor = AnchorStyles.None;
-			complectsLabelRight.AutoSize = true;
-			complectsLabelRight.Location = new Point(175, 29);
-			complectsLabelRight.Name = "complectsLabelRight";
-			complectsLabelRight.Size = new Size(70, 15);
-			complectsLabelRight.TabIndex = 9;
-			complectsLabelRight.Text = "Комплекты";
-			// 
-			// editComplectBtnRight
-			// 
-			editComplectBtnRight.Anchor = AnchorStyles.None;
-			editComplectBtnRight.AutoSize = true;
-			editComplectBtnRight.Enabled = false;
-			editComplectBtnRight.Location = new Point(171, 47);
-			editComplectBtnRight.Name = "editComplectBtnRight";
-			editComplectBtnRight.Size = new Size(78, 25);
-			editComplectBtnRight.TabIndex = 8;
-			editComplectBtnRight.Text = "editComplectBtn2";
-			editComplectBtnRight.UseVisualStyleBackColor = true;
-			editComplectBtnRight.Click += editComplectBtn_Click;
-			// 
-			// complectsLBoxRight
-			// 
-			complectsLBoxRight.Dock = DockStyle.Fill;
-			complectsLBoxRight.FormattingEnabled = true;
-			complectsLBoxRight.ItemHeight = 15;
-			complectsLBoxRight.Location = new Point(171, 78);
-			complectsLBoxRight.Name = "complectsLBoxRight";
-			complectsLBoxRight.Size = new Size(78, 316);
-			complectsLBoxRight.TabIndex = 7;
-			complectsLBoxRight.SelectedValueChanged += complectsLBox_SelectedValueChanged;
+			buildingsLabelRight.Anchor = AnchorStyles.None;
+			buildingsLabelRight.AutoSize = true;
+			buildingsLabelRight.Location = new Point(19, 29);
+			buildingsLabelRight.Name = "buildingsLabelRight";
+			buildingsLabelRight.Size = new Size(46, 15);
+			buildingsLabelRight.TabIndex = 5;
+			buildingsLabelRight.Text = "Здания";
 			// 
 			// cabinetsLabelRight
 			// 
@@ -455,37 +406,25 @@
 			cabinetsLabelRight.TabIndex = 6;
 			cabinetsLabelRight.Text = "Кабинеты";
 			// 
-			// buildingsLabelRight
+			// complectsLabelRight
 			// 
-			buildingsLabelRight.Anchor = AnchorStyles.None;
-			buildingsLabelRight.AutoSize = true;
-			buildingsLabelRight.Location = new Point(19, 29);
-			buildingsLabelRight.Name = "buildingsLabelRight";
-			buildingsLabelRight.Size = new Size(46, 15);
-			buildingsLabelRight.TabIndex = 5;
-			buildingsLabelRight.Text = "Здания";
+			complectsLabelRight.Anchor = AnchorStyles.None;
+			complectsLabelRight.AutoSize = true;
+			complectsLabelRight.Location = new Point(175, 29);
+			complectsLabelRight.Name = "complectsLabelRight";
+			complectsLabelRight.Size = new Size(70, 15);
+			complectsLabelRight.TabIndex = 9;
+			complectsLabelRight.Text = "Комплекты";
 			// 
-			// buildingsLBoxRight
+			// devicesLabelRight
 			// 
-			buildingsLBoxRight.Dock = DockStyle.Fill;
-			buildingsLBoxRight.FormattingEnabled = true;
-			buildingsLBoxRight.ItemHeight = 15;
-			buildingsLBoxRight.Location = new Point(3, 78);
-			buildingsLBoxRight.Name = "buildingsLBoxRight";
-			buildingsLBoxRight.Size = new Size(78, 316);
-			buildingsLBoxRight.TabIndex = 0;
-			buildingsLBoxRight.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
-			// 
-			// cabinetsLBoxRight
-			// 
-			cabinetsLBoxRight.Dock = DockStyle.Fill;
-			cabinetsLBoxRight.FormattingEnabled = true;
-			cabinetsLBoxRight.ItemHeight = 15;
-			cabinetsLBoxRight.Location = new Point(87, 78);
-			cabinetsLBoxRight.Name = "cabinetsLBoxRight";
-			cabinetsLBoxRight.Size = new Size(78, 316);
-			cabinetsLBoxRight.TabIndex = 1;
-			cabinetsLBoxRight.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
+			devicesLabelRight.Anchor = AnchorStyles.None;
+			devicesLabelRight.AutoSize = true;
+			devicesLabelRight.Location = new Point(284, 29);
+			devicesLabelRight.Name = "devicesLabelRight";
+			devicesLabelRight.Size = new Size(103, 15);
+			devicesLabelRight.TabIndex = 12;
+			devicesLabelRight.Text = "Единицы техники";
 			// 
 			// editBuildingBtnRight
 			// 
@@ -511,6 +450,76 @@
 			editCabinetBtnRight.Text = "editCabinetBtn2";
 			editCabinetBtnRight.UseVisualStyleBackColor = true;
 			editCabinetBtnRight.Click += editCabinetBtn_Click;
+			// 
+			// editComplectBtnRight
+			// 
+			editComplectBtnRight.Anchor = AnchorStyles.None;
+			editComplectBtnRight.AutoSize = true;
+			editComplectBtnRight.Enabled = false;
+			editComplectBtnRight.Location = new Point(171, 47);
+			editComplectBtnRight.Name = "editComplectBtnRight";
+			editComplectBtnRight.Size = new Size(78, 25);
+			editComplectBtnRight.TabIndex = 8;
+			editComplectBtnRight.Text = "editComplectBtn2";
+			editComplectBtnRight.UseVisualStyleBackColor = true;
+			editComplectBtnRight.Click += editComplectBtn_Click;
+			// 
+			// editDeviceBtnRight
+			// 
+			editDeviceBtnRight.Anchor = AnchorStyles.None;
+			editDeviceBtnRight.AutoSize = true;
+			editDeviceBtnRight.Enabled = false;
+			editDeviceBtnRight.Location = new Point(286, 47);
+			editDeviceBtnRight.Name = "editDeviceBtnRight";
+			editDeviceBtnRight.Size = new Size(99, 25);
+			editDeviceBtnRight.TabIndex = 11;
+			editDeviceBtnRight.Text = "editDeviceBtn2";
+			editDeviceBtnRight.UseVisualStyleBackColor = true;
+			editDeviceBtnRight.Click += editDeviceBtn_Click;
+			// 
+			// buildingsLBoxRight
+			// 
+			buildingsLBoxRight.Dock = DockStyle.Fill;
+			buildingsLBoxRight.FormattingEnabled = true;
+			buildingsLBoxRight.ItemHeight = 15;
+			buildingsLBoxRight.Location = new Point(3, 78);
+			buildingsLBoxRight.Name = "buildingsLBoxRight";
+			buildingsLBoxRight.Size = new Size(78, 316);
+			buildingsLBoxRight.TabIndex = 0;
+			buildingsLBoxRight.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
+			// 
+			// cabinetsLBoxRight
+			// 
+			cabinetsLBoxRight.Dock = DockStyle.Fill;
+			cabinetsLBoxRight.FormattingEnabled = true;
+			cabinetsLBoxRight.ItemHeight = 15;
+			cabinetsLBoxRight.Location = new Point(87, 78);
+			cabinetsLBoxRight.Name = "cabinetsLBoxRight";
+			cabinetsLBoxRight.Size = new Size(78, 316);
+			cabinetsLBoxRight.TabIndex = 1;
+			cabinetsLBoxRight.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
+			// 
+			// complectsLBoxRight
+			// 
+			complectsLBoxRight.Dock = DockStyle.Fill;
+			complectsLBoxRight.FormattingEnabled = true;
+			complectsLBoxRight.ItemHeight = 15;
+			complectsLBoxRight.Location = new Point(171, 78);
+			complectsLBoxRight.Name = "complectsLBoxRight";
+			complectsLBoxRight.Size = new Size(78, 316);
+			complectsLBoxRight.TabIndex = 7;
+			complectsLBoxRight.SelectedValueChanged += complectsLBox_SelectedValueChanged;
+			// 
+			// devicesLBoxRight
+			// 
+			devicesLBoxRight.Dock = DockStyle.Fill;
+			devicesLBoxRight.FormattingEnabled = true;
+			devicesLBoxRight.ItemHeight = 15;
+			devicesLBoxRight.Location = new Point(255, 78);
+			devicesLBoxRight.Name = "devicesLBoxRight";
+			devicesLBoxRight.Size = new Size(162, 316);
+			devicesLBoxRight.TabIndex = 16;
+			devicesLBoxRight.SelectedValueChanged += devicesLBox_SelectedValueChanged;
 			// 
 			// moveLeftRightBtnsTLP
 			// 
@@ -538,54 +547,6 @@
 			moveLeftRightBtnsTLP.Size = new Size(113, 248);
 			moveLeftRightBtnsTLP.TabIndex = 2;
 			// 
-			// moveDeviceToLeftBtn
-			// 
-			moveDeviceToLeftBtn.AutoSize = true;
-			moveDeviceToLeftBtn.Dock = DockStyle.Fill;
-			moveDeviceToLeftBtn.Location = new Point(3, 220);
-			moveDeviceToLeftBtn.Name = "moveDeviceToLeftBtn";
-			moveDeviceToLeftBtn.Size = new Size(107, 25);
-			moveDeviceToLeftBtn.TabIndex = 5;
-			moveDeviceToLeftBtn.Text = "<<< Устройство";
-			moveDeviceToLeftBtn.UseVisualStyleBackColor = true;
-			moveDeviceToLeftBtn.Click += moveDeviceToLeftBtn_Click;
-			// 
-			// moveDeviceToRightBtn
-			// 
-			moveDeviceToRightBtn.AutoSize = true;
-			moveDeviceToRightBtn.Dock = DockStyle.Fill;
-			moveDeviceToRightBtn.Location = new Point(3, 189);
-			moveDeviceToRightBtn.Name = "moveDeviceToRightBtn";
-			moveDeviceToRightBtn.Size = new Size(107, 25);
-			moveDeviceToRightBtn.TabIndex = 4;
-			moveDeviceToRightBtn.Text = "Устройство >>>";
-			moveDeviceToRightBtn.UseVisualStyleBackColor = true;
-			moveDeviceToRightBtn.Click += moveDeviceToRightBtn_Click;
-			// 
-			// moveComplectToLeftBtn
-			// 
-			moveComplectToLeftBtn.AutoSize = true;
-			moveComplectToLeftBtn.Dock = DockStyle.Fill;
-			moveComplectToLeftBtn.Location = new Point(3, 127);
-			moveComplectToLeftBtn.Name = "moveComplectToLeftBtn";
-			moveComplectToLeftBtn.Size = new Size(107, 25);
-			moveComplectToLeftBtn.TabIndex = 3;
-			moveComplectToLeftBtn.Text = "<<< Комплект";
-			moveComplectToLeftBtn.UseVisualStyleBackColor = true;
-			moveComplectToLeftBtn.Click += moveComplectToLeftBtn_Click;
-			// 
-			// moveComplectToRightBtn
-			// 
-			moveComplectToRightBtn.AutoSize = true;
-			moveComplectToRightBtn.Dock = DockStyle.Fill;
-			moveComplectToRightBtn.Location = new Point(3, 96);
-			moveComplectToRightBtn.Name = "moveComplectToRightBtn";
-			moveComplectToRightBtn.Size = new Size(107, 25);
-			moveComplectToRightBtn.TabIndex = 2;
-			moveComplectToRightBtn.Text = "Комплект >>>";
-			moveComplectToRightBtn.UseVisualStyleBackColor = true;
-			moveComplectToRightBtn.Click += moveComplectToRightBtn_Click;
-			// 
 			// moveCabinetToRightBtn
 			// 
 			moveCabinetToRightBtn.AutoSize = true;
@@ -612,6 +573,54 @@
 			moveCabinetToLeftBtn.UseVisualStyleBackColor = true;
 			moveCabinetToLeftBtn.Click += moveCabinetToLeftBtn_Click;
 			// 
+			// moveComplectToRightBtn
+			// 
+			moveComplectToRightBtn.AutoSize = true;
+			moveComplectToRightBtn.Dock = DockStyle.Fill;
+			moveComplectToRightBtn.Location = new Point(3, 96);
+			moveComplectToRightBtn.Name = "moveComplectToRightBtn";
+			moveComplectToRightBtn.Size = new Size(107, 25);
+			moveComplectToRightBtn.TabIndex = 2;
+			moveComplectToRightBtn.Text = "Комплект >>>";
+			moveComplectToRightBtn.UseVisualStyleBackColor = true;
+			moveComplectToRightBtn.Click += moveComplectToRightBtn_Click;
+			// 
+			// moveComplectToLeftBtn
+			// 
+			moveComplectToLeftBtn.AutoSize = true;
+			moveComplectToLeftBtn.Dock = DockStyle.Fill;
+			moveComplectToLeftBtn.Location = new Point(3, 127);
+			moveComplectToLeftBtn.Name = "moveComplectToLeftBtn";
+			moveComplectToLeftBtn.Size = new Size(107, 25);
+			moveComplectToLeftBtn.TabIndex = 3;
+			moveComplectToLeftBtn.Text = "<<< Комплект";
+			moveComplectToLeftBtn.UseVisualStyleBackColor = true;
+			moveComplectToLeftBtn.Click += moveComplectToLeftBtn_Click;
+			// 
+			// moveDeviceToRightBtn
+			// 
+			moveDeviceToRightBtn.AutoSize = true;
+			moveDeviceToRightBtn.Dock = DockStyle.Fill;
+			moveDeviceToRightBtn.Location = new Point(3, 189);
+			moveDeviceToRightBtn.Name = "moveDeviceToRightBtn";
+			moveDeviceToRightBtn.Size = new Size(107, 25);
+			moveDeviceToRightBtn.TabIndex = 4;
+			moveDeviceToRightBtn.Text = "Устройство >>>";
+			moveDeviceToRightBtn.UseVisualStyleBackColor = true;
+			moveDeviceToRightBtn.Click += moveDeviceToRightBtn_Click;
+			// 
+			// moveDeviceToLeftBtn
+			// 
+			moveDeviceToLeftBtn.AutoSize = true;
+			moveDeviceToLeftBtn.Dock = DockStyle.Fill;
+			moveDeviceToLeftBtn.Location = new Point(3, 220);
+			moveDeviceToLeftBtn.Name = "moveDeviceToLeftBtn";
+			moveDeviceToLeftBtn.Size = new Size(107, 25);
+			moveDeviceToLeftBtn.TabIndex = 5;
+			moveDeviceToLeftBtn.Text = "<<< Устройство";
+			moveDeviceToLeftBtn.UseVisualStyleBackColor = true;
+			moveDeviceToLeftBtn.Click += moveDeviceToLeftBtn_Click;
+			// 
 			// tabPage2
 			// 
 			tabPage2.Controls.Add(deviceTypesNamesProvidersTLP);
@@ -620,7 +629,7 @@
 			tabPage2.Padding = new Padding(3);
 			tabPage2.Size = new Size(976, 409);
 			tabPage2.TabIndex = 3;
-			tabPage2.Text = "Прочие настройки";
+			tabPage2.Text = "Типы, названия, предоставители техники";
 			tabPage2.UseVisualStyleBackColor = true;
 			// 
 			// deviceTypesNamesProvidersTLP
@@ -637,55 +646,6 @@
 			deviceTypesNamesProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 			deviceTypesNamesProvidersTLP.Size = new Size(970, 403);
 			deviceTypesNamesProvidersTLP.TabIndex = 0;
-			// 
-			// deviceProvidersTLP
-			// 
-			deviceProvidersTLP.ColumnCount = 1;
-			deviceProvidersTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			deviceProvidersTLP.Controls.Add(deviceProvidersLabel, 0, 0);
-			deviceProvidersTLP.Controls.Add(editDeviceProviderBtn, 0, 1);
-			deviceProvidersTLP.Controls.Add(deviceProvidersLBox, 0, 2);
-			deviceProvidersTLP.Dock = DockStyle.Fill;
-			deviceProvidersTLP.Location = new Point(649, 3);
-			deviceProvidersTLP.Name = "deviceProvidersTLP";
-			deviceProvidersTLP.RowCount = 3;
-			deviceProvidersTLP.RowStyles.Add(new RowStyle());
-			deviceProvidersTLP.RowStyles.Add(new RowStyle());
-			deviceProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			deviceProvidersTLP.Size = new Size(318, 397);
-			deviceProvidersTLP.TabIndex = 1;
-			// 
-			// deviceProvidersLBox
-			// 
-			deviceProvidersLBox.Dock = DockStyle.Fill;
-			deviceProvidersLBox.FormattingEnabled = true;
-			deviceProvidersLBox.ItemHeight = 15;
-			deviceProvidersLBox.Location = new Point(3, 49);
-			deviceProvidersLBox.Name = "deviceProvidersLBox";
-			deviceProvidersLBox.Size = new Size(312, 345);
-			deviceProvidersLBox.TabIndex = 0;
-			// 
-			// editDeviceProviderBtn
-			// 
-			editDeviceProviderBtn.Anchor = AnchorStyles.None;
-			editDeviceProviderBtn.AutoSize = true;
-			editDeviceProviderBtn.Location = new Point(96, 18);
-			editDeviceProviderBtn.Name = "editDeviceProviderBtn";
-			editDeviceProviderBtn.Size = new Size(126, 25);
-			editDeviceProviderBtn.TabIndex = 1;
-			editDeviceProviderBtn.Text = "Добавить/изменить";
-			editDeviceProviderBtn.UseVisualStyleBackColor = true;
-			editDeviceProviderBtn.Click += deviceProviderEditBtn_Click;
-			// 
-			// deviceProvidersLabel
-			// 
-			deviceProvidersLabel.Anchor = AnchorStyles.None;
-			deviceProvidersLabel.AutoSize = true;
-			deviceProvidersLabel.Location = new Point(120, 0);
-			deviceProvidersLabel.Name = "deviceProvidersLabel";
-			deviceProvidersLabel.Size = new Size(78, 15);
-			deviceProvidersLabel.TabIndex = 2;
-			deviceProvidersLabel.Text = "Получено от";
 			// 
 			// deviceTypesNamesGBox
 			// 
@@ -719,38 +679,25 @@
 			deviceTypesNamesTLP.Size = new Size(634, 375);
 			deviceTypesNamesTLP.TabIndex = 0;
 			// 
-			// deviceNamesLBox
+			// deviceTypesLabel
 			// 
-			deviceNamesLBox.Dock = DockStyle.Fill;
-			deviceNamesLBox.FormattingEnabled = true;
-			deviceNamesLBox.ItemHeight = 15;
-			deviceNamesLBox.Location = new Point(320, 49);
-			deviceNamesLBox.Name = "deviceNamesLBox";
-			deviceNamesLBox.Size = new Size(311, 323);
-			deviceNamesLBox.TabIndex = 3;
+			deviceTypesLabel.Anchor = AnchorStyles.None;
+			deviceTypesLabel.AutoSize = true;
+			deviceTypesLabel.Location = new Point(117, 0);
+			deviceTypesLabel.Name = "deviceTypesLabel";
+			deviceTypesLabel.Size = new Size(83, 15);
+			deviceTypesLabel.TabIndex = 2;
+			deviceTypesLabel.Text = "Типы техники";
 			// 
-			// deviceTypesLBox
+			// deviceNamesLabel
 			// 
-			deviceTypesLBox.Dock = DockStyle.Fill;
-			deviceTypesLBox.FormattingEnabled = true;
-			deviceTypesLBox.ItemHeight = 15;
-			deviceTypesLBox.Location = new Point(3, 49);
-			deviceTypesLBox.Name = "deviceTypesLBox";
-			deviceTypesLBox.Size = new Size(311, 323);
-			deviceTypesLBox.TabIndex = 0;
-			deviceTypesLBox.SelectedValueChanged += typesLBox_SelectedValueChanged;
-			// 
-			// editDeviceNameBtn
-			// 
-			editDeviceNameBtn.Anchor = AnchorStyles.None;
-			editDeviceNameBtn.AutoSize = true;
-			editDeviceNameBtn.Location = new Point(412, 18);
-			editDeviceNameBtn.Name = "editDeviceNameBtn";
-			editDeviceNameBtn.Size = new Size(126, 25);
-			editDeviceNameBtn.TabIndex = 1;
-			editDeviceNameBtn.Text = "Добавить/изменить";
-			editDeviceNameBtn.UseVisualStyleBackColor = true;
-			editDeviceNameBtn.Click += deviceNameEditBtn_Click;
+			deviceNamesLabel.Anchor = AnchorStyles.None;
+			deviceNamesLabel.AutoSize = true;
+			deviceNamesLabel.Location = new Point(422, 0);
+			deviceNamesLabel.Name = "deviceNamesLabel";
+			deviceNamesLabel.Size = new Size(106, 15);
+			deviceNamesLabel.TabIndex = 2;
+			deviceNamesLabel.Text = "Названия техники";
 			// 
 			// editDeviceTypeBtn
 			// 
@@ -764,25 +711,152 @@
 			editDeviceTypeBtn.UseVisualStyleBackColor = true;
 			editDeviceTypeBtn.Click += deviceTypeEditBtn_Click;
 			// 
-			// deviceNamesLabel
+			// editDeviceNameBtn
 			// 
-			deviceNamesLabel.Anchor = AnchorStyles.None;
-			deviceNamesLabel.AutoSize = true;
-			deviceNamesLabel.Location = new Point(422, 0);
-			deviceNamesLabel.Name = "deviceNamesLabel";
-			deviceNamesLabel.Size = new Size(106, 15);
-			deviceNamesLabel.TabIndex = 2;
-			deviceNamesLabel.Text = "Названия техники";
+			editDeviceNameBtn.Anchor = AnchorStyles.None;
+			editDeviceNameBtn.AutoSize = true;
+			editDeviceNameBtn.Location = new Point(412, 18);
+			editDeviceNameBtn.Name = "editDeviceNameBtn";
+			editDeviceNameBtn.Size = new Size(126, 25);
+			editDeviceNameBtn.TabIndex = 1;
+			editDeviceNameBtn.Text = "Добавить/изменить";
+			editDeviceNameBtn.UseVisualStyleBackColor = true;
+			editDeviceNameBtn.Click += deviceNameEditBtn_Click;
 			// 
-			// deviceTypesLabel
+			// deviceTypesLBox
 			// 
-			deviceTypesLabel.Anchor = AnchorStyles.None;
-			deviceTypesLabel.AutoSize = true;
-			deviceTypesLabel.Location = new Point(117, 0);
-			deviceTypesLabel.Name = "deviceTypesLabel";
-			deviceTypesLabel.Size = new Size(83, 15);
-			deviceTypesLabel.TabIndex = 2;
-			deviceTypesLabel.Text = "Типы техники";
+			deviceTypesLBox.Dock = DockStyle.Fill;
+			deviceTypesLBox.FormattingEnabled = true;
+			deviceTypesLBox.ItemHeight = 15;
+			deviceTypesLBox.Location = new Point(3, 49);
+			deviceTypesLBox.Name = "deviceTypesLBox";
+			deviceTypesLBox.Size = new Size(311, 323);
+			deviceTypesLBox.TabIndex = 0;
+			deviceTypesLBox.SelectedValueChanged += typesLBox_SelectedValueChanged;
+			// 
+			// deviceNamesLBox
+			// 
+			deviceNamesLBox.Dock = DockStyle.Fill;
+			deviceNamesLBox.FormattingEnabled = true;
+			deviceNamesLBox.ItemHeight = 15;
+			deviceNamesLBox.Location = new Point(320, 49);
+			deviceNamesLBox.Name = "deviceNamesLBox";
+			deviceNamesLBox.Size = new Size(311, 323);
+			deviceNamesLBox.TabIndex = 3;
+			// 
+			// deviceProvidersTLP
+			// 
+			deviceProvidersTLP.ColumnCount = 1;
+			deviceProvidersTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+			deviceProvidersTLP.Controls.Add(deviceProvidersLabel, 0, 0);
+			deviceProvidersTLP.Controls.Add(editDeviceProviderBtn, 0, 1);
+			deviceProvidersTLP.Controls.Add(deviceProvidersLBox, 0, 2);
+			deviceProvidersTLP.Dock = DockStyle.Fill;
+			deviceProvidersTLP.Location = new Point(649, 3);
+			deviceProvidersTLP.Name = "deviceProvidersTLP";
+			deviceProvidersTLP.RowCount = 3;
+			deviceProvidersTLP.RowStyles.Add(new RowStyle());
+			deviceProvidersTLP.RowStyles.Add(new RowStyle());
+			deviceProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			deviceProvidersTLP.Size = new Size(318, 397);
+			deviceProvidersTLP.TabIndex = 1;
+			// 
+			// deviceProvidersLabel
+			// 
+			deviceProvidersLabel.Anchor = AnchorStyles.None;
+			deviceProvidersLabel.AutoSize = true;
+			deviceProvidersLabel.Location = new Point(120, 0);
+			deviceProvidersLabel.Name = "deviceProvidersLabel";
+			deviceProvidersLabel.Size = new Size(78, 15);
+			deviceProvidersLabel.TabIndex = 2;
+			deviceProvidersLabel.Text = "Получено от";
+			// 
+			// editDeviceProviderBtn
+			// 
+			editDeviceProviderBtn.Anchor = AnchorStyles.None;
+			editDeviceProviderBtn.AutoSize = true;
+			editDeviceProviderBtn.Location = new Point(96, 18);
+			editDeviceProviderBtn.Name = "editDeviceProviderBtn";
+			editDeviceProviderBtn.Size = new Size(126, 25);
+			editDeviceProviderBtn.TabIndex = 1;
+			editDeviceProviderBtn.Text = "Добавить/изменить";
+			editDeviceProviderBtn.UseVisualStyleBackColor = true;
+			editDeviceProviderBtn.Click += deviceProviderEditBtn_Click;
+			// 
+			// deviceProvidersLBox
+			// 
+			deviceProvidersLBox.Dock = DockStyle.Fill;
+			deviceProvidersLBox.FormattingEnabled = true;
+			deviceProvidersLBox.ItemHeight = 15;
+			deviceProvidersLBox.Location = new Point(3, 49);
+			deviceProvidersLBox.Name = "deviceProvidersLBox";
+			deviceProvidersLBox.Size = new Size(312, 345);
+			deviceProvidersLBox.TabIndex = 0;
+			// 
+			// tabPage3
+			// 
+			tabPage3.Controls.Add(tableLayoutPanel1);
+			tabPage3.Location = new Point(4, 24);
+			tabPage3.Name = "tabPage3";
+			tabPage3.Padding = new Padding(3);
+			tabPage3.Size = new Size(976, 409);
+			tabPage3.TabIndex = 4;
+			tabPage3.Text = "История перемещений";
+			tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// tableLayoutPanel1
+			// 
+			tableLayoutPanel1.ColumnCount = 2;
+			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
+			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
+			tableLayoutPanel1.Controls.Add(historySearchTBox, 1, 0);
+			tableLayoutPanel1.Controls.Add(historySearchLabel, 0, 0);
+			tableLayoutPanel1.Controls.Add(historyDGW, 0, 1);
+			tableLayoutPanel1.Dock = DockStyle.Fill;
+			tableLayoutPanel1.Location = new Point(3, 3);
+			tableLayoutPanel1.Name = "tableLayoutPanel1";
+			tableLayoutPanel1.RowCount = 2;
+			tableLayoutPanel1.RowStyles.Add(new RowStyle());
+			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+			tableLayoutPanel1.Size = new Size(970, 403);
+			tableLayoutPanel1.TabIndex = 0;
+			// 
+			// historySearchTBox
+			// 
+			historySearchTBox.Dock = DockStyle.Fill;
+			historySearchTBox.Location = new Point(51, 3);
+			historySearchTBox.Name = "historySearchTBox";
+			historySearchTBox.Size = new Size(916, 23);
+			historySearchTBox.TabIndex = 15;
+			historySearchTBox.TextChanged += historySearchTBox_TextChanged;
+			// 
+			// historySearchLabel
+			// 
+			historySearchLabel.Anchor = AnchorStyles.None;
+			historySearchLabel.AutoSize = true;
+			historySearchLabel.Location = new Point(3, 7);
+			historySearchLabel.Name = "historySearchLabel";
+			historySearchLabel.Size = new Size(42, 15);
+			historySearchLabel.TabIndex = 14;
+			historySearchLabel.Text = "Поиск";
+			// 
+			// historyDGW
+			// 
+			historyDGW.AllowUserToAddRows = false;
+			historyDGW.AllowUserToDeleteRows = false;
+			historyDGW.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+			historyDGW.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+			historyDGW.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			tableLayoutPanel1.SetColumnSpan(historyDGW, 2);
+			historyDGW.Dock = DockStyle.Fill;
+			historyDGW.Location = new Point(3, 32);
+			historyDGW.MultiSelect = false;
+			historyDGW.Name = "historyDGW";
+			historyDGW.ReadOnly = true;
+			historyDGW.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			historyDGW.Size = new Size(964, 368);
+			historyDGW.TabIndex = 16;
 			// 
 			// menuStrip
 			// 
@@ -824,11 +898,15 @@
 			moveLeftRightBtnsTLP.PerformLayout();
 			tabPage2.ResumeLayout(false);
 			deviceTypesNamesProvidersTLP.ResumeLayout(false);
-			deviceProvidersTLP.ResumeLayout(false);
-			deviceProvidersTLP.PerformLayout();
 			deviceTypesNamesGBox.ResumeLayout(false);
 			deviceTypesNamesTLP.ResumeLayout(false);
 			deviceTypesNamesTLP.PerformLayout();
+			deviceProvidersTLP.ResumeLayout(false);
+			deviceProvidersTLP.PerformLayout();
+			tabPage3.ResumeLayout(false);
+			tableLayoutPanel1.ResumeLayout(false);
+			tableLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)historyDGW).EndInit();
 			menuStrip.ResumeLayout(false);
 			menuStrip.PerformLayout();
 			ResumeLayout(false);
@@ -893,5 +971,10 @@
 		private ListBox deviceNamesLBox;
 		private ListBox devicesLBoxLeft;
 		private ListBox devicesLBoxRight;
+		private TabPage tabPage3;
+		private TableLayoutPanel tableLayoutPanel1;
+		private TextBox historySearchTBox;
+		private Label historySearchLabel;
+		private DataGridView historyDGW;
 	}
 }
