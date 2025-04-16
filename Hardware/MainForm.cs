@@ -18,6 +18,7 @@ namespace Hardware
 		{
 			InitializeButtons();
 			InitializeHistoryDGW();
+			InitializeFullListDGW();
 			RefreshAll();
 		}
 
@@ -820,6 +821,46 @@ namespace Hardware
 		private void historySearchTBox_TextChanged(object sender, EventArgs e)
 		{
 			RefreshHistoryDGW();
+		}
+
+		private void tabPage3_Enter(object sender, EventArgs e)
+		{
+			RefreshHistoryDGW();
+		}
+
+		// Блок работы с полным списком техники
+		private void InitializeFullListDGW()
+		{
+			fullListDGW.DataSource = context.Devices.Select(d => new { d.Complect.Cabinet.Building, d.Complect.Cabinet, d.Complect, d.DeviceName.DeviceType, d.DeviceName, d.DeviceProvider, d.Serial, d.Inventory }).ToList();
+			fullListDGW.Columns[0].HeaderText = "Здание";
+			fullListDGW.Columns[1].HeaderText = "Кабинет";
+			fullListDGW.Columns[2].HeaderText = "Комплект";
+			fullListDGW.Columns[3].HeaderText = "Тип";
+			fullListDGW.Columns[4].HeaderText = "Название";
+			fullListDGW.Columns[5].HeaderText = "Получено от";
+			fullListDGW.Columns[6].HeaderText = "Серийный номер";
+			fullListDGW.Columns[7].HeaderText = "Инвентарный номер";
+		}
+
+		private void RefreshFullListDGW()
+		{
+			if (fullListSearchTBox.Text.Length == 0)
+				fullListDGW.DataSource = context.Devices.Select(d => new { d.Complect.Cabinet.Building, d.Complect.Cabinet, d.Complect, d.DeviceName.DeviceType, d.DeviceName, d.DeviceProvider, d.Serial, d.Inventory }).ToList();
+			else
+			{
+				var text = fullListSearchTBox.Text.ToLower();
+				fullListDGW.DataSource = context.Devices.ToList().Where(d => d.GetFullString().ToLower().Contains(text)).Select(d => new { d.Complect.Cabinet.Building, d.Complect.Cabinet, d.Complect, d.DeviceName.DeviceType, d.DeviceName, d.DeviceProvider, d.Serial, d.Inventory }).ToList();
+			}
+		}
+
+		private void fullListSearchTBox_TextChanged(object sender, EventArgs e)
+		{
+			RefreshFullListDGW();
+		}
+
+		private void tabPage4_Enter(object sender, EventArgs e)
+		{
+			RefreshFullListDGW();
 		}
 	}
 }

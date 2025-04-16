@@ -84,10 +84,15 @@
 			editDeviceProviderBtn = new Button();
 			deviceProvidersLBox = new ListBox();
 			tabPage3 = new TabPage();
-			tableLayoutPanel1 = new TableLayoutPanel();
-			historySearchTBox = new TextBox();
+			historyTLP = new TableLayoutPanel();
 			historySearchLabel = new Label();
+			historySearchTBox = new TextBox();
 			historyDGW = new DataGridView();
+			tabPage4 = new TabPage();
+			fullListTLP = new TableLayoutPanel();
+			fullListSearchLabel = new Label();
+			fullListSearchTBox = new TextBox();
+			fullListDGW = new DataGridView();
 			menuStrip = new MenuStrip();
 			refreshToolStripMenuItem = new ToolStripMenuItem();
 			tabControl.SuspendLayout();
@@ -102,8 +107,11 @@
 			deviceTypesNamesTLP.SuspendLayout();
 			deviceProvidersTLP.SuspendLayout();
 			tabPage3.SuspendLayout();
-			tableLayoutPanel1.SuspendLayout();
+			historyTLP.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)historyDGW).BeginInit();
+			tabPage4.SuspendLayout();
+			fullListTLP.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)fullListDGW).BeginInit();
 			menuStrip.SuspendLayout();
 			SuspendLayout();
 			// 
@@ -112,6 +120,7 @@
 			tabControl.Controls.Add(tabPage1);
 			tabControl.Controls.Add(tabPage2);
 			tabControl.Controls.Add(tabPage3);
+			tabControl.Controls.Add(tabPage4);
 			tabControl.Dock = DockStyle.Fill;
 			tabControl.Location = new Point(0, 24);
 			tabControl.Name = "tabControl";
@@ -795,7 +804,7 @@
 			// 
 			// tabPage3
 			// 
-			tabPage3.Controls.Add(tableLayoutPanel1);
+			tabPage3.Controls.Add(historyTLP);
 			tabPage3.Location = new Point(4, 24);
 			tabPage3.Name = "tabPage3";
 			tabPage3.Padding = new Padding(3);
@@ -803,33 +812,25 @@
 			tabPage3.TabIndex = 4;
 			tabPage3.Text = "История перемещений";
 			tabPage3.UseVisualStyleBackColor = true;
+			tabPage3.Enter += tabPage3_Enter;
 			// 
-			// tableLayoutPanel1
+			// historyTLP
 			// 
-			tableLayoutPanel1.ColumnCount = 2;
-			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-			tableLayoutPanel1.Controls.Add(historySearchTBox, 1, 0);
-			tableLayoutPanel1.Controls.Add(historySearchLabel, 0, 0);
-			tableLayoutPanel1.Controls.Add(historyDGW, 0, 1);
-			tableLayoutPanel1.Dock = DockStyle.Fill;
-			tableLayoutPanel1.Location = new Point(3, 3);
-			tableLayoutPanel1.Name = "tableLayoutPanel1";
-			tableLayoutPanel1.RowCount = 2;
-			tableLayoutPanel1.RowStyles.Add(new RowStyle());
-			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			tableLayoutPanel1.Size = new Size(970, 403);
-			tableLayoutPanel1.TabIndex = 0;
-			// 
-			// historySearchTBox
-			// 
-			historySearchTBox.Dock = DockStyle.Fill;
-			historySearchTBox.Location = new Point(51, 3);
-			historySearchTBox.Name = "historySearchTBox";
-			historySearchTBox.Size = new Size(916, 23);
-			historySearchTBox.TabIndex = 15;
-			historySearchTBox.TextChanged += historySearchTBox_TextChanged;
+			historyTLP.ColumnCount = 2;
+			historyTLP.ColumnStyles.Add(new ColumnStyle());
+			historyTLP.ColumnStyles.Add(new ColumnStyle());
+			historyTLP.Controls.Add(historySearchLabel, 0, 0);
+			historyTLP.Controls.Add(historySearchTBox, 1, 0);
+			historyTLP.Controls.Add(historyDGW, 0, 1);
+			historyTLP.Dock = DockStyle.Fill;
+			historyTLP.Location = new Point(3, 3);
+			historyTLP.Name = "historyTLP";
+			historyTLP.RowCount = 2;
+			historyTLP.RowStyles.Add(new RowStyle());
+			historyTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			historyTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+			historyTLP.Size = new Size(970, 403);
+			historyTLP.TabIndex = 0;
 			// 
 			// historySearchLabel
 			// 
@@ -841,6 +842,15 @@
 			historySearchLabel.TabIndex = 14;
 			historySearchLabel.Text = "Поиск";
 			// 
+			// historySearchTBox
+			// 
+			historySearchTBox.Dock = DockStyle.Fill;
+			historySearchTBox.Location = new Point(51, 3);
+			historySearchTBox.Name = "historySearchTBox";
+			historySearchTBox.Size = new Size(916, 23);
+			historySearchTBox.TabIndex = 15;
+			historySearchTBox.TextChanged += historySearchTBox_TextChanged;
+			// 
 			// historyDGW
 			// 
 			historyDGW.AllowUserToAddRows = false;
@@ -848,7 +858,7 @@
 			historyDGW.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			historyDGW.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			historyDGW.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			tableLayoutPanel1.SetColumnSpan(historyDGW, 2);
+			historyTLP.SetColumnSpan(historyDGW, 2);
 			historyDGW.Dock = DockStyle.Fill;
 			historyDGW.Location = new Point(3, 32);
 			historyDGW.MultiSelect = false;
@@ -857,6 +867,72 @@
 			historyDGW.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 			historyDGW.Size = new Size(964, 368);
 			historyDGW.TabIndex = 16;
+			// 
+			// tabPage4
+			// 
+			tabPage4.Controls.Add(fullListTLP);
+			tabPage4.Location = new Point(4, 24);
+			tabPage4.Name = "tabPage4";
+			tabPage4.Padding = new Padding(3);
+			tabPage4.Size = new Size(976, 409);
+			tabPage4.TabIndex = 5;
+			tabPage4.Text = "Полный список (только чтение)";
+			tabPage4.UseVisualStyleBackColor = true;
+			tabPage4.Enter += tabPage4_Enter;
+			// 
+			// fullListTLP
+			// 
+			fullListTLP.ColumnCount = 2;
+			fullListTLP.ColumnStyles.Add(new ColumnStyle());
+			fullListTLP.ColumnStyles.Add(new ColumnStyle());
+			fullListTLP.Controls.Add(fullListSearchLabel, 0, 0);
+			fullListTLP.Controls.Add(fullListSearchTBox, 1, 0);
+			fullListTLP.Controls.Add(fullListDGW, 0, 1);
+			fullListTLP.Dock = DockStyle.Fill;
+			fullListTLP.Location = new Point(3, 3);
+			fullListTLP.Name = "fullListTLP";
+			fullListTLP.RowCount = 2;
+			fullListTLP.RowStyles.Add(new RowStyle());
+			fullListTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			fullListTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+			fullListTLP.Size = new Size(970, 403);
+			fullListTLP.TabIndex = 1;
+			// 
+			// fullListSearchLabel
+			// 
+			fullListSearchLabel.Anchor = AnchorStyles.None;
+			fullListSearchLabel.AutoSize = true;
+			fullListSearchLabel.Location = new Point(3, 7);
+			fullListSearchLabel.Name = "fullListSearchLabel";
+			fullListSearchLabel.Size = new Size(42, 15);
+			fullListSearchLabel.TabIndex = 14;
+			fullListSearchLabel.Text = "Поиск";
+			// 
+			// fullListSearchTBox
+			// 
+			fullListSearchTBox.Dock = DockStyle.Fill;
+			fullListSearchTBox.Location = new Point(51, 3);
+			fullListSearchTBox.Name = "fullListSearchTBox";
+			fullListSearchTBox.Size = new Size(916, 23);
+			fullListSearchTBox.TabIndex = 15;
+			fullListSearchTBox.TextChanged += fullListSearchTBox_TextChanged;
+			// 
+			// fullListDGW
+			// 
+			fullListDGW.AllowUserToAddRows = false;
+			fullListDGW.AllowUserToDeleteRows = false;
+			fullListDGW.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+			fullListDGW.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+			fullListDGW.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			fullListTLP.SetColumnSpan(fullListDGW, 2);
+			fullListDGW.Dock = DockStyle.Fill;
+			fullListDGW.Location = new Point(3, 32);
+			fullListDGW.MultiSelect = false;
+			fullListDGW.Name = "fullListDGW";
+			fullListDGW.ReadOnly = true;
+			fullListDGW.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+			fullListDGW.Size = new Size(964, 368);
+			fullListDGW.TabIndex = 16;
 			// 
 			// menuStrip
 			// 
@@ -904,9 +980,13 @@
 			deviceProvidersTLP.ResumeLayout(false);
 			deviceProvidersTLP.PerformLayout();
 			tabPage3.ResumeLayout(false);
-			tableLayoutPanel1.ResumeLayout(false);
-			tableLayoutPanel1.PerformLayout();
+			historyTLP.ResumeLayout(false);
+			historyTLP.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)historyDGW).EndInit();
+			tabPage4.ResumeLayout(false);
+			fullListTLP.ResumeLayout(false);
+			fullListTLP.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)fullListDGW).EndInit();
 			menuStrip.ResumeLayout(false);
 			menuStrip.PerformLayout();
 			ResumeLayout(false);
@@ -972,9 +1052,14 @@
 		private ListBox devicesLBoxLeft;
 		private ListBox devicesLBoxRight;
 		private TabPage tabPage3;
-		private TableLayoutPanel tableLayoutPanel1;
+		private TableLayoutPanel historyTLP;
 		private TextBox historySearchTBox;
 		private Label historySearchLabel;
 		private DataGridView historyDGW;
+		private TabPage tabPage4;
+		private TableLayoutPanel fullListTLP;
+		private TextBox fullListSearchTBox;
+		private Label fullListSearchLabel;
+		private DataGridView fullListDGW;
 	}
 }
