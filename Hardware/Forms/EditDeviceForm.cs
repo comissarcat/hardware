@@ -162,7 +162,7 @@ namespace Hardware.Forms
 			};
 			var after = device.ToStringForHistory();
 			await context.Devices.AddAsync(device);
-			context.History.AddAsync(new History() { Before = before, After = after });
+			await context.History.AddAsync(new History() { Before = before, After = after });
 			try
 			{
 				await context.SaveChangesAsync();
@@ -183,7 +183,7 @@ namespace Hardware.Forms
 			device.DeviceName = (DeviceName)deviceNameCBox.SelectedItem;
 			device.DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem;
 			var after = device.ToStringForHistory();
-			context.History.AddAsync(new History() { Before = before, After = after });
+			await context.History.AddAsync(new History() { Before = before, After = after });
 			try
 			{
 				await context.SaveChangesAsync();
@@ -200,7 +200,7 @@ namespace Hardware.Forms
 			var before = device.ToStringForHistory();
 			var after = string.Empty;
 			context.Devices.Remove(device);
-			context.History.AddAsync(new History() { Before = before, After = after });
+			await context.History.AddAsync(new History() { Before = before, After = after });
 			try
 			{
 				await context.SaveChangesAsync();
