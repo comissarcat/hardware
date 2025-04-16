@@ -26,7 +26,8 @@ namespace Hardware.Forms
 
 		private void SwitchRemoveBtn()
 		{
-			var nameHasDevices = context.Devices.Where(d => d.DeviceName == deviceName).Any();
+			var nameHasDevices = context.Devices.Where(d => d.DeviceName == deviceName)
+												.Any();
 			removeBtn.Enabled = !nameHasDevices;
 		}
 

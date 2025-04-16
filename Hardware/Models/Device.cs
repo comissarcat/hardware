@@ -14,9 +14,14 @@
 			return $"{DeviceName.Name} {Serial} {Inventory}";
 		}
 
-		public string GetFullString()
+		public string ToFullString()
 		{
 			return $"{Complect.Cabinet.Building.Name} {Complect.Cabinet.Name} {Complect.Name} {DeviceName.DeviceType.Name} {DeviceName.Name} {DeviceProvider.Name} {Serial} {Inventory}";
+		}
+
+		public string ToStringForHistory()
+		{
+			return $"Здание: {Complect.Cabinet.Building.Name}; кабинет: {Complect.Cabinet.Name}; комплект: {Complect.Name}; название: {DeviceName}; с/н: {Serial}; и/н: {Inventory}";
 		}
 	}
 }

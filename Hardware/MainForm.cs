@@ -109,9 +109,11 @@ namespace Hardware
 		private List<Building> SearchBuildingByDevice(string text)
 		{
 			text = text.ToLower();
-			return [.. context.Devices.Where(d => d.DeviceName.Name.ToLower().Contains(text) || d.Serial.ToLower().Contains(text) || d.Inventory.ToLower().Contains(text))
-					.GroupBy(d => d.Complect.Cabinet.Building)
-					.Select(d => d.First().Complect.Cabinet.Building)];
+			return context.Devices.ToList()
+								  .Where(d => d.ToString().ToLower().Contains(text))
+								  .GroupBy(d => d.Complect.Cabinet.Building)
+								  .Select(d => d.First().Complect.Cabinet.Building)
+								  .ToList();
 		}
 
 		private void editBuildingBtn_Click(object sender, EventArgs e)
@@ -155,7 +157,8 @@ namespace Hardware
 		{
 			var selectedItem = cabinetsLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
-				cabinetsLBoxLeft.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxLeft.SelectedItem).ToList();
+				cabinetsLBoxLeft.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxLeft.SelectedItem)
+															  .ToList();
 			else
 				cabinetsLBoxLeft.DataSource = SearchCabinetByDevice(searchTBoxLeft.Text, (Building?)buildingsLBoxLeft.SelectedItem);
 			if (selectedItem is not null)
@@ -170,7 +173,8 @@ namespace Hardware
 		{
 			var selectedItem = cabinetsLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
-				cabinetsLBoxRight.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxRight.SelectedItem).ToList();
+				cabinetsLBoxRight.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxRight.SelectedItem)
+															   .ToList();
 			else
 				cabinetsLBoxRight.DataSource = SearchCabinetByDevice(searchTBoxRight.Text, (Building?)buildingsLBoxRight.SelectedItem);
 			if (selectedItem is not null)
@@ -184,11 +188,13 @@ namespace Hardware
 		private List<Cabinet> SearchCabinetByDevice(string text, Building? building)
 		{
 			text = text.ToLower();
-			return [.. context.Devices.Where(d => d.DeviceName.Name.ToLower().Contains(text) || d.Serial.ToLower().Contains(text) || d.Inventory.ToLower().Contains(text))
-				.GroupBy(d => d.Complect.Cabinet)
-				.Select(d => d.First().Complect.Cabinet)
-				.ToList()
-				.Where(c => c.Building == building)];
+			return context.Devices.ToList()
+								  .Where(d => d.ToString().ToLower().Contains(text))
+								  .GroupBy(d => d.Complect.Cabinet)
+								  .Select(d => d.First().Complect.Cabinet)
+								  .ToList()
+								  .Where(c => c.Building == building)
+								  .ToList();
 		}
 
 		private void SwitchEditCabinetBtnLeft()
@@ -291,15 +297,20 @@ namespace Hardware
 			List<string> before = [];
 			List<string> after = [];
 			Cabinet cabinet = (Cabinet)cabinetsLBoxLeft.SelectedItem;
-			var cabinetDevices = await context.Devices.Include(d => d.Complect.Cabinet.Building).Where(d => d.Complect.Cabinet == cabinet).ToListAsync();
-			if (cabinetDevices.Count > 0)
+			var devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
+												  .Where(d => d.Complect.Cabinet == cabinet)
+												  .ToList();
+			if (devicesInCabinet.Count > 0)
 			{
-				foreach (var device in cabinetDevices)
-					before.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
+				foreach (var device in devicesInCabinet)
+					before.Add(device.ToStringForHistory());
+
 				cabinet.Building = (Building)buildingsLBoxRight.SelectedItem;
-				foreach (var device in cabinetDevices)
-					after.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
-				for (int i = 0; i < cabinetDevices.Count; i++)
+
+				foreach (var device in devicesInCabinet)
+					after.Add(device.ToStringForHistory());
+
+				for (int i = 0; i < devicesInCabinet.Count; i++)
 					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
 			}
 			else
@@ -323,15 +334,20 @@ namespace Hardware
 			List<string> before = [];
 			List<string> after = [];
 			Cabinet cabinet = (Cabinet)cabinetsLBoxRight.SelectedItem;
-			var cabinetDevices = await context.Devices.Include(d => d.Complect.Cabinet.Building).Where(d => d.Complect.Cabinet == cabinet).ToListAsync();
-			if (cabinetDevices.Count > 0)
+			var devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
+												  .Where(d => d.Complect.Cabinet == cabinet)
+												  .ToList();
+			if (devicesInCabinet.Count > 0)
 			{
-				foreach (var device in cabinetDevices)
-					before.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
+				foreach (var device in devicesInCabinet)
+					before.Add(device.ToStringForHistory());
+
 				cabinet.Building = (Building)buildingsLBoxLeft.SelectedItem;
-				foreach (var device in cabinetDevices)
-					after.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
-				for (int i = 0; i < cabinetDevices.Count; i++)
+
+				foreach (var device in devicesInCabinet)
+					after.Add(device.ToStringForHistory());
+
+				for (int i = 0; i < devicesInCabinet.Count; i++)
 					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
 			}
 			else
@@ -361,7 +377,8 @@ namespace Hardware
 		{
 			var selectedItem = complectsLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
-				complectsLBoxLeft.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxLeft.SelectedItem).ToList();
+				complectsLBoxLeft.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxLeft.SelectedItem)
+																.ToList();
 			else
 				complectsLBoxLeft.DataSource = SearchComplectByDevice(searchTBoxLeft.Text, (Cabinet?)cabinetsLBoxLeft.SelectedItem);
 			if (selectedItem is not null)
@@ -376,7 +393,8 @@ namespace Hardware
 		{
 			var selectedItem = complectsLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
-				complectsLBoxRight.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxRight.SelectedItem).ToList();
+				complectsLBoxRight.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxRight.SelectedItem)
+																 .ToList();
 			else
 				complectsLBoxRight.DataSource = SearchComplectByDevice(searchTBoxRight.Text, (Cabinet?)cabinetsLBoxRight.SelectedItem);
 			if (selectedItem is not null)
@@ -390,11 +408,13 @@ namespace Hardware
 		private List<Complect> SearchComplectByDevice(string text, Cabinet? cabinet)
 		{
 			text = text.ToLower();
-			return [..context.Devices.Where(d => d.DeviceName.Name.ToLower().Contains(text) || d.Serial.ToLower().Contains(text) || d.Inventory.ToLower().Contains(text))
-				.GroupBy(d => d.Complect)
-				.Select(d => d.First().Complect)
-				.ToList()
-				.Where(c => c.Cabinet == cabinet)];
+			return context.Devices.ToList()
+								  .Where(d => d.ToString().ToLower().Contains(text))
+								  .GroupBy(d => d.Complect)
+								  .Select(d => d.First().Complect)
+								  .ToList()
+								  .Where(c => c.Cabinet == cabinet)
+								  .ToList();
 		}
 
 		private void SwitchEditComplectBtnLeft()
@@ -496,15 +516,20 @@ namespace Hardware
 			List<string> before = [];
 			List<string> after = [];
 			Complect complect = (Complect)complectsLBoxLeft.SelectedItem;
-			var complectDevices = await context.Devices.Include(d => d.Complect.Cabinet.Building).Where(d => d.Complect == complect).ToListAsync();
-			if (complectDevices.Count > 0)
+			var devicesInComplect = context.Devices.Include(d => d.Complect.Cabinet.Building)
+												   .Where(d => d.Complect == complect)
+												   .ToList();
+			if (devicesInComplect.Count > 0)
 			{
-				foreach (var device in complectDevices)
-					before.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
+				foreach (var device in devicesInComplect)
+					before.Add(device.ToStringForHistory());
+
 				complect.Cabinet = (Cabinet)cabinetsLBoxRight.SelectedItem;
-				foreach (var device in complectDevices)
-					after.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
-				for (int i = 0; i < complectDevices.Count; i++)
+
+				foreach (var device in devicesInComplect)
+					after.Add(device.ToStringForHistory());
+
+				for (int i = 0; i < devicesInComplect.Count; i++)
 					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
 			}
 			else
@@ -528,15 +553,20 @@ namespace Hardware
 			List<string> before = [];
 			List<string> after = [];
 			Complect complect = (Complect)complectsLBoxRight.SelectedItem;
-			var complectDevices = await context.Devices.Include(d => d.Complect.Cabinet.Building).Where(d => d.Complect == complect).ToListAsync();
-			if (complectDevices.Count > 0)
+			var devicesInComplect = context.Devices.Include(d => d.Complect.Cabinet.Building)
+												   .Where(d => d.Complect == complect)
+												   .ToList();
+			if (devicesInComplect.Count > 0)
 			{
-				foreach (var device in complectDevices)
-					before.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
+				foreach (var device in devicesInComplect)
+					before.Add(device.ToStringForHistory());
+
 				complect.Cabinet = (Cabinet)cabinetsLBoxLeft.SelectedItem;
-				foreach (var device in complectDevices)
-					after.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
-				for (int i = 0; i < complectDevices.Count; i++)
+
+				foreach (var device in devicesInComplect)
+					after.Add(device.ToStringForHistory());
+
+				for (int i = 0; i < devicesInComplect.Count; i++)
 					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
 			}
 			else
@@ -565,7 +595,9 @@ namespace Hardware
 		private void RefreshDevicesLBoxLeft()
 		{
 			var selectedItem = devicesLBoxLeft.SelectedItem;
-			devicesLBoxLeft.DataSource = context.Devices.Include(d => d.DeviceName).Where(d => d.Complect == complectsLBoxLeft.SelectedItem).ToList();
+			devicesLBoxLeft.DataSource = context.Devices.Include(d => d.DeviceName)
+														.Where(d => d.Complect == complectsLBoxLeft.SelectedItem)
+														.ToList();
 			if (selectedItem is not null)
 				if (devicesLBoxLeft.Items.Contains(selectedItem))
 					devicesLBoxLeft.SelectedItem = selectedItem;
@@ -575,7 +607,9 @@ namespace Hardware
 		private void RefreshDevicesLBoxRight()
 		{
 			var selectedItem = devicesLBoxRight.SelectedItem;
-			devicesLBoxRight.DataSource = context.Devices.Include(d => d.DeviceName).Where(d => d.Complect == complectsLBoxRight.SelectedItem).ToList();
+			devicesLBoxRight.DataSource = context.Devices.Include(d => d.DeviceName)
+														 .Where(d => d.Complect == complectsLBoxRight.SelectedItem)
+														 .ToList();
 			if (selectedItem is not null)
 				if (devicesLBoxRight.Items.Contains(selectedItem))
 					devicesLBoxRight.SelectedItem = selectedItem;
@@ -676,10 +710,10 @@ namespace Hardware
 		private async void moveDeviceToRightBtn_Click(object sender, EventArgs e)
 		{
 			Device device = (Device)devicesLBoxLeft.SelectedItem;
-			var before = $"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}";
+			var before = device.ToStringForHistory();
 			device.Complect = (Complect)complectsLBoxRight.SelectedItem;
-			var after = $"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}";
-			context.History.AddAsync(new History() { Before = before, After = after });
+			var after = device.ToStringForHistory();
+			await context.History.AddAsync(new History() { Before = before, After = after });
 			bool success;
 			try
 			{
@@ -697,10 +731,10 @@ namespace Hardware
 		private async void moveDeviceToLeftBtn_Click(object sender, EventArgs e)
 		{
 			Device device = (Device)devicesLBoxRight.SelectedItem;
-			var before = $"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}";
+			var before = device.ToStringForHistory();
 			device.Complect = (Complect)complectsLBoxLeft.SelectedItem;
-			var after = $"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}";
-			context.History.AddAsync(new History() { Before = before, After = after });
+			var after = device.ToStringForHistory();
+			await context.History.AddAsync(new History() { Before = before, After = after });
 			bool success;
 			try
 			{
@@ -768,7 +802,8 @@ namespace Hardware
 		private void RefreshDeviceNames()
 		{
 			var selectedItem = deviceNamesLBox.SelectedItem;
-			deviceNamesLBox.DataSource = context.DeviceNames.Where(dn => dn.DeviceType == deviceTypesLBox.SelectedItem).ToList();
+			deviceNamesLBox.DataSource = context.DeviceNames.Where(dn => dn.DeviceType == deviceTypesLBox.SelectedItem)
+															.ToList();
 			if (selectedItem is not null)
 				if (deviceNamesLBox.Items.Contains(selectedItem))
 					deviceNamesLBox.SelectedItem = selectedItem;
@@ -814,7 +849,8 @@ namespace Hardware
 			else
 			{
 				var text = historySearchTBox.Text.ToLower();
-				historyDGW.DataSource = context.History.Where(h => h.Before.ToLower().Contains(text) || h.After.ToLower().Contains(text)).ToList();
+				historyDGW.DataSource = context.History.Where(h => h.Before.ToLower().Contains(text) || h.After.ToLower().Contains(text))
+													   .ToList();
 			}
 		}
 
@@ -831,7 +867,18 @@ namespace Hardware
 		// Блок работы с полным списком техники
 		private void InitializeFullListDGW()
 		{
-			fullListDGW.DataSource = context.Devices.Select(d => new { d.Complect.Cabinet.Building, d.Complect.Cabinet, d.Complect, d.DeviceName.DeviceType, d.DeviceName, d.DeviceProvider, d.Serial, d.Inventory }).ToList();
+			fullListDGW.DataSource = context.Devices.Select(d => new
+			{
+				d.Complect.Cabinet.Building,
+				d.Complect.Cabinet,
+				d.Complect,
+				d.DeviceName.DeviceType,
+				d.DeviceName,
+				d.DeviceProvider,
+				d.Serial,
+				d.Inventory
+			}).ToList();
+
 			fullListDGW.Columns[0].HeaderText = "Здание";
 			fullListDGW.Columns[1].HeaderText = "Кабинет";
 			fullListDGW.Columns[2].HeaderText = "Комплект";
@@ -845,11 +892,34 @@ namespace Hardware
 		private void RefreshFullListDGW()
 		{
 			if (fullListSearchTBox.Text.Length == 0)
-				fullListDGW.DataSource = context.Devices.Select(d => new { d.Complect.Cabinet.Building, d.Complect.Cabinet, d.Complect, d.DeviceName.DeviceType, d.DeviceName, d.DeviceProvider, d.Serial, d.Inventory }).ToList();
+				fullListDGW.DataSource = context.Devices.Select(d => new
+				{
+					d.Complect.Cabinet.Building,
+					d.Complect.Cabinet,
+					d.Complect,
+					d.DeviceName.DeviceType,
+					d.DeviceName,
+					d.DeviceProvider,
+					d.Serial,
+					d.Inventory
+				}).ToList();
 			else
 			{
 				var text = fullListSearchTBox.Text.ToLower();
-				fullListDGW.DataSource = context.Devices.ToList().Where(d => d.GetFullString().ToLower().Contains(text)).Select(d => new { d.Complect.Cabinet.Building, d.Complect.Cabinet, d.Complect, d.DeviceName.DeviceType, d.DeviceName, d.DeviceProvider, d.Serial, d.Inventory }).ToList();
+				fullListDGW.DataSource = context.Devices.ToList()
+														.Where(d => d.ToFullString().ToLower().Contains(text))
+														.Select(d => new
+														{
+															d.Complect.Cabinet.Building,
+															d.Complect.Cabinet,
+															d.Complect,
+															d.DeviceName.DeviceType,
+															d.DeviceName,
+															d.DeviceProvider,
+															d.Serial,
+															d.Inventory
+														})
+														.ToList();
 			}
 		}
 

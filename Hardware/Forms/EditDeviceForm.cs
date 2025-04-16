@@ -23,10 +23,12 @@ namespace Hardware.Forms
 
 				buildingCBox.SelectedItem = this.device.Complect.Cabinet.Building;
 
-				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem).ToList();
+				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+														 .ToList();
 				cabinetCBox.SelectedItem = this.device.Complect.Cabinet;
 
-				complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem).ToList();
+				complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
+														   .ToList();
 				complectCBox.SelectedItem = this.device.Complect;
 
 				deviceNameCBox.SelectedItem = this.device.DeviceName;
@@ -39,10 +41,12 @@ namespace Hardware.Forms
 			{
 				buildingCBox.SelectedItem = complect.Cabinet.Building;
 
-				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem).ToList();
+				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+														 .ToList();
 				cabinetCBox.SelectedItem = complect.Cabinet;
 
-				complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem).ToList();
+				complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
+														   .ToList();
 				complectCBox.SelectedItem = complect;
 			}
 		}
@@ -93,7 +97,8 @@ namespace Hardware.Forms
 		{
 			var selectedItem = cabinetCBox.SelectedItem;
 
-			cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem).ToList();
+			cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+													 .ToList();
 
 			if (cabinetCBox.Items.Count == 0)
 				cabinetCBox.Text = string.Empty;
@@ -107,7 +112,8 @@ namespace Hardware.Forms
 		{
 			var selectedItem = complectCBox.SelectedItem;
 
-			complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem).ToList();
+			complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
+													   .ToList();
 
 			if (complectCBox.Items.Count == 0)
 				complectCBox.Text = string.Empty;
@@ -146,8 +152,15 @@ namespace Hardware.Forms
 		private async Task<bool> AddDevice()
 		{
 			var before = string.Empty;
-			device = new() { Serial = serialTBox.Text, Inventory = inventoryTBox.Text, Complect = (Complect)complectCBox.SelectedItem, DeviceName = (DeviceName)deviceNameCBox.SelectedItem, DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem };
-			var after = $"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}";
+			device = new()
+			{
+				Serial = serialTBox.Text,
+				Inventory = inventoryTBox.Text,
+				Complect = (Complect)complectCBox.SelectedItem,
+				DeviceName = (DeviceName)deviceNameCBox.SelectedItem,
+				DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem
+			};
+			var after = device.ToStringForHistory();
 			await context.Devices.AddAsync(device);
 			context.History.AddAsync(new History() { Before = before, After = after });
 			try
@@ -163,13 +176,13 @@ namespace Hardware.Forms
 
 		private async Task<bool> EditDevice()
 		{
-			var before = $"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}";
+			var before = device.ToStringForHistory();
 			device.Serial = serialTBox.Text;
 			device.Inventory = inventoryTBox.Text;
 			device.Complect = (Complect)complectCBox.SelectedItem;
 			device.DeviceName = (DeviceName)deviceNameCBox.SelectedItem;
 			device.DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem;
-			var after = $"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}";
+			var after = device.ToStringForHistory();
 			context.History.AddAsync(new History() { Before = before, After = after });
 			try
 			{
@@ -184,7 +197,7 @@ namespace Hardware.Forms
 
 		private async Task<bool> RemoveDevice()
 		{
-			var before = $"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}";
+			var before = device.ToStringForHistory();
 			var after = string.Empty;
 			context.Devices.Remove(device);
 			context.History.AddAsync(new History() { Before = before, After = after });

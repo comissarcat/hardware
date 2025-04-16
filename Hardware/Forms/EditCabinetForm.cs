@@ -27,7 +27,9 @@ namespace Hardware.Forms
 
 		private void SwitchRemoveBtn()
 		{
-			var cabinetHasDevices = context.Devices.Include(d => d.Complect.Cabinet).Where(d => d.Complect.Cabinet == cabinet).Any();
+			var cabinetHasDevices = context.Devices.Include(d => d.Complect.Cabinet)
+												   .Where(d => d.Complect.Cabinet == cabinet)
+												   .Any();
 			removeBtn.Enabled = !cabinetHasDevices;
 		}
 
@@ -61,16 +63,21 @@ namespace Hardware.Forms
 		{
 			List<string> before = [];
 			List<string> after = [];
-			var cabinetDevices = await context.Devices.Include(d => d.Complect.Cabinet.Building).Where(d => d.Complect.Cabinet == cabinet).ToListAsync();
-			if (cabinetDevices.Count > 0)
+			var devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
+												  .Where(d => d.Complect.Cabinet == cabinet)
+												  .ToList();
+			if (devicesInCabinet.Count > 0)
 			{
-				foreach (var device in cabinetDevices)
-					before.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
+				foreach (var device in devicesInCabinet)
+					before.Add(device.ToStringForHistory());
+
 				cabinet.Name = nameTBox.Text;
 				cabinet.Building = (Building)buildingCBox.SelectedItem;
-				foreach (var device in cabinetDevices)
-					after.Add($"{device.Complect.Cabinet.Building.Name} -> {device.Complect.Cabinet.Name} -> {device.Complect.Name} -> {device.DeviceName} {device.Serial} {device.Inventory}");
-				for (int i = 0; i < cabinetDevices.Count; i++)
+
+				foreach (var device in devicesInCabinet)
+					after.Add(device.ToStringForHistory());
+
+				for (int i = 0; i < devicesInCabinet.Count; i++)
 					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
 			}
 			else
