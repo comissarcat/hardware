@@ -11,9 +11,14 @@ namespace Hardware
 		public MainForm()
 		{
 			InitializeComponent();
-			context = ApplicationContext.Instanse();
-			//Import();
-			Init();
+			EnterPasswordForm form = new();
+			var result = form.ShowDialog();
+			if (result == DialogResult.OK)
+			{
+				context = ApplicationContext.Instanse();
+				//Import();
+				Init();
+			}
 		}
 
 		// Блок импорта данных из старой БД
@@ -706,10 +711,13 @@ namespace Hardware
 		private void RefreshDevicesLBoxLeft()
 		{
 			var selectedItem = devicesLBoxLeft.SelectedItem;
-			devicesLBoxLeft.DataSource = context.Devices.Include(d => d.DeviceName)
+			if (searchTBoxLeft.Text.Length == 0)
+				devicesLBoxLeft.DataSource = context.Devices.Include(d => d.DeviceName)
 														.Where(d => d.Complect == complectsLBoxLeft.SelectedItem)
 														.OrderBy(d => d.DeviceName.Name)
 														.ToList();
+			else
+				devicesLBoxLeft.DataSource = SearchDevice(searchTBoxLeft.Text, (Complect?)complectsLBoxLeft.SelectedItem);
 			if (selectedItem is not null)
 				if (devicesLBoxLeft.Items.Contains(selectedItem))
 					devicesLBoxLeft.SelectedItem = selectedItem;
@@ -719,14 +727,26 @@ namespace Hardware
 		private void RefreshDevicesLBoxRight()
 		{
 			var selectedItem = devicesLBoxRight.SelectedItem;
-			devicesLBoxRight.DataSource = context.Devices.Include(d => d.DeviceName)
+			if (searchTBoxRight.Text.Length == 0)
+				devicesLBoxRight.DataSource = context.Devices.Include(d => d.DeviceName)
 														 .Where(d => d.Complect == complectsLBoxRight.SelectedItem)
 														 .OrderBy(d => d.DeviceName.Name)
 														 .ToList();
+			else
+				devicesLBoxRight.DataSource = SearchDevice(searchTBoxRight.Text, (Complect?)complectsLBoxRight.SelectedItem);
 			if (selectedItem is not null)
 				if (devicesLBoxRight.Items.Contains(selectedItem))
 					devicesLBoxRight.SelectedItem = selectedItem;
 			SwitchMoveDeviceBtns();
+		}
+
+		private List<Device> SearchDevice(string text, Complect? complect)
+		{
+			text = text.ToLower();
+			return context.Devices.ToList()
+								  .Where(d => d.ToString().ToLower().Contains(text) && d.Complect == complect)
+								  .OrderBy(d => d.DeviceName.Name)
+								  .ToList();
 		}
 
 		private void SwitchEditDeviceBtnLeft()
@@ -1007,47 +1027,45 @@ namespace Hardware
 			fullListDGW.Columns[5].HeaderText = "Получено от";
 			fullListDGW.Columns[6].HeaderText = "Серийный номер";
 			fullListDGW.Columns[7].HeaderText = "Инвентарный номер";
+
+			fullListNumberOfDevicesLabel.Text = $"Всего единиц техники: {fullListDGW.RowCount}";
 		}
 
 		private void RefreshFullListDGW()
 		{
-			if (fullListSearchTBox.Text.Length == 0)
-				fullListDGW.DataSource = context.Devices.Select(d => new
-				{
-					d.Complect.Cabinet.Building,
-					d.Complect.Cabinet,
-					d.Complect,
-					d.DeviceName.DeviceType,
-					d.DeviceName,
-					d.DeviceProvider,
-					d.Serial,
-					d.Inventory
-				}).OrderBy(d => d.Building.Name)
-				  .ThenBy(d => d.Cabinet.Name)
-				  .ThenBy(d => d.Complect.Name)
-				  .ThenBy(d => d.DeviceName.Name)
-				  .ToList();
-			else
+			var list = context.Devices.Select(d => new
 			{
-				var text = fullListSearchTBox.Text.ToLower();
-				fullListDGW.DataSource = context.Devices.ToList()
-														.Where(d => d.ToFullString().ToLower().Contains(text))
-														.Select(d => new
-														{
-															d.Complect.Cabinet.Building,
-															d.Complect.Cabinet,
-															d.Complect,
-															d.DeviceName.DeviceType,
-															d.DeviceName,
-															d.DeviceProvider,
-															d.Serial,
-															d.Inventory
-														}).OrderBy(d => d.Building.Name)
-														  .ThenBy(d => d.Cabinet.Name)
-														  .ThenBy(d => d.Complect.Name)
-														  .ThenBy(d => d.DeviceName.Name)
-														  .ToList();
-			}
+				d.Complect.Cabinet.Building,
+				d.Complect.Cabinet,
+				d.Complect,
+				d.DeviceName.DeviceType,
+				d.DeviceName,
+				d.DeviceProvider,
+				d.Serial,
+				d.Inventory
+			}).OrderBy(d => d.Building.Name)
+			  .ThenBy(d => d.Cabinet.Name)
+			  .ThenBy(d => d.Complect.Name)
+			  .ThenBy(d => d.DeviceName.Name)
+			  .ToList();
+			if (fullListBuildingTBox.Text.Length != 0)
+				list = list.Where(d => d.Building.Name.ToLower().Contains(fullListBuildingTBox.Text.ToLower())).ToList();
+			if (fullListCabinetTBox.Text.Length != 0)
+				list = list.Where(d => d.Cabinet.Name.ToLower().Contains(fullListCabinetTBox.Text.ToLower())).ToList();
+			if (fullListComplectTBox.Text.Length != 0)
+				list = list.Where(d => d.Complect.Name.ToLower().Contains(fullListComplectTBox.Text.ToLower())).ToList();
+			if (fullListDeviceTypeTBox.Text.Length != 0)
+				list = list.Where(d => d.DeviceType.Name.ToLower().Contains(fullListDeviceTypeTBox.Text.ToLower())).ToList();
+			if (fullListDeviceNameTBox.Text.Length != 0)
+				list = list.Where(d => d.DeviceName.Name.ToLower().Contains(fullListDeviceNameTBox.Text.ToLower())).ToList();
+			if (fullListDeviceProviderTBox.Text.Length != 0)
+				list = list.Where(d => d.DeviceProvider.Name.ToLower().Contains(fullListDeviceProviderTBox.Text.ToLower())).ToList();
+			if (fullListSerialTBox.Text.Length != 0)
+				list = list.Where(d => d.Serial.ToLower().Contains(fullListSerialTBox.Text.ToLower())).ToList();
+			if (fullListInventoryTBox.Text.Length != 0)
+				list = list.Where(d => d.Inventory.ToLower().Contains(fullListInventoryTBox.Text.ToLower())).ToList();
+			fullListDGW.DataSource = list;
+			fullListNumberOfDevicesLabel.Text = $"Всего единиц техники: {fullListDGW.RowCount}";
 		}
 
 		private void fullListSearchTBox_TextChanged(object sender, EventArgs e)
