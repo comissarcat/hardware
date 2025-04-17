@@ -11,7 +11,8 @@ namespace Hardware.Forms
 			InitializeComponent();
 			context = ApplicationContext.Instanse();
 			DialogResult = DialogResult.Cancel;
-			typeCBox.DataSource = context.DeviceTypes.ToList();
+			typeCBox.DataSource = context.DeviceTypes.OrderBy(d => d.Name)
+													 .ToList();
 			this.deviceName = deviceName;
 			if (this.deviceName is not null)
 			{
@@ -35,7 +36,8 @@ namespace Hardware.Forms
 		{
 			var selectedItem = typeCBox.SelectedItem;
 
-			typeCBox.DataSource = context.DeviceTypes.ToList();
+			typeCBox.DataSource = context.DeviceTypes.OrderBy(d => d.Name)
+													 .ToList();
 
 			if (typeCBox.Items.Count == 0)
 				typeCBox.Text = string.Empty;

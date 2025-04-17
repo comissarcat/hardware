@@ -12,7 +12,8 @@ namespace Hardware.Forms
 			InitializeComponent();
 			context = ApplicationContext.Instanse();
 			DialogResult = DialogResult.Cancel;
-			buildingCBox.DataSource = context.Buildings.ToList();
+			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+													   .ToList();
 			this.cabinet = cabinet;
 			if (this.cabinet is not null)
 			{
@@ -37,7 +38,8 @@ namespace Hardware.Forms
 		{
 			var selectedItem = buildingCBox.SelectedItem;
 
-			buildingCBox.DataSource = context.Buildings.ToList();
+			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+													   .ToList();
 
 			if (selectedItem is not null)
 				if (buildingCBox.Items.Contains(selectedItem))

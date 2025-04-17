@@ -11,9 +11,12 @@ namespace Hardware.Forms
 			InitializeComponent();
 			context = ApplicationContext.Instanse();
 			DialogResult = DialogResult.Cancel;
-			buildingCBox.DataSource = context.Buildings.ToList();
-			deviceNameCBox.DataSource = context.DeviceNames.ToList();
-			deviceProviderCBox.DataSource = context.DeviceProviders.ToList();
+			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+													   .ToList();
+			deviceNameCBox.DataSource = context.DeviceNames.OrderBy(d => d.Name)
+														   .ToList();
+			deviceProviderCBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name)
+																   .ToList();
 			this.device = device;
 			if (this.device is not null)
 			{
@@ -24,10 +27,12 @@ namespace Hardware.Forms
 				buildingCBox.SelectedItem = this.device.Complect.Cabinet.Building;
 
 				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+														 .OrderBy(c => c.Name)
 														 .ToList();
 				cabinetCBox.SelectedItem = this.device.Complect.Cabinet;
 
 				complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
+														   .OrderBy(c => c.Name)
 														   .ToList();
 				complectCBox.SelectedItem = this.device.Complect;
 
@@ -42,10 +47,12 @@ namespace Hardware.Forms
 				buildingCBox.SelectedItem = complect.Cabinet.Building;
 
 				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+														 .OrderBy(c => c.Name)
 														 .ToList();
 				cabinetCBox.SelectedItem = complect.Cabinet;
 
 				complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
+														   .OrderBy(c => c.Name)
 														   .ToList();
 				complectCBox.SelectedItem = complect;
 			}
@@ -83,7 +90,8 @@ namespace Hardware.Forms
 		{
 			var selectedItem = buildingCBox.SelectedItem;
 
-			buildingCBox.DataSource = context.Buildings.ToList();
+			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+													   .ToList();
 
 			if (buildingCBox.Items.Count == 0)
 				buildingCBox.Text = string.Empty;
@@ -98,6 +106,7 @@ namespace Hardware.Forms
 			var selectedItem = cabinetCBox.SelectedItem;
 
 			cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+													 .OrderBy(c => c.Name)
 													 .ToList();
 
 			if (cabinetCBox.Items.Count == 0)
@@ -113,6 +122,7 @@ namespace Hardware.Forms
 			var selectedItem = complectCBox.SelectedItem;
 
 			complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
+													   .OrderBy(c => c.Name)
 													   .ToList();
 
 			if (complectCBox.Items.Count == 0)
@@ -126,7 +136,8 @@ namespace Hardware.Forms
 		{
 			var selectedItem = deviceNameCBox.SelectedItem;
 
-			deviceNameCBox.DataSource = context.DeviceNames.ToList();
+			deviceNameCBox.DataSource = context.DeviceNames.OrderBy(d => d.Name)
+														   .ToList();
 
 			if (deviceNameCBox.Items.Count == 0)
 				deviceNameCBox.Text = string.Empty;
@@ -140,7 +151,8 @@ namespace Hardware.Forms
 		{
 			var selectedItem = deviceProviderCBox.SelectedItem;
 
-			deviceProviderCBox.DataSource = context.DeviceProviders.ToList();
+			deviceProviderCBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name)
+																   .ToList();
 
 			if (deviceProviderCBox.Items.Count == 0)
 				deviceProviderCBox.Text = string.Empty;
@@ -293,7 +305,7 @@ namespace Hardware.Forms
 				RefreshDeviceNames();
 		}
 
-		private void editDeviceProviderBtn_Click(Object sender, EventArgs e)
+		private void editDeviceProviderBtn_Click(object sender, EventArgs e)
 		{
 			var deviceProvider = (DeviceProvider?)deviceProviderCBox.SelectedItem;
 			var form = new EditDeviceProviderForm(deviceProvider);

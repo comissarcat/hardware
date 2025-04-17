@@ -1,5 +1,6 @@
 using Hardware.Forms;
 using Hardware.Models;
+using Hardware.Temp;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hardware
@@ -11,9 +12,110 @@ namespace Hardware
 		{
 			InitializeComponent();
 			context = ApplicationContext.Instanse();
+			//Import();
 			Init();
 		}
 
+		// Блок импорта данных из старой БД
+		private void Import()
+		{
+			var tempContext = new TempApplicatonContext();
+			ImportBuildings(tempContext);
+			ImportCabinets(tempContext);
+			ImportComplects(tempContext);
+			ImportDeviceTypes(tempContext);
+			ImportDeviceNames(tempContext);
+			CreateDeviceProviders();
+			ImportDevices(tempContext);
+		}
+
+		private void ImportBuildings(TempApplicatonContext tempContext)
+		{
+			foreach (var building in tempContext.Buildings)
+				if (!context.Buildings.Where(b => b.Name == building.Name).Any())
+					context.Buildings.Add(new() { Name = building.Name });
+			context.SaveChanges();
+		}
+
+		private void ImportCabinets(TempApplicatonContext tempContext)
+		{
+			foreach (var complect in tempContext.Complects)
+			{
+				var building = context.Buildings.Where(b => b.Name == complect.BuildingEntity.Name).First();
+				var name = complect.Cabinet;
+				if (!context.Cabinets.Where(c => c.Building == building && c.Name == name).Any())
+					context.Cabinets.Add(new() { Building = building, Name = name });
+				context.SaveChanges();
+			}
+		}
+
+		private void ImportComplects(TempApplicatonContext tempContext)
+		{
+			foreach (var complect in tempContext.Complects)
+			{
+				var building = context.Buildings.Where(b => b.Name == complect.BuildingEntity.Name).First();
+				var cabinet = context.Cabinets.Where(c => c.Building == building && c.Name == complect.Cabinet).First();
+				var name = complect.User;
+				if (!context.Complects.Where(c => c.Cabinet == cabinet && c.Name == name).Any())
+					context.Complects.Add(new() { Cabinet = cabinet, Name = name });
+				context.SaveChanges();
+			}
+		}
+
+		private void ImportDeviceTypes(TempApplicatonContext tempContext)
+		{
+			foreach (var deviceType in tempContext.Types)
+				if (!context.DeviceTypes.Where(d => d.Name == deviceType.Type).Any())
+					context.DeviceTypes.Add(new() { Name = deviceType.Type });
+			context.SaveChanges();
+		}
+
+		private void ImportDeviceNames(TempApplicatonContext tempContext)
+		{
+			foreach (var deviceName in tempContext.Names)
+			{
+				var deviceType = context.DeviceTypes.Where(d => d.Name == deviceName.TypeEntity.Type).First();
+				var name = deviceName.Name;
+				if (!context.DeviceNames.Where(d => d.DeviceType == deviceType && d.Name == name).Any())
+					context.DeviceNames.Add(new() { DeviceType = deviceType, Name = name });
+				context.SaveChanges();
+			}
+		}
+
+		private void CreateDeviceProviders()
+		{
+			if (!context.DeviceProviders.Any())
+			{
+				context.DeviceProviders.Add(new() { Name = "ИАЦ" });
+				context.SaveChanges();
+			}
+		}
+
+		private void ImportDevices(TempApplicatonContext tempContext)
+		{
+			foreach (var device in tempContext.Devices)
+			{
+				var serial = device.Serial_number;
+				var inventory = device.Inventory_number;
+				var deviceName = context.DeviceNames.Where(d => d.Name == device.NameEntity.Name).First();
+				var complect = context.Complects.Where(c => c.Name == device.ComplectEntity.User && c.Cabinet.Name == device.ComplectEntity.Cabinet && c.Cabinet.Building.Name == device.ComplectEntity.BuildingEntity.Name).First();
+				var deviceProvider = context.DeviceProviders.First();
+				if (!context.Devices.Where(d => d.Serial == serial).Any())
+				{
+					context.Devices.Add(new()
+					{
+						Serial = serial,
+						Inventory = inventory,
+						DeviceName = deviceName,
+						Complect = complect,
+						DeviceProvider = deviceProvider
+					});
+					context.SaveChanges();
+				}
+			}
+		}
+
+		// Конец блока импорта данных из старой БД
 		private void Init()
 		{
 			InitializeButtons();
@@ -84,7 +186,8 @@ namespace Hardware
 		{
 			var selectedItem = buildingsLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
-				buildingsLBoxLeft.DataSource = context.Buildings.ToList();
+				buildingsLBoxLeft.DataSource = context.Buildings.OrderBy(b => b.Name)
+																.ToList();
 			else
 				buildingsLBoxLeft.DataSource = SearchBuildingByDevice(searchTBoxLeft.Text);
 			if (selectedItem is not null)
@@ -97,7 +200,8 @@ namespace Hardware
 		{
 			var selectedItem = buildingsLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
-				buildingsLBoxRight.DataSource = context.Buildings.ToList();
+				buildingsLBoxRight.DataSource = context.Buildings.OrderBy(b => b.Name)
+																 .ToList();
 			else
 				buildingsLBoxRight.DataSource = SearchBuildingByDevice(searchTBoxRight.Text);
 			if (selectedItem is not null)
@@ -113,6 +217,7 @@ namespace Hardware
 								  .Where(d => d.ToString().ToLower().Contains(text))
 								  .GroupBy(d => d.Complect.Cabinet.Building)
 								  .Select(d => d.First().Complect.Cabinet.Building)
+								  .OrderBy(b => b.Name)
 								  .ToList();
 		}
 
@@ -158,6 +263,7 @@ namespace Hardware
 			var selectedItem = cabinetsLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				cabinetsLBoxLeft.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxLeft.SelectedItem)
+															  .OrderBy(c => c.Name)
 															  .ToList();
 			else
 				cabinetsLBoxLeft.DataSource = SearchCabinetByDevice(searchTBoxLeft.Text, (Building?)buildingsLBoxLeft.SelectedItem);
@@ -174,6 +280,7 @@ namespace Hardware
 			var selectedItem = cabinetsLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				cabinetsLBoxRight.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxRight.SelectedItem)
+															   .OrderBy(c => c.Name)
 															   .ToList();
 			else
 				cabinetsLBoxRight.DataSource = SearchCabinetByDevice(searchTBoxRight.Text, (Building?)buildingsLBoxRight.SelectedItem);
@@ -194,6 +301,7 @@ namespace Hardware
 								  .Select(d => d.First().Complect.Cabinet)
 								  .ToList()
 								  .Where(c => c.Building == building)
+								  .OrderBy(c => c.Name)
 								  .ToList();
 		}
 
@@ -378,6 +486,7 @@ namespace Hardware
 			var selectedItem = complectsLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				complectsLBoxLeft.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxLeft.SelectedItem)
+																.OrderBy(c => c.Name)
 																.ToList();
 			else
 				complectsLBoxLeft.DataSource = SearchComplectByDevice(searchTBoxLeft.Text, (Cabinet?)cabinetsLBoxLeft.SelectedItem);
@@ -394,6 +503,7 @@ namespace Hardware
 			var selectedItem = complectsLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				complectsLBoxRight.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxRight.SelectedItem)
+																 .OrderBy(c => c.Name)
 																 .ToList();
 			else
 				complectsLBoxRight.DataSource = SearchComplectByDevice(searchTBoxRight.Text, (Cabinet?)cabinetsLBoxRight.SelectedItem);
@@ -414,6 +524,7 @@ namespace Hardware
 								  .Select(d => d.First().Complect)
 								  .ToList()
 								  .Where(c => c.Cabinet == cabinet)
+								  .OrderBy(c => c.Name)
 								  .ToList();
 		}
 
@@ -597,6 +708,7 @@ namespace Hardware
 			var selectedItem = devicesLBoxLeft.SelectedItem;
 			devicesLBoxLeft.DataSource = context.Devices.Include(d => d.DeviceName)
 														.Where(d => d.Complect == complectsLBoxLeft.SelectedItem)
+														.OrderBy(d => d.DeviceName.Name)
 														.ToList();
 			if (selectedItem is not null)
 				if (devicesLBoxLeft.Items.Contains(selectedItem))
@@ -609,6 +721,7 @@ namespace Hardware
 			var selectedItem = devicesLBoxRight.SelectedItem;
 			devicesLBoxRight.DataSource = context.Devices.Include(d => d.DeviceName)
 														 .Where(d => d.Complect == complectsLBoxRight.SelectedItem)
+														 .OrderBy(d => d.DeviceName.Name)
 														 .ToList();
 			if (selectedItem is not null)
 				if (devicesLBoxRight.Items.Contains(selectedItem))
@@ -768,7 +881,8 @@ namespace Hardware
 		private void RefreshDeviceTypes()
 		{
 			var selectedItem = deviceTypesLBox.SelectedItem;
-			deviceTypesLBox.DataSource = context.DeviceTypes.ToList();
+			deviceTypesLBox.DataSource = context.DeviceTypes.OrderBy(d => d.Name)
+															.ToList();
 			if (selectedItem is not null)
 				if (deviceTypesLBox.Items.Contains(selectedItem))
 					deviceTypesLBox.SelectedItem = selectedItem;
@@ -803,6 +917,7 @@ namespace Hardware
 		{
 			var selectedItem = deviceNamesLBox.SelectedItem;
 			deviceNamesLBox.DataSource = context.DeviceNames.Where(dn => dn.DeviceType == deviceTypesLBox.SelectedItem)
+															.OrderBy(d => d.Name)
 															.ToList();
 			if (selectedItem is not null)
 				if (deviceNamesLBox.Items.Contains(selectedItem))
@@ -824,7 +939,8 @@ namespace Hardware
 		private void RefreshDeviceProviders()
 		{
 			var selectedItem = deviceProvidersLBox.SelectedItem;
-			deviceProvidersLBox.DataSource = context.DeviceProviders.ToList();
+			deviceProvidersLBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name)
+																	.ToList();
 			if (selectedItem is not null)
 				if (deviceProvidersLBox.Items.Contains(selectedItem))
 					deviceProvidersLBox.SelectedItem = selectedItem;
@@ -877,7 +993,11 @@ namespace Hardware
 				d.DeviceProvider,
 				d.Serial,
 				d.Inventory
-			}).ToList();
+			}).OrderBy(d => d.Building.Name)
+			  .ThenBy(d => d.Cabinet.Name)
+			  .ThenBy(d => d.Complect.Name)
+			  .ThenBy(d => d.DeviceName.Name)
+			  .ToList();
 
 			fullListDGW.Columns[0].HeaderText = "Здание";
 			fullListDGW.Columns[1].HeaderText = "Кабинет";
@@ -902,7 +1022,11 @@ namespace Hardware
 					d.DeviceProvider,
 					d.Serial,
 					d.Inventory
-				}).ToList();
+				}).OrderBy(d => d.Building.Name)
+				  .ThenBy(d => d.Cabinet.Name)
+				  .ThenBy(d => d.Complect.Name)
+				  .ThenBy(d => d.DeviceName.Name)
+				  .ToList();
 			else
 			{
 				var text = fullListSearchTBox.Text.ToLower();
@@ -918,8 +1042,11 @@ namespace Hardware
 															d.DeviceProvider,
 															d.Serial,
 															d.Inventory
-														})
-														.ToList();
+														}).OrderBy(d => d.Building.Name)
+														  .ThenBy(d => d.Cabinet.Name)
+														  .ThenBy(d => d.Complect.Name)
+														  .ThenBy(d => d.DeviceName.Name)
+														  .ToList();
 			}
 		}
 

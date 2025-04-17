@@ -12,7 +12,8 @@ namespace Hardware.Forms
 			InitializeComponent();
 			context = ApplicationContext.Instanse();
 			DialogResult = DialogResult.Cancel;
-			buildingCBox.DataSource = context.Buildings.ToList();
+			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+													   .ToList();
 			this.complect = complect;
 			if (this.complect is not null)
 			{
@@ -22,6 +23,7 @@ namespace Hardware.Forms
 				buildingCBox.SelectedItem = this.complect.Cabinet.Building;
 
 				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+														 .OrderBy(c => c.Name)
 														 .ToList();
 				cabinetCBox.SelectedItem = this.complect.Cabinet;
 
@@ -32,6 +34,7 @@ namespace Hardware.Forms
 			{
 				buildingCBox.SelectedItem = cabinet.Building;
 				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+														 .OrderBy(c => c.Name)
 														 .ToList();
 				cabinetCBox.SelectedItem = cabinet;
 			}
@@ -62,7 +65,8 @@ namespace Hardware.Forms
 		{
 			var selectedItem = buildingCBox.SelectedItem;
 
-			buildingCBox.DataSource = context.Buildings.ToList();
+			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+													   .ToList();
 
 			if (buildingCBox.Items.Count == 0)
 				buildingCBox.Text = string.Empty;
@@ -77,6 +81,7 @@ namespace Hardware.Forms
 			var selectedItem = cabinetCBox.SelectedItem;
 
 			cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
+													 .OrderBy(c => c.Name)
 													 .ToList();
 
 			if (cabinetCBox.Items.Count == 0)
