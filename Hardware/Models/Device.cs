@@ -23,5 +23,12 @@
 		{
 			return $"Здание: {Complect.Cabinet.Building.Name}; кабинет: {Complect.Cabinet.Name}; комплект: {Complect.Name}; название: {DeviceName}; с/н: {Serial}; и/н: {Inventory}";
 		}
+
+		public override bool Equals(object? obj)
+		{
+			if (obj is Device)
+				return Id == (obj as Device).Id;
+			return false;
+		}
 	}
 }

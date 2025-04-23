@@ -1,6 +1,5 @@
 using Hardware.Forms;
 using Hardware.Models;
-using Hardware.Temp;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hardware
@@ -16,117 +15,18 @@ namespace Hardware
 			if (result == DialogResult.OK)
 			{
 				context = ApplicationContext.Instanse();
-				//Import();
 				Init();
 			}
+			else
+				Close();
 		}
 
-		// Блок импорта данных из старой БД
-		private void Import()
-		{
-			var tempContext = new TempApplicatonContext();
-			ImportBuildings(tempContext);
-			ImportCabinets(tempContext);
-			ImportComplects(tempContext);
-			ImportDeviceTypes(tempContext);
-			ImportDeviceNames(tempContext);
-			CreateDeviceProviders();
-			ImportDevices(tempContext);
-		}
-
-		private void ImportBuildings(TempApplicatonContext tempContext)
-		{
-			foreach (var building in tempContext.Buildings)
-				if (!context.Buildings.Where(b => b.Name == building.Name).Any())
-					context.Buildings.Add(new() { Name = building.Name });
-			context.SaveChanges();
-		}
-
-		private void ImportCabinets(TempApplicatonContext tempContext)
-		{
-			foreach (var complect in tempContext.Complects)
-			{
-				var building = context.Buildings.Where(b => b.Name == complect.BuildingEntity.Name).First();
-				var name = complect.Cabinet;
-				if (!context.Cabinets.Where(c => c.Building == building && c.Name == name).Any())
-					context.Cabinets.Add(new() { Building = building, Name = name });
-				context.SaveChanges();
-			}
-		}
-
-		private void ImportComplects(TempApplicatonContext tempContext)
-		{
-			foreach (var complect in tempContext.Complects)
-			{
-				var building = context.Buildings.Where(b => b.Name == complect.BuildingEntity.Name).First();
-				var cabinet = context.Cabinets.Where(c => c.Building == building && c.Name == complect.Cabinet).First();
-				var name = complect.User;
-				if (!context.Complects.Where(c => c.Cabinet == cabinet && c.Name == name).Any())
-					context.Complects.Add(new() { Cabinet = cabinet, Name = name });
-				context.SaveChanges();
-			}
-		}
-
-		private void ImportDeviceTypes(TempApplicatonContext tempContext)
-		{
-			foreach (var deviceType in tempContext.Types)
-				if (!context.DeviceTypes.Where(d => d.Name == deviceType.Type).Any())
-					context.DeviceTypes.Add(new() { Name = deviceType.Type });
-			context.SaveChanges();
-		}
-
-		private void ImportDeviceNames(TempApplicatonContext tempContext)
-		{
-			foreach (var deviceName in tempContext.Names)
-			{
-				var deviceType = context.DeviceTypes.Where(d => d.Name == deviceName.TypeEntity.Type).First();
-				var name = deviceName.Name;
-				if (!context.DeviceNames.Where(d => d.DeviceType == deviceType && d.Name == name).Any())
-					context.DeviceNames.Add(new() { DeviceType = deviceType, Name = name });
-				context.SaveChanges();
-			}
-		}
-
-		private void CreateDeviceProviders()
-		{
-			if (!context.DeviceProviders.Any())
-			{
-				context.DeviceProviders.Add(new() { Name = "ИАЦ" });
-				context.SaveChanges();
-			}
-		}
-
-		private void ImportDevices(TempApplicatonContext tempContext)
-		{
-			foreach (var device in tempContext.Devices)
-			{
-				var serial = device.Serial_number;
-				var inventory = device.Inventory_number;
-				var deviceName = context.DeviceNames.Where(d => d.Name == device.NameEntity.Name).First();
-				var complect = context.Complects.Where(c => c.Name == device.ComplectEntity.User && c.Cabinet.Name == device.ComplectEntity.Cabinet && c.Cabinet.Building.Name == device.ComplectEntity.BuildingEntity.Name).First();
-				var deviceProvider = context.DeviceProviders.First();
-				if (!context.Devices.Where(d => d.Serial == serial).Any())
-				{
-					context.Devices.Add(new()
-					{
-						Serial = serial,
-						Inventory = inventory,
-						DeviceName = deviceName,
-						Complect = complect,
-						DeviceProvider = deviceProvider
-					});
-					context.SaveChanges();
-				}
-			}
-		}
-
-		// Конец блока импорта данных из старой БД
 		private void Init()
 		{
 			InitializeButtons();
+			RefreshBuildings();
 			InitializeHistoryDGW();
 			InitializeFullListDGW();
-			RefreshAll();
 		}
 
 		private void InitializeButtons()
@@ -148,36 +48,19 @@ namespace Hardware
 
 		private void searchTBox_TextChanged(object sender, EventArgs e)
 		{
-			if ((TextBox)sender == searchTBoxLeft)
-				RefreshLeft();
-			else if ((TextBox)sender == searchTBoxRight)
-				RefreshRight();
+			if (sender as TextBox == searchTBoxLeft)
+				RefreshBuildingsLBoxLeft();
+			else if (sender as TextBox == searchTBoxRight)
+				RefreshBuildingsLBoxRight();
 		}
 
 		private void RefreshAll()
 		{
 			RefreshBuildings();
-			RefreshCabinets();
-			RefreshComplects();
-			RefreshDevicesLBoxes();
+			RefreshDeviceTypes();
 			RefreshDeviceProviders();
-			RefreshDeviceTypesAndNames();
-		}
-
-		private void RefreshLeft()
-		{
-			RefreshBuildingsLBoxLeft();
-			RefreshCabinetsLBoxLeft();
-			RefreshComplectsLBoxLeft();
-			RefreshDevicesLBoxLeft();
-		}
-
-		private void RefreshRight()
-		{
-			RefreshBuildingsLBoxRight();
-			RefreshCabinetsLBoxRight();
-			RefreshComplectsLBoxRight();
-			RefreshDevicesLBoxRight();
+			RefreshHistoryDGW();
+			RefreshFullListDGW();
 		}
 
 		// Блок работы со списком зданий
@@ -191,13 +74,13 @@ namespace Hardware
 		{
 			var selectedItem = buildingsLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
-				buildingsLBoxLeft.DataSource = context.Buildings.OrderBy(b => b.Name)
-																.ToList();
+				buildingsLBoxLeft.DataSource = context.Buildings.OrderBy(b => b.Name).ToList();
 			else
 				buildingsLBoxLeft.DataSource = SearchBuildingByDevice(searchTBoxLeft.Text);
 			if (selectedItem is not null)
 				if (buildingsLBoxLeft.Items.Contains(selectedItem))
 					buildingsLBoxLeft.SelectedItem = selectedItem;
+			RefreshCabinetsLBoxLeft();
 			SwitchEditCabinetBtnLeft();
 		}
 
@@ -205,13 +88,13 @@ namespace Hardware
 		{
 			var selectedItem = buildingsLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
-				buildingsLBoxRight.DataSource = context.Buildings.OrderBy(b => b.Name)
-																 .ToList();
+				buildingsLBoxRight.DataSource = context.Buildings.OrderBy(b => b.Name).ToList();
 			else
 				buildingsLBoxRight.DataSource = SearchBuildingByDevice(searchTBoxRight.Text);
 			if (selectedItem is not null)
 				if (buildingsLBoxRight.Items.Contains(selectedItem))
 					buildingsLBoxRight.SelectedItem = selectedItem;
+			RefreshCabinetsLBoxRight();
 			SwitchEditCabinetBtnRight();
 		}
 
@@ -219,23 +102,23 @@ namespace Hardware
 		{
 			text = text.ToLower();
 			return context.Devices.ToList()
-								  .Where(d => d.ToString().ToLower().Contains(text))
-								  .GroupBy(d => d.Complect.Cabinet.Building)
-								  .Select(d => d.First().Complect.Cabinet.Building)
-								  .OrderBy(b => b.Name)
-								  .ToList();
+				.Where(d => d.ToString().ToLower().Contains(text))
+				.GroupBy(d => d.Complect.Cabinet.Building)
+				.Select(d => d.First().Complect.Cabinet.Building)
+				.OrderBy(b => b.Name)
+				.ToList();
 		}
 
 		private void editBuildingBtn_Click(object sender, EventArgs e)
 		{
-			if (((Button)sender) == editBuildingBtnLeft)
+			if (sender as Button == editBuildingBtnLeft)
 			{
-				var building = (Building?)buildingsLBoxLeft.SelectedItem;
+				var building = buildingsLBoxLeft.SelectedItem as Building;
 				EditBuilding(building);
 			}
-			else if (((Button)sender) == editBuildingBtnRight)
+			else if (sender as Button == editBuildingBtnRight)
 			{
-				var building = (Building?)buildingsLBoxRight.SelectedItem;
+				var building = buildingsLBoxRight.SelectedItem as Building;
 				EditBuilding(building);
 			}
 		}
@@ -245,33 +128,27 @@ namespace Hardware
 			var form = new EditBuildingForm(building);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		private void buildingsLBox_SelectedValueChanged(object sender, EventArgs e)
 		{
-			if (((ListBox)sender) == buildingsLBoxLeft)
+			if (sender as ListBox == buildingsLBoxLeft)
 				RefreshCabinetsLBoxLeft();
-			else if (((ListBox)sender) == buildingsLBoxRight)
+			else if (sender as ListBox == buildingsLBoxRight)
 				RefreshCabinetsLBoxRight();
 		}
 
 		// Блок работы со списком кабинетов
-		private void RefreshCabinets()
-		{
-			RefreshCabinetsLBoxLeft();
-			RefreshCabinetsLBoxRight();
-		}
-
 		private void RefreshCabinetsLBoxLeft()
 		{
 			var selectedItem = cabinetsLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				cabinetsLBoxLeft.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxLeft.SelectedItem)
-															  .OrderBy(c => c.Name)
-															  .ToList();
+					.OrderBy(c => c.Name)
+					.ToList();
 			else
-				cabinetsLBoxLeft.DataSource = SearchCabinetByDevice(searchTBoxLeft.Text, (Building?)buildingsLBoxLeft.SelectedItem);
+				cabinetsLBoxLeft.DataSource = SearchCabinetByDevice(searchTBoxLeft.Text, buildingsLBoxLeft.SelectedItem as Building);
 			if (selectedItem is not null)
 				if (cabinetsLBoxLeft.Items.Contains(selectedItem))
 					cabinetsLBoxLeft.SelectedItem = selectedItem;
@@ -285,10 +162,10 @@ namespace Hardware
 			var selectedItem = cabinetsLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				cabinetsLBoxRight.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxRight.SelectedItem)
-															   .OrderBy(c => c.Name)
-															   .ToList();
+					.OrderBy(c => c.Name)
+					.ToList();
 			else
-				cabinetsLBoxRight.DataSource = SearchCabinetByDevice(searchTBoxRight.Text, (Building?)buildingsLBoxRight.SelectedItem);
+				cabinetsLBoxRight.DataSource = SearchCabinetByDevice(searchTBoxRight.Text, buildingsLBoxRight.SelectedItem as Building);
 			if (selectedItem is not null)
 				if (cabinetsLBoxRight.Items.Contains(selectedItem))
 					cabinetsLBoxRight.SelectedItem = selectedItem;
@@ -301,13 +178,13 @@ namespace Hardware
 		{
 			text = text.ToLower();
 			return context.Devices.ToList()
-								  .Where(d => d.ToString().ToLower().Contains(text))
-								  .GroupBy(d => d.Complect.Cabinet)
-								  .Select(d => d.First().Complect.Cabinet)
-								  .ToList()
-								  .Where(c => c.Building == building)
-								  .OrderBy(c => c.Name)
-								  .ToList();
+				.Where(d => d.ToString().ToLower().Contains(text))
+				.GroupBy(d => d.Complect.Cabinet)
+				.Select(d => d.First().Complect.Cabinet)
+				.ToList()
+				.Where(c => c.Building == building)
+				.OrderBy(c => c.Name)
+				.ToList();
 		}
 
 		private void SwitchEditCabinetBtnLeft()
@@ -374,16 +251,16 @@ namespace Hardware
 
 		private void editCabinetBtn_Click(object sender, EventArgs e)
 		{
-			if (((Button)sender) == editCabinetBtnLeft)
+			if (sender as Button == editCabinetBtnLeft)
 			{
-				var cabinet = (Cabinet?)cabinetsLBoxLeft.SelectedItem;
-				var building = cabinet is null ? (Building)buildingsLBoxLeft.SelectedItem : cabinet.Building;
+				var cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
+				var building = cabinet is null ? buildingsLBoxLeft.SelectedItem as Building : cabinet.Building;
 				EditCabinet(cabinet, building);
 			}
-			else if (((Button)sender) == editCabinetBtnRight)
+			else if (sender as Button == editCabinetBtnRight)
 			{
-				var cabinet = (Cabinet?)cabinetsLBoxRight.SelectedItem;
-				var building = cabinet is null ? (Building)buildingsLBoxRight.SelectedItem : cabinet.Building;
+				var cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
+				var building = cabinet is null ? buildingsLBoxRight.SelectedItem as Building : cabinet.Building;
 				EditCabinet(cabinet, building);
 			}
 		}
@@ -393,41 +270,41 @@ namespace Hardware
 			var form = new EditCabinetForm(cabinet, building);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
-				RefreshAll();
-
+				RefreshBuildings();
 		}
 
 		private void cabinetsLBox_SelectedValueChanged(object sender, EventArgs e)
 		{
-			if (((ListBox)sender) == cabinetsLBoxLeft)
+			if (sender as ListBox == cabinetsLBoxLeft)
 				RefreshComplectsLBoxLeft();
-			else if (((ListBox)sender) == cabinetsLBoxRight)
+			else if (sender as ListBox == cabinetsLBoxRight)
 				RefreshComplectsLBoxRight();
 		}
 
 		private async void moveCabinetToRightBtn_Click(object sender, EventArgs e)
 		{
-			List<string> before = [];
-			List<string> after = [];
-			Cabinet cabinet = (Cabinet)cabinetsLBoxLeft.SelectedItem;
+			var before = new List<string>();
+			var after = new List<string>();
+			var cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
 			var devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
-												  .Where(d => d.Complect.Cabinet == cabinet)
-												  .ToList();
-			if (devicesInCabinet.Count > 0)
-			{
-				foreach (var device in devicesInCabinet)
-					before.Add(device.ToStringForHistory());
+				.Where(d => d.Complect.Cabinet == cabinet)
+				.ToList();
 
-				cabinet.Building = (Building)buildingsLBoxRight.SelectedItem;
+			foreach (var device in devicesInCabinet)
+				before.Add(device.ToStringForHistory());
 
-				foreach (var device in devicesInCabinet)
-					after.Add(device.ToStringForHistory());
+			cabinet.Building = buildingsLBoxRight.SelectedItem as Building;
 
-				for (int i = 0; i < devicesInCabinet.Count; i++)
-					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
-			}
-			else
-				cabinet.Building = (Building)buildingsLBoxRight.SelectedItem;
+			foreach (var device in devicesInCabinet)
+				after.Add(device.ToStringForHistory());
+
+			for (int i = 0; i < devicesInCabinet.Count; i++)
+				await context.History.AddAsync(new History()
+				{
+					Before = before[i],
+					After = after[i]
+				});
+
 			bool success;
 			try
 			{
@@ -439,32 +316,33 @@ namespace Hardware
 				success = false;
 			}
 			if (success)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		private async void moveCabinetToLeftBtn_Click(object sender, EventArgs e)
 		{
-			List<string> before = [];
-			List<string> after = [];
-			Cabinet cabinet = (Cabinet)cabinetsLBoxRight.SelectedItem;
+			var before = new List<string>();
+			var after = new List<string>();
+			var cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
 			var devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
-												  .Where(d => d.Complect.Cabinet == cabinet)
-												  .ToList();
-			if (devicesInCabinet.Count > 0)
-			{
-				foreach (var device in devicesInCabinet)
-					before.Add(device.ToStringForHistory());
+				.Where(d => d.Complect.Cabinet == cabinet)
+				.ToList();
 
-				cabinet.Building = (Building)buildingsLBoxLeft.SelectedItem;
+			foreach (var device in devicesInCabinet)
+				before.Add(device.ToStringForHistory());
 
-				foreach (var device in devicesInCabinet)
-					after.Add(device.ToStringForHistory());
+			cabinet.Building = buildingsLBoxLeft.SelectedItem as Building;
 
-				for (int i = 0; i < devicesInCabinet.Count; i++)
-					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
-			}
-			else
-				cabinet.Building = (Building)buildingsLBoxLeft.SelectedItem;
+			foreach (var device in devicesInCabinet)
+				after.Add(device.ToStringForHistory());
+
+			for (int i = 0; i < devicesInCabinet.Count; i++)
+				await context.History.AddAsync(new History()
+				{
+					Before = before[i],
+					After = after[i]
+				});
+
 			bool success;
 			try
 			{
@@ -476,25 +354,19 @@ namespace Hardware
 				success = false;
 			}
 			if (success)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		// Блок работы со списком комплектов
-		private void RefreshComplects()
-		{
-			RefreshComplectsLBoxLeft();
-			RefreshComplectsLBoxRight();
-		}
-
 		private void RefreshComplectsLBoxLeft()
 		{
 			var selectedItem = complectsLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				complectsLBoxLeft.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxLeft.SelectedItem)
-																.OrderBy(c => c.Name)
-																.ToList();
+					.OrderBy(c => c.Name)
+					.ToList();
 			else
-				complectsLBoxLeft.DataSource = SearchComplectByDevice(searchTBoxLeft.Text, (Cabinet?)cabinetsLBoxLeft.SelectedItem);
+				complectsLBoxLeft.DataSource = SearchComplectByDevice(searchTBoxLeft.Text, cabinetsLBoxLeft.SelectedItem as Cabinet);
 			if (selectedItem is not null)
 				if (complectsLBoxLeft.Items.Contains(selectedItem))
 					complectsLBoxLeft.SelectedItem = selectedItem;
@@ -508,10 +380,10 @@ namespace Hardware
 			var selectedItem = complectsLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				complectsLBoxRight.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxRight.SelectedItem)
-																 .OrderBy(c => c.Name)
-																 .ToList();
+					.OrderBy(c => c.Name)
+					.ToList();
 			else
-				complectsLBoxRight.DataSource = SearchComplectByDevice(searchTBoxRight.Text, (Cabinet?)cabinetsLBoxRight.SelectedItem);
+				complectsLBoxRight.DataSource = SearchComplectByDevice(searchTBoxRight.Text, cabinetsLBoxRight.SelectedItem as Cabinet);
 			if (selectedItem is not null)
 				if (complectsLBoxRight.Items.Contains(selectedItem))
 					complectsLBoxRight.SelectedItem = selectedItem;
@@ -524,13 +396,13 @@ namespace Hardware
 		{
 			text = text.ToLower();
 			return context.Devices.ToList()
-								  .Where(d => d.ToString().ToLower().Contains(text))
-								  .GroupBy(d => d.Complect)
-								  .Select(d => d.First().Complect)
-								  .ToList()
-								  .Where(c => c.Cabinet == cabinet)
-								  .OrderBy(c => c.Name)
-								  .ToList();
+				.Where(d => d.ToString().ToLower().Contains(text))
+				.GroupBy(d => d.Complect)
+				.Select(d => d.First().Complect)
+				.ToList()
+				.Where(c => c.Cabinet == cabinet)
+				.OrderBy(c => c.Name)
+				.ToList();
 		}
 
 		private void SwitchEditComplectBtnLeft()
@@ -597,16 +469,16 @@ namespace Hardware
 
 		private void editComplectBtn_Click(object sender, EventArgs e)
 		{
-			if (((Button)sender) == editComplectBtnLeft)
+			if (sender as Button == editComplectBtnLeft)
 			{
-				var complect = (Complect?)complectsLBoxLeft.SelectedItem;
-				var cabinet = complect is null ? (Cabinet)cabinetsLBoxLeft.SelectedItem : complect.Cabinet;
+				var complect = complectsLBoxLeft.SelectedItem as Complect;
+				var cabinet = complect is null ? cabinetsLBoxLeft.SelectedItem as Cabinet : complect.Cabinet;
 				EditComplect(complect, cabinet);
 			}
-			else if (((Button)sender) == editComplectBtnRight)
+			else if (sender as Button == editComplectBtnRight)
 			{
-				var complect = (Complect?)complectsLBoxRight.SelectedItem;
-				var cabinet = complect is null ? (Cabinet)cabinetsLBoxRight.SelectedItem : complect.Cabinet;
+				var complect = complectsLBoxRight.SelectedItem as Complect;
+				var cabinet = complect is null ? cabinetsLBoxRight.SelectedItem as Cabinet : complect.Cabinet;
 				EditComplect(complect, cabinet);
 			}
 		}
@@ -616,40 +488,41 @@ namespace Hardware
 			var form = new EditComplectForm(complect, cabinet);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		private void complectsLBox_SelectedValueChanged(object sender, EventArgs e)
 		{
-			if (((ListBox)sender) == complectsLBoxLeft)
+			if (sender as ListBox == complectsLBoxLeft)
 				RefreshDevicesLBoxLeft();
-			else if (((ListBox)sender) == complectsLBoxRight)
+			else if (sender as ListBox == complectsLBoxRight)
 				RefreshDevicesLBoxRight();
 		}
 
 		private async void moveComplectToRightBtn_Click(object sender, EventArgs e)
 		{
-			List<string> before = [];
-			List<string> after = [];
-			Complect complect = (Complect)complectsLBoxLeft.SelectedItem;
+			var before = new List<string>();
+			var after = new List<string>();
+			var complect = complectsLBoxLeft.SelectedItem as Complect;
 			var devicesInComplect = context.Devices.Include(d => d.Complect.Cabinet.Building)
-												   .Where(d => d.Complect == complect)
-												   .ToList();
-			if (devicesInComplect.Count > 0)
-			{
-				foreach (var device in devicesInComplect)
-					before.Add(device.ToStringForHistory());
+				.Where(d => d.Complect == complect)
+				.ToList();
 
-				complect.Cabinet = (Cabinet)cabinetsLBoxRight.SelectedItem;
+			foreach (var device in devicesInComplect)
+				before.Add(device.ToStringForHistory());
 
-				foreach (var device in devicesInComplect)
-					after.Add(device.ToStringForHistory());
+			complect.Cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
 
-				for (int i = 0; i < devicesInComplect.Count; i++)
-					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
-			}
-			else
-				complect.Cabinet = (Cabinet)cabinetsLBoxRight.SelectedItem;
+			foreach (var device in devicesInComplect)
+				after.Add(device.ToStringForHistory());
+
+			for (int i = 0; i < devicesInComplect.Count; i++)
+				await context.History.AddAsync(new History()
+				{
+					Before = before[i],
+					After = after[i]
+				});
+
 			bool success;
 			try
 			{
@@ -661,32 +534,33 @@ namespace Hardware
 				success = false;
 			}
 			if (success)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		private async void moveComplectToLeftBtn_Click(object sender, EventArgs e)
 		{
-			List<string> before = [];
-			List<string> after = [];
-			Complect complect = (Complect)complectsLBoxRight.SelectedItem;
+			var before = new List<string>();
+			var after = new List<string>();
+			var complect = complectsLBoxRight.SelectedItem as Complect;
 			var devicesInComplect = context.Devices.Include(d => d.Complect.Cabinet.Building)
-												   .Where(d => d.Complect == complect)
-												   .ToList();
-			if (devicesInComplect.Count > 0)
-			{
-				foreach (var device in devicesInComplect)
-					before.Add(device.ToStringForHistory());
+				.Where(d => d.Complect == complect)
+				.ToList();
 
-				complect.Cabinet = (Cabinet)cabinetsLBoxLeft.SelectedItem;
+			foreach (var device in devicesInComplect)
+				before.Add(device.ToStringForHistory());
 
-				foreach (var device in devicesInComplect)
-					after.Add(device.ToStringForHistory());
+			complect.Cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
 
-				for (int i = 0; i < devicesInComplect.Count; i++)
-					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
-			}
-			else
-				complect.Cabinet = (Cabinet)cabinetsLBoxLeft.SelectedItem;
+			foreach (var device in devicesInComplect)
+				after.Add(device.ToStringForHistory());
+
+			for (int i = 0; i < devicesInComplect.Count; i++)
+				await context.History.AddAsync(new History()
+				{
+					Before = before[i],
+					After = after[i]
+				});
+
 			bool success;
 			try
 			{
@@ -698,7 +572,7 @@ namespace Hardware
 				success = false;
 			}
 			if (success)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		// Блок работы со списком единиц техники
@@ -713,11 +587,11 @@ namespace Hardware
 			var selectedItem = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				devicesLBoxLeft.DataSource = context.Devices.Include(d => d.DeviceName)
-														.Where(d => d.Complect == complectsLBoxLeft.SelectedItem)
-														.OrderBy(d => d.DeviceName.Name)
-														.ToList();
+					.Where(d => d.Complect == complectsLBoxLeft.SelectedItem)
+					.OrderBy(d => d.DeviceName.Name)
+					.ToList();
 			else
-				devicesLBoxLeft.DataSource = SearchDevice(searchTBoxLeft.Text, (Complect?)complectsLBoxLeft.SelectedItem);
+				devicesLBoxLeft.DataSource = SearchDevice(searchTBoxLeft.Text, complectsLBoxLeft.SelectedItem as Complect);
 			if (selectedItem is not null)
 				if (devicesLBoxLeft.Items.Contains(selectedItem))
 					devicesLBoxLeft.SelectedItem = selectedItem;
@@ -729,11 +603,11 @@ namespace Hardware
 			var selectedItem = devicesLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				devicesLBoxRight.DataSource = context.Devices.Include(d => d.DeviceName)
-														 .Where(d => d.Complect == complectsLBoxRight.SelectedItem)
-														 .OrderBy(d => d.DeviceName.Name)
-														 .ToList();
+					.Where(d => d.Complect == complectsLBoxRight.SelectedItem)
+					.OrderBy(d => d.DeviceName.Name)
+					.ToList();
 			else
-				devicesLBoxRight.DataSource = SearchDevice(searchTBoxRight.Text, (Complect?)complectsLBoxRight.SelectedItem);
+				devicesLBoxRight.DataSource = SearchDevice(searchTBoxRight.Text, complectsLBoxRight.SelectedItem as Complect);
 			if (selectedItem is not null)
 				if (devicesLBoxRight.Items.Contains(selectedItem))
 					devicesLBoxRight.SelectedItem = selectedItem;
@@ -744,9 +618,9 @@ namespace Hardware
 		{
 			text = text.ToLower();
 			return context.Devices.ToList()
-								  .Where(d => d.ToString().ToLower().Contains(text) && d.Complect == complect)
-								  .OrderBy(d => d.DeviceName.Name)
-								  .ToList();
+				.Where(d => d.ToString().ToLower().Contains(text) && d.Complect == complect)
+				.OrderBy(d => d.DeviceName.Name)
+				.ToList();
 		}
 
 		private void SwitchEditDeviceBtnLeft()
@@ -813,16 +687,16 @@ namespace Hardware
 
 		private void editDeviceBtn_Click(object sender, EventArgs e)
 		{
-			if (((Button)sender) == editDeviceBtnLeft)
+			if (sender as Button == editDeviceBtnLeft)
 			{
 				var device = (Device?)devicesLBoxLeft.SelectedItem;
-				var complect = device is null ? (Complect)complectsLBoxLeft.SelectedItem : device.Complect;
+				var complect = device is null ? complectsLBoxLeft.SelectedItem as Complect : device.Complect;
 				EditDevice(device, complect);
 			}
-			else if (((Button)sender) == editDeviceBtnRight)
+			else if (sender as Button == editDeviceBtnRight)
 			{
 				var device = (Device?)devicesLBoxRight.SelectedItem;
-				var complect = device is null ? (Complect)complectsLBoxRight.SelectedItem : device.Complect;
+				var complect = device is null ? complectsLBoxRight.SelectedItem as Complect : device.Complect;
 				EditDevice(device, complect);
 			}
 		}
@@ -832,7 +706,7 @@ namespace Hardware
 			var form = new EditDeviceForm(device, complect);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		private void devicesLBox_SelectedValueChanged(object sender, EventArgs e)
@@ -842,11 +716,15 @@ namespace Hardware
 
 		private async void moveDeviceToRightBtn_Click(object sender, EventArgs e)
 		{
-			Device device = (Device)devicesLBoxLeft.SelectedItem;
+			var device = devicesLBoxLeft.SelectedItem as Device;
 			var before = device.ToStringForHistory();
-			device.Complect = (Complect)complectsLBoxRight.SelectedItem;
+			device.Complect = complectsLBoxRight.SelectedItem as Complect;
 			var after = device.ToStringForHistory();
-			await context.History.AddAsync(new History() { Before = before, After = after });
+			await context.History.AddAsync(new History()
+			{
+				Before = before,
+				After = after
+			});
 			bool success;
 			try
 			{
@@ -858,16 +736,20 @@ namespace Hardware
 				success = false;
 			}
 			if (success)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		private async void moveDeviceToLeftBtn_Click(object sender, EventArgs e)
 		{
-			Device device = (Device)devicesLBoxRight.SelectedItem;
+			var device = devicesLBoxRight.SelectedItem as Device;
 			var before = device.ToStringForHistory();
-			device.Complect = (Complect)complectsLBoxLeft.SelectedItem;
+			device.Complect = complectsLBoxLeft.SelectedItem as Complect;
 			var after = device.ToStringForHistory();
-			await context.History.AddAsync(new History() { Before = before, After = after });
+			await context.History.AddAsync(new History()
+			{
+				Before = before,
+				After = after
+			});
 			bool success;
 			try
 			{
@@ -879,13 +761,13 @@ namespace Hardware
 				success = false;
 			}
 			if (success)
-				RefreshAll();
+				RefreshBuildings();
 		}
 
 		// Блок работы со списком типов техники
 		private void deviceTypeEditBtn_Click(object sender, EventArgs e)
 		{
-			var deviceType = (DeviceType?)deviceTypesLBox.SelectedItem;
+			var deviceType = deviceTypesLBox.SelectedItem as DeviceType;
 			var form = new EditDeviceTypeForm(deviceType);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
@@ -901,11 +783,11 @@ namespace Hardware
 		private void RefreshDeviceTypes()
 		{
 			var selectedItem = deviceTypesLBox.SelectedItem;
-			deviceTypesLBox.DataSource = context.DeviceTypes.OrderBy(d => d.Name)
-															.ToList();
+			deviceTypesLBox.DataSource = context.DeviceTypes.OrderBy(d => d.Name).ToList();
 			if (selectedItem is not null)
 				if (deviceTypesLBox.Items.Contains(selectedItem))
 					deviceTypesLBox.SelectedItem = selectedItem;
+			RefreshDeviceNames();
 			SwitchEditDeviceNameBtn();
 		}
 
@@ -925,20 +807,20 @@ namespace Hardware
 		// Блок работы со списком названий техники
 		private void deviceNameEditBtn_Click(object sender, EventArgs e)
 		{
-			var deviceName = (DeviceName?)deviceNamesLBox.SelectedItem;
-			var deviceType = deviceName is null ? (DeviceType)deviceTypesLBox.SelectedItem : deviceName.DeviceType;
+			var deviceName = deviceNamesLBox.SelectedItem as DeviceName;
+			var deviceType = deviceName is null ? deviceTypesLBox.SelectedItem as DeviceType : deviceName.DeviceType;
 			var form = new EditDeviceNameForm(deviceName, deviceType);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
-				RefreshDeviceTypesAndNames();
+				RefreshDeviceTypes();
 		}
 
 		private void RefreshDeviceNames()
 		{
 			var selectedItem = deviceNamesLBox.SelectedItem;
 			deviceNamesLBox.DataSource = context.DeviceNames.Where(dn => dn.DeviceType == deviceTypesLBox.SelectedItem)
-															.OrderBy(d => d.Name)
-															.ToList();
+				.OrderBy(d => d.Name)
+				.ToList();
 			if (selectedItem is not null)
 				if (deviceNamesLBox.Items.Contains(selectedItem))
 					deviceNamesLBox.SelectedItem = selectedItem;
@@ -949,7 +831,7 @@ namespace Hardware
 		// Блок работы со списком предоставителей техники
 		private void deviceProviderEditBtn_Click(object sender, EventArgs e)
 		{
-			var deviceProvider = (DeviceProvider?)deviceProvidersLBox.SelectedItem;
+			var deviceProvider = deviceProvidersLBox.SelectedItem as DeviceProvider;
 			var form = new EditDeviceProviderForm(deviceProvider);
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
@@ -959,8 +841,7 @@ namespace Hardware
 		private void RefreshDeviceProviders()
 		{
 			var selectedItem = deviceProvidersLBox.SelectedItem;
-			deviceProvidersLBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name)
-																	.ToList();
+			deviceProvidersLBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name).ToList();
 			if (selectedItem is not null)
 				if (deviceProvidersLBox.Items.Contains(selectedItem))
 					deviceProvidersLBox.SelectedItem = selectedItem;
@@ -971,7 +852,7 @@ namespace Hardware
 		// Блок работы с историей перемещений
 		private void InitializeHistoryDGW()
 		{
-			historyDGW.DataSource = context.History.ToList();
+			historyDGW.DataSource = context.History.OrderByDescending(h => h.ChangedAt).ToList();
 			historyDGW.Columns[0].Visible = false;
 			historyDGW.Columns[1].HeaderText = "Было";
 			historyDGW.Columns[2].HeaderText = "Стало";
@@ -981,12 +862,13 @@ namespace Hardware
 		private void RefreshHistoryDGW()
 		{
 			if (historySearchTBox.Text.Length == 0)
-				historyDGW.DataSource = context.History.ToList();
+				historyDGW.DataSource = context.History.OrderByDescending(h => h.ChangedAt).ToList();
 			else
 			{
 				var text = historySearchTBox.Text.ToLower();
 				historyDGW.DataSource = context.History.Where(h => h.Before.ToLower().Contains(text) || h.After.ToLower().Contains(text))
-													   .ToList();
+					.OrderByDescending(h => h.ChangedAt)
+					.ToList();
 			}
 		}
 
@@ -1014,10 +896,10 @@ namespace Hardware
 				d.Serial,
 				d.Inventory
 			}).OrderBy(d => d.Building.Name)
-			  .ThenBy(d => d.Cabinet.Name)
-			  .ThenBy(d => d.Complect.Name)
-			  .ThenBy(d => d.DeviceName.Name)
-			  .ToList();
+			.ThenBy(d => d.Cabinet.Name)
+			.ThenBy(d => d.Complect.Name)
+			.ThenBy(d => d.DeviceName.Name)
+			.ToList();
 
 			fullListDGW.Columns[0].HeaderText = "Здание";
 			fullListDGW.Columns[1].HeaderText = "Кабинет";
@@ -1044,10 +926,10 @@ namespace Hardware
 				d.Serial,
 				d.Inventory
 			}).OrderBy(d => d.Building.Name)
-			  .ThenBy(d => d.Cabinet.Name)
-			  .ThenBy(d => d.Complect.Name)
-			  .ThenBy(d => d.DeviceName.Name)
-			  .ToList();
+			.ThenBy(d => d.Cabinet.Name)
+			.ThenBy(d => d.Complect.Name)
+			.ThenBy(d => d.DeviceName.Name)
+			.ToList();
 			if (fullListBuildingTBox.Text.Length != 0)
 				list = list.Where(d => d.Building.Name.ToLower().Contains(fullListBuildingTBox.Text.ToLower())).ToList();
 			if (fullListCabinetTBox.Text.Length != 0)
