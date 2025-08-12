@@ -4,7 +4,7 @@ namespace Hardware.Forms
 {
 	public partial class SettingsForm : Form
 	{
-		ConfigManager configManager;
+		private readonly ConfigManager configManager;
 		public SettingsForm()
 		{
 			InitializeComponent();
@@ -36,9 +36,9 @@ namespace Hardware.Forms
 				context.Database.CloseConnection();
 				MessageBox.Show("Успех!", "Соединение с базой данных установлено!", MessageBoxButtons.OK);
 			}
-			catch
+			catch (Exception ex)
 			{
-				MessageBox.Show("А нихера", "Нет соединения с базой данных", MessageBoxButtons.OK);
+				MessageBox.Show(ex.Message, "Нет соединения с базой данных", MessageBoxButtons.OK);
 			}
 		}
 	}

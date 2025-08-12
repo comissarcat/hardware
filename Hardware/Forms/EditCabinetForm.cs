@@ -46,7 +46,7 @@ namespace Hardware.Forms
 					buildingCBox.SelectedItem = selectedItem;
 		}
 
-		private async Task<bool> AddCabinet()
+		private async Task<string?> AddCabinet()
 		{
 			cabinet = new() { Name = nameTBox.Text, Building = (Building)buildingCBox.SelectedItem };
 			await context.Cabinets.AddAsync(cabinet);
@@ -54,14 +54,14 @@ namespace Hardware.Forms
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
-		private async Task<bool> EditCabinet()
+		private async Task<string?> EditCabinet()
 		{
 			List<string> before = [];
 			List<string> after = [];
@@ -91,31 +91,32 @@ namespace Hardware.Forms
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
-		private async Task<bool> RemoveCabinet()
+		private async Task<string?> RemoveCabinet()
 		{
 			context.Cabinets.Remove(cabinet);
 			try
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
 		private async void addBtn_Click(object sender, EventArgs e)
 		{
-			if (!await AddCabinet())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await AddCabinet();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно добавлено", "Успех", MessageBoxButtons.OK);
@@ -126,8 +127,9 @@ namespace Hardware.Forms
 
 		private async void editBtn_Click(object sender, EventArgs e)
 		{
-			if (!await EditCabinet())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await EditCabinet();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно изменено", "Успех", MessageBoxButtons.OK);
@@ -138,8 +140,9 @@ namespace Hardware.Forms
 
 		private async void removeBtn_Click(object sender, EventArgs e)
 		{
-			if (!await RemoveCabinet())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await RemoveCabinet();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно удалено", "Успех", MessageBoxButtons.OK);

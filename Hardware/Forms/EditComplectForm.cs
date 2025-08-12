@@ -91,7 +91,7 @@ namespace Hardware.Forms
 					cabinetCBox.SelectedItem = selectedItem;
 		}
 
-		private async Task<bool> AddComplect()
+		private async Task<string?> AddComplect()
 		{
 			complect = new() { Name = nameTBox.Text, Cabinet = (Cabinet)cabinetCBox.SelectedItem };
 			await context.Complects.AddAsync(complect);
@@ -99,14 +99,14 @@ namespace Hardware.Forms
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
-		private async Task<bool> EditComplect()
+		private async Task<string?> EditComplect()
 		{
 			List<string> before = [];
 			List<string> after = [];
@@ -136,31 +136,32 @@ namespace Hardware.Forms
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
-		private async Task<bool> RemoveComplect()
+		private async Task<string?> RemoveComplect()
 		{
 			context.Complects.Remove(complect);
 			try
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
 		private async void addBtn_Click(object sender, EventArgs e)
 		{
-			if (!await AddComplect())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await AddComplect();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно добавлено", "Успех", MessageBoxButtons.OK);
@@ -171,8 +172,9 @@ namespace Hardware.Forms
 
 		private async void editBtn_Click(object sender, EventArgs e)
 		{
-			if (!await EditComplect())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await EditComplect();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно изменено", "Успех", MessageBoxButtons.OK);
@@ -183,8 +185,9 @@ namespace Hardware.Forms
 
 		private async void removeBtn_Click(object sender, EventArgs e)
 		{
-			if (!await RemoveComplect())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await RemoveComplect();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно удалено", "Успех", MessageBoxButtons.OK);

@@ -30,7 +30,7 @@ namespace Hardware.Forms
 			removeBtn.Enabled = !buildingHasDevices;
 		}
 
-		private async Task<bool> AddBuilding()
+		private async Task<string?> AddBuilding()
 		{
 			building = new() { Name = nameTBox.Text };
 			await context.Buildings.AddAsync(building);
@@ -38,45 +38,46 @@ namespace Hardware.Forms
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
-		private async Task<bool> EditBuilding()
+		private async Task<string?> EditBuilding()
 		{
 			building.Name = nameTBox.Text;
 			try
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
-		private async Task<bool> RemoveBuilding()
+		private async Task<string?> RemoveBuilding()
 		{
 			context.Buildings.Remove(building);
 			try
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
 		private async void addBtn_Click(object sender, EventArgs e)
 		{
-			if (!await AddBuilding())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await AddBuilding();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно добавлено", "Успех", MessageBoxButtons.OK);
@@ -87,8 +88,9 @@ namespace Hardware.Forms
 
 		private async void editBtn_Click(object sender, EventArgs e)
 		{
-			if (!await EditBuilding())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await EditBuilding();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно изменено", "Успех", MessageBoxButtons.OK);
@@ -99,8 +101,9 @@ namespace Hardware.Forms
 
 		private async void removeBtn_Click(object sender, EventArgs e)
 		{
-			if (!await RemoveBuilding())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await RemoveBuilding();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно удалено", "Успех", MessageBoxButtons.OK);

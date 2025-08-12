@@ -161,7 +161,7 @@ namespace Hardware.Forms
 					deviceProviderCBox.SelectedItem = selectedItem;
 		}
 
-		private async Task<bool> AddDevice()
+		private async Task<string?> AddDevice()
 		{
 			var before = string.Empty;
 			device = new()
@@ -179,14 +179,14 @@ namespace Hardware.Forms
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
-		private async Task<bool> EditDevice()
+		private async Task<string?> EditDevice()
 		{
 			var before = device.ToStringForHistory();
 			device.Serial = serialTBox.Text;
@@ -200,14 +200,14 @@ namespace Hardware.Forms
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
-		private async Task<bool> RemoveDevice()
+		private async Task<string?> RemoveDevice()
 		{
 			var before = device.ToStringForHistory();
 			var after = string.Empty;
@@ -217,17 +217,18 @@ namespace Hardware.Forms
 			{
 				await context.SaveChangesAsync();
 			}
-			catch
+			catch (Exception ex)
 			{
-				return false;
+				return ex.Message;
 			}
-			return true;
+			return null;
 		}
 
 		private async void addBtn_Click(object sender, EventArgs e)
 		{
-			if (!await AddDevice())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await AddDevice();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно добавлено", "Успех", MessageBoxButtons.OK);
@@ -238,8 +239,9 @@ namespace Hardware.Forms
 
 		private async void editBtn_Click(object sender, EventArgs e)
 		{
-			if (!await EditDevice())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await EditDevice();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно изменено", "Успех", MessageBoxButtons.OK);
@@ -250,8 +252,9 @@ namespace Hardware.Forms
 
 		private async void removeBtn_Click(object sender, EventArgs e)
 		{
-			if (!await RemoveDevice())
-				MessageBox.Show("А нихера", "Ошибка", MessageBoxButtons.OK);
+			string? result = await RemoveDevice();
+			if (result != null)
+				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
 			else
 			{
 				MessageBox.Show("Успешно удалено", "Успех", MessageBoxButtons.OK);

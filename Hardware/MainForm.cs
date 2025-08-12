@@ -6,7 +6,7 @@ namespace Hardware
 {
 	public partial class MainForm : Form
 	{
-		readonly ApplicationContext context;
+		private readonly ApplicationContext context;
 		public MainForm()
 		{
 			InitializeComponent();

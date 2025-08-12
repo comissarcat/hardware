@@ -24,7 +24,7 @@
 				Close();
 			}
 			else
-				MessageBox.Show("А нихера", "Неверный пароль", MessageBoxButtons.OK);
+				MessageBox.Show("Неверный пароль", "Неверный пароль", MessageBoxButtons.OK);
 		}
 
 		private void cancelBtn_Click(object sender, EventArgs e)
@@ -41,7 +41,7 @@
 				form.ShowDialog();
 			}
 			else
-				MessageBox.Show("А нихера", "Неверный пароль", MessageBoxButtons.OK);
+				MessageBox.Show("Неверный пароль", "Неверный пароль", MessageBoxButtons.OK);
 		}
 	}
 }
