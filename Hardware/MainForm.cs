@@ -911,7 +911,8 @@ namespace Hardware
 				d.DeviceName,
 				d.DeviceProvider,
 				d.Serial,
-				d.Inventory
+				d.Inventory,
+				d.Notes
 			}).OrderBy(d => d.Building.Name)
 			.ThenBy(d => d.Cabinet.Name)
 			.ThenBy(d => d.Complect.Name)
@@ -926,6 +927,7 @@ namespace Hardware
 			fullListDGW.Columns[5].HeaderText = "Получено от";
 			fullListDGW.Columns[6].HeaderText = "Серийный номер";
 			fullListDGW.Columns[7].HeaderText = "Инвентарный номер";
+			fullListDGW.Columns[8].HeaderText = "Примечание";
 
 			fullListNumberOfDevicesLabel.Text = $"Всего единиц техники: {fullListDGW.RowCount}";
 		}
@@ -941,12 +943,14 @@ namespace Hardware
 				d.DeviceName,
 				d.DeviceProvider,
 				d.Serial,
-				d.Inventory
+				d.Inventory,
+				d.Notes
 			}).OrderBy(d => d.Building.Name)
 			.ThenBy(d => d.Cabinet.Name)
 			.ThenBy(d => d.Complect.Name)
 			.ThenBy(d => d.DeviceName.Name)
 			.ToList();
+
 			if (fullListBuildingTBox.Text.Length != 0)
 				list = list.Where(d => d.Building.Name.ToLower().Contains(fullListBuildingTBox.Text.ToLower())).ToList();
 			if (fullListCabinetTBox.Text.Length != 0)
@@ -963,6 +967,9 @@ namespace Hardware
 				list = list.Where(d => d.Serial.ToLower().Contains(fullListSerialTBox.Text.ToLower())).ToList();
 			if (fullListInventoryTBox.Text.Length != 0)
 				list = list.Where(d => d.Inventory.ToLower().Contains(fullListInventoryTBox.Text.ToLower())).ToList();
+			if (fullListNotesTBox.Text.Length != 0)
+				list = list.Where(d => d.Notes.ToLower().Contains(fullListNotesTBox.Text.ToLower())).ToList();
+
 			fullListDGW.DataSource = list;
 			fullListNumberOfDevicesLabel.Text = $"Всего единиц техники: {fullListDGW.RowCount}";
 		}

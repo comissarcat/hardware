@@ -110,6 +110,8 @@
 			fullListNumberOfDevicesLabel = new Label();
 			menuStrip = new MenuStrip();
 			refreshToolStripMenuItem = new ToolStripMenuItem();
+			label8 = new Label();
+			fullListNotesTBox = new TextBox();
 			tabControl.SuspendLayout();
 			tabPage1.SuspendLayout();
 			devicesTLP.SuspendLayout();
@@ -897,15 +899,18 @@
 			// 
 			// fullListTLP
 			// 
-			fullListTLP.ColumnCount = 8;
-			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
-			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
-			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
-			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
-			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
-			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
-			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
-			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
+			fullListTLP.ColumnCount = 9;
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 11.1111107F));
+			fullListTLP.Controls.Add(fullListNotesTBox, 8, 1);
+			fullListTLP.Controls.Add(label8, 8, 0);
 			fullListTLP.Controls.Add(fullListInventoryTBox, 7, 1);
 			fullListTLP.Controls.Add(fullListSerialTBox, 6, 1);
 			fullListTLP.Controls.Add(fullListDeviceProviderTBox, 5, 1);
@@ -932,71 +937,69 @@
 			fullListTLP.RowStyles.Add(new RowStyle());
 			fullListTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 			fullListTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			fullListTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-			fullListTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
 			fullListTLP.Size = new Size(970, 403);
 			fullListTLP.TabIndex = 1;
 			// 
 			// fullListInventoryTBox
 			// 
 			fullListInventoryTBox.Dock = DockStyle.Fill;
-			fullListInventoryTBox.Location = new Point(850, 33);
+			fullListInventoryTBox.Location = new Point(752, 33);
 			fullListInventoryTBox.Name = "fullListInventoryTBox";
-			fullListInventoryTBox.Size = new Size(117, 23);
+			fullListInventoryTBox.Size = new Size(101, 23);
 			fullListInventoryTBox.TabIndex = 30;
 			fullListInventoryTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
 			// fullListSerialTBox
 			// 
 			fullListSerialTBox.Dock = DockStyle.Fill;
-			fullListSerialTBox.Location = new Point(729, 33);
+			fullListSerialTBox.Location = new Point(645, 33);
 			fullListSerialTBox.Name = "fullListSerialTBox";
-			fullListSerialTBox.Size = new Size(115, 23);
+			fullListSerialTBox.Size = new Size(101, 23);
 			fullListSerialTBox.TabIndex = 29;
 			fullListSerialTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
 			// fullListDeviceProviderTBox
 			// 
 			fullListDeviceProviderTBox.Dock = DockStyle.Fill;
-			fullListDeviceProviderTBox.Location = new Point(608, 33);
+			fullListDeviceProviderTBox.Location = new Point(538, 33);
 			fullListDeviceProviderTBox.Name = "fullListDeviceProviderTBox";
-			fullListDeviceProviderTBox.Size = new Size(115, 23);
+			fullListDeviceProviderTBox.Size = new Size(101, 23);
 			fullListDeviceProviderTBox.TabIndex = 28;
 			fullListDeviceProviderTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
 			// fullListDeviceNameTBox
 			// 
 			fullListDeviceNameTBox.Dock = DockStyle.Fill;
-			fullListDeviceNameTBox.Location = new Point(487, 33);
+			fullListDeviceNameTBox.Location = new Point(431, 33);
 			fullListDeviceNameTBox.Name = "fullListDeviceNameTBox";
-			fullListDeviceNameTBox.Size = new Size(115, 23);
+			fullListDeviceNameTBox.Size = new Size(101, 23);
 			fullListDeviceNameTBox.TabIndex = 27;
 			fullListDeviceNameTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
 			// fullListDeviceTypeTBox
 			// 
 			fullListDeviceTypeTBox.Dock = DockStyle.Fill;
-			fullListDeviceTypeTBox.Location = new Point(366, 33);
+			fullListDeviceTypeTBox.Location = new Point(324, 33);
 			fullListDeviceTypeTBox.Name = "fullListDeviceTypeTBox";
-			fullListDeviceTypeTBox.Size = new Size(115, 23);
+			fullListDeviceTypeTBox.Size = new Size(101, 23);
 			fullListDeviceTypeTBox.TabIndex = 26;
 			fullListDeviceTypeTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
 			// fullListComplectTBox
 			// 
 			fullListComplectTBox.Dock = DockStyle.Fill;
-			fullListComplectTBox.Location = new Point(245, 33);
+			fullListComplectTBox.Location = new Point(217, 33);
 			fullListComplectTBox.Name = "fullListComplectTBox";
-			fullListComplectTBox.Size = new Size(115, 23);
+			fullListComplectTBox.Size = new Size(101, 23);
 			fullListComplectTBox.TabIndex = 25;
 			fullListComplectTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
 			// fullListCabinetTBox
 			// 
 			fullListCabinetTBox.Dock = DockStyle.Fill;
-			fullListCabinetTBox.Location = new Point(124, 33);
+			fullListCabinetTBox.Location = new Point(110, 33);
 			fullListCabinetTBox.Name = "fullListCabinetTBox";
-			fullListCabinetTBox.Size = new Size(115, 23);
+			fullListCabinetTBox.Size = new Size(101, 23);
 			fullListCabinetTBox.TabIndex = 24;
 			fullListCabinetTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
@@ -1004,7 +1007,7 @@
 			// 
 			label7.Anchor = AnchorStyles.None;
 			label7.AutoSize = true;
-			label7.Location = new Point(865, 0);
+			label7.Location = new Point(759, 0);
 			label7.Name = "label7";
 			label7.Size = new Size(86, 30);
 			label7.TabIndex = 23;
@@ -1014,9 +1017,9 @@
 			// 
 			label6.Anchor = AnchorStyles.None;
 			label6.AutoSize = true;
-			label6.Location = new Point(734, 7);
+			label6.Location = new Point(661, 0);
 			label6.Name = "label6";
-			label6.Size = new Size(104, 15);
+			label6.Size = new Size(68, 30);
 			label6.TabIndex = 22;
 			label6.Text = "Серийный номер";
 			// 
@@ -1024,7 +1027,7 @@
 			// 
 			label5.Anchor = AnchorStyles.None;
 			label5.AutoSize = true;
-			label5.Location = new Point(515, 7);
+			label5.Location = new Point(452, 7);
 			label5.Name = "label5";
 			label5.Size = new Size(59, 15);
 			label5.TabIndex = 21;
@@ -1034,7 +1037,7 @@
 			// 
 			label4.Anchor = AnchorStyles.None;
 			label4.AutoSize = true;
-			label4.Location = new Point(626, 7);
+			label4.Location = new Point(549, 7);
 			label4.Name = "label4";
 			label4.Size = new Size(78, 15);
 			label4.TabIndex = 20;
@@ -1044,7 +1047,7 @@
 			// 
 			label3.Anchor = AnchorStyles.None;
 			label3.AutoSize = true;
-			label3.Location = new Point(410, 7);
+			label3.Location = new Point(361, 7);
 			label3.Name = "label3";
 			label3.Size = new Size(27, 15);
 			label3.TabIndex = 19;
@@ -1054,7 +1057,7 @@
 			// 
 			label2.Anchor = AnchorStyles.None;
 			label2.AutoSize = true;
-			label2.Location = new Point(272, 7);
+			label2.Location = new Point(237, 7);
 			label2.Name = "label2";
 			label2.Size = new Size(61, 15);
 			label2.TabIndex = 18;
@@ -1064,7 +1067,7 @@
 			// 
 			label1.Anchor = AnchorStyles.None;
 			label1.AutoSize = true;
-			label1.Location = new Point(155, 7);
+			label1.Location = new Point(134, 7);
 			label1.Name = "label1";
 			label1.Size = new Size(52, 15);
 			label1.TabIndex = 17;
@@ -1074,7 +1077,7 @@
 			// 
 			fullListSearchLabel.Anchor = AnchorStyles.None;
 			fullListSearchLabel.AutoSize = true;
-			fullListSearchLabel.Location = new Point(37, 7);
+			fullListSearchLabel.Location = new Point(30, 7);
 			fullListSearchLabel.Name = "fullListSearchLabel";
 			fullListSearchLabel.Size = new Size(46, 15);
 			fullListSearchLabel.TabIndex = 14;
@@ -1085,7 +1088,7 @@
 			fullListBuildingTBox.Dock = DockStyle.Fill;
 			fullListBuildingTBox.Location = new Point(3, 33);
 			fullListBuildingTBox.Name = "fullListBuildingTBox";
-			fullListBuildingTBox.Size = new Size(115, 23);
+			fullListBuildingTBox.Size = new Size(101, 23);
 			fullListBuildingTBox.TabIndex = 15;
 			fullListBuildingTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
@@ -1096,7 +1099,7 @@
 			fullListDGW.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			fullListDGW.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 			fullListDGW.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			fullListTLP.SetColumnSpan(fullListDGW, 8);
+			fullListTLP.SetColumnSpan(fullListDGW, 9);
 			fullListDGW.Dock = DockStyle.Fill;
 			fullListDGW.Location = new Point(3, 62);
 			fullListDGW.MultiSelect = false;
@@ -1132,6 +1135,25 @@
 			refreshToolStripMenuItem.Size = new Size(73, 20);
 			refreshToolStripMenuItem.Text = "Обновить";
 			refreshToolStripMenuItem.Click += refreshToolStripMenuItem_Click;
+			// 
+			// label8
+			// 
+			label8.Anchor = AnchorStyles.None;
+			label8.AutoSize = true;
+			label8.Location = new Point(874, 7);
+			label8.Name = "label8";
+			label8.Size = new Size(78, 15);
+			label8.TabIndex = 32;
+			label8.Text = "Примечание";
+			// 
+			// fullListNotesTBox
+			// 
+			fullListNotesTBox.Dock = DockStyle.Fill;
+			fullListNotesTBox.Location = new Point(859, 33);
+			fullListNotesTBox.Name = "fullListNotesTBox";
+			fullListNotesTBox.Size = new Size(108, 23);
+			fullListNotesTBox.TabIndex = 33;
+			fullListNotesTBox.TextChanged += fullListSearchTBox_TextChanged;
 			// 
 			// MainForm
 			// 
@@ -1259,5 +1281,7 @@
 		private Label label2;
 		private Label label1;
 		private Label fullListNumberOfDevicesLabel;
+		private Label label8;
+		private TextBox fullListNotesTBox;
 	}
 }

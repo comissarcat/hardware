@@ -31,6 +31,8 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditDeviceForm));
 			tableLayoutPanel1 = new TableLayoutPanel();
 			tableLayoutPanel2 = new TableLayoutPanel();
+			notesTBox = new TextBox();
+			label9 = new Label();
 			editComplectBtn = new Button();
 			complectCBox = new ComboBox();
 			label8 = new Label();
@@ -74,7 +76,7 @@
 			tableLayoutPanel1.RowCount = 2;
 			tableLayoutPanel1.RowStyles.Add(new RowStyle());
 			tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tableLayoutPanel1.Size = new Size(534, 311);
+			tableLayoutPanel1.Size = new Size(534, 321);
 			tableLayoutPanel1.TabIndex = 3;
 			// 
 			// tableLayoutPanel2
@@ -84,6 +86,8 @@
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 			tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle());
+			tableLayoutPanel2.Controls.Add(notesTBox, 1, 8);
+			tableLayoutPanel2.Controls.Add(label9, 0, 8);
 			tableLayoutPanel2.Controls.Add(editComplectBtn, 2, 3);
 			tableLayoutPanel2.Controls.Add(complectCBox, 1, 3);
 			tableLayoutPanel2.Controls.Add(label8, 0, 3);
@@ -108,7 +112,7 @@
 			tableLayoutPanel2.Dock = DockStyle.Fill;
 			tableLayoutPanel2.Location = new Point(3, 3);
 			tableLayoutPanel2.Name = "tableLayoutPanel2";
-			tableLayoutPanel2.RowCount = 8;
+			tableLayoutPanel2.RowCount = 9;
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
@@ -117,8 +121,27 @@
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
 			tableLayoutPanel2.RowStyles.Add(new RowStyle());
-			tableLayoutPanel2.Size = new Size(528, 242);
+			tableLayoutPanel2.RowStyles.Add(new RowStyle());
+			tableLayoutPanel2.Size = new Size(528, 271);
 			tableLayoutPanel2.TabIndex = 0;
+			// 
+			// notesTBox
+			// 
+			notesTBox.Dock = DockStyle.Fill;
+			notesTBox.Location = new Point(131, 245);
+			notesTBox.Name = "notesTBox";
+			notesTBox.Size = new Size(262, 23);
+			notesTBox.TabIndex = 23;
+			// 
+			// label9
+			// 
+			label9.Anchor = AnchorStyles.Right;
+			label9.AutoSize = true;
+			label9.Location = new Point(47, 249);
+			label9.Name = "label9";
+			label9.Size = new Size(78, 15);
+			label9.TabIndex = 22;
+			label9.Text = "Примечание";
 			// 
 			// editComplectBtn
 			// 
@@ -350,17 +373,17 @@
 			tableLayoutPanel3.Controls.Add(removeBtn, 2, 0);
 			tableLayoutPanel3.Controls.Add(cancelBtn, 3, 0);
 			tableLayoutPanel3.Dock = DockStyle.Fill;
-			tableLayoutPanel3.Location = new Point(3, 251);
+			tableLayoutPanel3.Location = new Point(3, 280);
 			tableLayoutPanel3.Name = "tableLayoutPanel3";
 			tableLayoutPanel3.RowCount = 1;
 			tableLayoutPanel3.RowStyles.Add(new RowStyle());
-			tableLayoutPanel3.Size = new Size(528, 57);
+			tableLayoutPanel3.Size = new Size(528, 38);
 			tableLayoutPanel3.TabIndex = 1;
 			// 
 			// addBtn
 			// 
 			addBtn.Anchor = AnchorStyles.None;
-			addBtn.Location = new Point(28, 17);
+			addBtn.Location = new Point(28, 7);
 			addBtn.Name = "addBtn";
 			addBtn.Size = new Size(75, 23);
 			addBtn.TabIndex = 0;
@@ -372,7 +395,7 @@
 			// 
 			editBtn.Anchor = AnchorStyles.None;
 			editBtn.Enabled = false;
-			editBtn.Location = new Point(160, 17);
+			editBtn.Location = new Point(160, 7);
 			editBtn.Name = "editBtn";
 			editBtn.Size = new Size(75, 23);
 			editBtn.TabIndex = 1;
@@ -384,7 +407,7 @@
 			// 
 			removeBtn.Anchor = AnchorStyles.None;
 			removeBtn.Enabled = false;
-			removeBtn.Location = new Point(292, 17);
+			removeBtn.Location = new Point(292, 7);
 			removeBtn.Name = "removeBtn";
 			removeBtn.Size = new Size(75, 23);
 			removeBtn.TabIndex = 2;
@@ -395,7 +418,7 @@
 			// cancelBtn
 			// 
 			cancelBtn.Anchor = AnchorStyles.None;
-			cancelBtn.Location = new Point(424, 17);
+			cancelBtn.Location = new Point(424, 7);
 			cancelBtn.Name = "cancelBtn";
 			cancelBtn.Size = new Size(75, 23);
 			cancelBtn.TabIndex = 3;
@@ -408,7 +431,7 @@
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			CancelButton = cancelBtn;
-			ClientSize = new Size(534, 311);
+			ClientSize = new Size(534, 321);
 			Controls.Add(tableLayoutPanel1);
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Name = "EditDeviceForm";
@@ -452,5 +475,7 @@
 		private ComboBox complectCBox;
 		private Label label8;
 		private Button editComplectBtn;
+		private Label label9;
+		private TextBox notesTBox;
 	}
 }

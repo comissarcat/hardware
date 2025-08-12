@@ -23,6 +23,7 @@ namespace Hardware.Forms
 				idTBox.Text = this.device.Id.ToString();
 				serialTBox.Text = this.device.Serial;
 				inventoryTBox.Text = this.device.Inventory;
+				notesTBox.Text = this.device.Notes;
 
 				buildingCBox.SelectedItem = this.device.Complect.Cabinet.Building;
 
@@ -170,7 +171,8 @@ namespace Hardware.Forms
 				Inventory = inventoryTBox.Text,
 				Complect = (Complect)complectCBox.SelectedItem,
 				DeviceName = (DeviceName)deviceNameCBox.SelectedItem,
-				DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem
+				DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem,
+				Notes = notesTBox.Text
 			};
 			var after = device.ToStringForHistory();
 			await context.Devices.AddAsync(device);
@@ -194,6 +196,7 @@ namespace Hardware.Forms
 			device.Complect = (Complect)complectCBox.SelectedItem;
 			device.DeviceName = (DeviceName)deviceNameCBox.SelectedItem;
 			device.DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem;
+			device.Notes = notesTBox.Text;
 			var after = device.ToStringForHistory();
 			await context.History.AddAsync(new History() { Before = before, After = after });
 			try
