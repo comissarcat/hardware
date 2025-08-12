@@ -63,6 +63,13 @@ namespace Hardware
 			RefreshFullListDGW();
 		}
 
+		private void RestoreSelectedItem(ListBox lBox, object? selectedItem)
+		{
+			if (selectedItem is not null)
+				if (lBox.Items.Contains(selectedItem))
+					lBox.SelectedItem = selectedItem;
+		}
+
 		// Блок работы со списком зданий
 		private void RefreshBuildings()
 		{
@@ -73,28 +80,34 @@ namespace Hardware
 		private void RefreshBuildingsLBoxLeft()
 		{
 			var selectedItem = buildingsLBoxLeft.SelectedItem;
+			var selectedCabinet = cabinetsLBoxLeft.SelectedItem;
+			var selectedComplect = complectsLBoxLeft.SelectedItem;
+			var selectedDevice = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				buildingsLBoxLeft.DataSource = context.Buildings.OrderBy(b => b.Name).ToList();
 			else
 				buildingsLBoxLeft.DataSource = SearchBuildingByDevice(searchTBoxLeft.Text);
-			if (selectedItem is not null)
-				if (buildingsLBoxLeft.Items.Contains(selectedItem))
-					buildingsLBoxLeft.SelectedItem = selectedItem;
-			RefreshCabinetsLBoxLeft();
+			RestoreSelectedItem(buildingsLBoxLeft, selectedItem);
+			RestoreSelectedItem(cabinetsLBoxLeft, selectedCabinet);
+			RestoreSelectedItem(complectsLBoxLeft, selectedComplect);
+			RestoreSelectedItem(devicesLBoxLeft, selectedDevice);
 			SwitchEditCabinetBtnLeft();
 		}
 
 		private void RefreshBuildingsLBoxRight()
 		{
 			var selectedItem = buildingsLBoxRight.SelectedItem;
+			var selectedCabinet = cabinetsLBoxRight.SelectedItem;
+			var selectedComplect = complectsLBoxRight.SelectedItem;
+			var selectedDevice = devicesLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				buildingsLBoxRight.DataSource = context.Buildings.OrderBy(b => b.Name).ToList();
 			else
 				buildingsLBoxRight.DataSource = SearchBuildingByDevice(searchTBoxRight.Text);
-			if (selectedItem is not null)
-				if (buildingsLBoxRight.Items.Contains(selectedItem))
-					buildingsLBoxRight.SelectedItem = selectedItem;
-			RefreshCabinetsLBoxRight();
+			RestoreSelectedItem(buildingsLBoxRight, selectedItem);
+			RestoreSelectedItem(cabinetsLBoxRight, selectedCabinet);
+			RestoreSelectedItem(complectsLBoxRight, selectedComplect);
+			RestoreSelectedItem(devicesLBoxRight, selectedDevice);
 			SwitchEditCabinetBtnRight();
 		}
 
@@ -143,16 +156,17 @@ namespace Hardware
 		private void RefreshCabinetsLBoxLeft()
 		{
 			var selectedItem = cabinetsLBoxLeft.SelectedItem;
+			var selectedComplect = complectsLBoxLeft.SelectedItem;
+			var selectedDevice = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				cabinetsLBoxLeft.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxLeft.SelectedItem)
 					.OrderBy(c => c.Name)
 					.ToList();
 			else
 				cabinetsLBoxLeft.DataSource = SearchCabinetByDevice(searchTBoxLeft.Text, buildingsLBoxLeft.SelectedItem as Building);
-			if (selectedItem is not null)
-				if (cabinetsLBoxLeft.Items.Contains(selectedItem))
-					cabinetsLBoxLeft.SelectedItem = selectedItem;
-			RefreshComplectsLBoxLeft();
+			RestoreSelectedItem(cabinetsLBoxLeft, selectedItem);
+			RestoreSelectedItem(complectsLBoxLeft, selectedComplect);
+			RestoreSelectedItem(devicesLBoxLeft, selectedDevice);
 			SwitchEditComplectBtnLeft();
 			SwitchMoveCabinetBtns();
 		}
@@ -160,16 +174,17 @@ namespace Hardware
 		private void RefreshCabinetsLBoxRight()
 		{
 			var selectedItem = cabinetsLBoxRight.SelectedItem;
+			var selectedComplect = complectsLBoxRight.SelectedItem;
+			var selectedDevice = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				cabinetsLBoxRight.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxRight.SelectedItem)
 					.OrderBy(c => c.Name)
 					.ToList();
 			else
 				cabinetsLBoxRight.DataSource = SearchCabinetByDevice(searchTBoxRight.Text, buildingsLBoxRight.SelectedItem as Building);
-			if (selectedItem is not null)
-				if (cabinetsLBoxRight.Items.Contains(selectedItem))
-					cabinetsLBoxRight.SelectedItem = selectedItem;
-			RefreshComplectsLBoxRight();
+			RestoreSelectedItem(cabinetsLBoxRight, selectedItem);
+			RestoreSelectedItem(complectsLBoxRight, selectedComplect);
+			RestoreSelectedItem(devicesLBoxRight, selectedDevice);
 			SwitchEditComplectBtnRight();
 			SwitchMoveCabinetBtns();
 		}
@@ -361,16 +376,19 @@ namespace Hardware
 		private void RefreshComplectsLBoxLeft()
 		{
 			var selectedItem = complectsLBoxLeft.SelectedItem;
+			var selectedDevice = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				complectsLBoxLeft.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxLeft.SelectedItem)
 					.OrderBy(c => c.Name)
 					.ToList();
 			else
 				complectsLBoxLeft.DataSource = SearchComplectByDevice(searchTBoxLeft.Text, cabinetsLBoxLeft.SelectedItem as Cabinet);
-			if (selectedItem is not null)
-				if (complectsLBoxLeft.Items.Contains(selectedItem))
-					complectsLBoxLeft.SelectedItem = selectedItem;
-			RefreshDevicesLBoxLeft();
+
+			if (complectsLBoxLeft.Items.Count == 0)
+				devicesLBoxLeft.DataSource = null;
+
+			RestoreSelectedItem(complectsLBoxLeft, selectedItem);
+			RestoreSelectedItem(devicesLBoxLeft, selectedDevice);
 			SwitchEditDeviceBtnLeft();
 			SwitchMoveComplectBtns();
 		}
@@ -378,16 +396,19 @@ namespace Hardware
 		private void RefreshComplectsLBoxRight()
 		{
 			var selectedItem = complectsLBoxRight.SelectedItem;
+			var selectedDevice = devicesLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				complectsLBoxRight.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxRight.SelectedItem)
 					.OrderBy(c => c.Name)
 					.ToList();
 			else
 				complectsLBoxRight.DataSource = SearchComplectByDevice(searchTBoxRight.Text, cabinetsLBoxRight.SelectedItem as Cabinet);
-			if (selectedItem is not null)
-				if (complectsLBoxRight.Items.Contains(selectedItem))
-					complectsLBoxRight.SelectedItem = selectedItem;
-			RefreshDevicesLBoxRight();
+
+			if (complectsLBoxRight.Items.Count == 0)
+				devicesLBoxRight.DataSource = null;
+
+			RestoreSelectedItem(complectsLBoxRight, selectedItem);
+			RestoreSelectedItem(devicesLBoxRight, selectedDevice);
 			SwitchEditDeviceBtnRight();
 			SwitchMoveComplectBtns();
 		}
@@ -592,9 +613,7 @@ namespace Hardware
 					.ToList();
 			else
 				devicesLBoxLeft.DataSource = SearchDevice(searchTBoxLeft.Text, complectsLBoxLeft.SelectedItem as Complect);
-			if (selectedItem is not null)
-				if (devicesLBoxLeft.Items.Contains(selectedItem))
-					devicesLBoxLeft.SelectedItem = selectedItem;
+			RestoreSelectedItem(devicesLBoxLeft, selectedItem);
 			SwitchMoveDeviceBtns();
 		}
 
@@ -608,9 +627,7 @@ namespace Hardware
 					.ToList();
 			else
 				devicesLBoxRight.DataSource = SearchDevice(searchTBoxRight.Text, complectsLBoxRight.SelectedItem as Complect);
-			if (selectedItem is not null)
-				if (devicesLBoxRight.Items.Contains(selectedItem))
-					devicesLBoxRight.SelectedItem = selectedItem;
+			RestoreSelectedItem(devicesLBoxRight, selectedItem);
 			SwitchMoveDeviceBtns();
 		}
 
