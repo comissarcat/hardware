@@ -56,7 +56,7 @@ namespace Hardware.Forms
 			}
 			catch (Exception ex)
 			{
-				return ex.Message;
+				return $"{ex.Message}\n{ex.InnerException}";
 			}
 			return null;
 		}
@@ -93,7 +93,7 @@ namespace Hardware.Forms
 			}
 			catch (Exception ex)
 			{
-				return ex.Message;
+				return $"{ex.Message}\n{ex.InnerException}";
 			}
 			return null;
 		}
@@ -107,7 +107,7 @@ namespace Hardware.Forms
 			}
 			catch (Exception ex)
 			{
-				return ex.Message;
+				return $"{ex.Message}\n{ex.InnerException}";
 			}
 			return null;
 		}
