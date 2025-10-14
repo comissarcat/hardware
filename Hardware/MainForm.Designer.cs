@@ -90,6 +90,8 @@
 			historyDGW = new DataGridView();
 			tabPage4 = new TabPage();
 			fullListTLP = new TableLayoutPanel();
+			fullListNotesTBox = new TextBox();
+			label8 = new Label();
 			fullListInventoryTBox = new TextBox();
 			fullListSerialTBox = new TextBox();
 			fullListDeviceProviderTBox = new TextBox();
@@ -110,8 +112,8 @@
 			fullListNumberOfDevicesLabel = new Label();
 			menuStrip = new MenuStrip();
 			refreshToolStripMenuItem = new ToolStripMenuItem();
-			label8 = new Label();
-			fullListNotesTBox = new TextBox();
+			передатьВExcelToolStripMenuItem = new ToolStripMenuItem();
+			выгрузитьQRкодыToolStripMenuItem = new ToolStripMenuItem();
 			tabControl.SuspendLayout();
 			tabPage1.SuspendLayout();
 			devicesTLP.SuspendLayout();
@@ -940,6 +942,25 @@
 			fullListTLP.Size = new Size(970, 403);
 			fullListTLP.TabIndex = 1;
 			// 
+			// fullListNotesTBox
+			// 
+			fullListNotesTBox.Dock = DockStyle.Fill;
+			fullListNotesTBox.Location = new Point(859, 33);
+			fullListNotesTBox.Name = "fullListNotesTBox";
+			fullListNotesTBox.Size = new Size(108, 23);
+			fullListNotesTBox.TabIndex = 33;
+			fullListNotesTBox.TextChanged += fullListSearchTBox_TextChanged;
+			// 
+			// label8
+			// 
+			label8.Anchor = AnchorStyles.None;
+			label8.AutoSize = true;
+			label8.Location = new Point(874, 7);
+			label8.Name = "label8";
+			label8.Size = new Size(78, 15);
+			label8.TabIndex = 32;
+			label8.Text = "Примечание";
+			// 
 			// fullListInventoryTBox
 			// 
 			fullListInventoryTBox.Dock = DockStyle.Fill;
@@ -1122,7 +1143,7 @@
 			// 
 			// menuStrip
 			// 
-			menuStrip.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem });
+			menuStrip.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem, передатьВExcelToolStripMenuItem, выгрузитьQRкодыToolStripMenuItem });
 			menuStrip.Location = new Point(0, 0);
 			menuStrip.Name = "menuStrip";
 			menuStrip.Size = new Size(984, 24);
@@ -1136,24 +1157,19 @@
 			refreshToolStripMenuItem.Text = "Обновить";
 			refreshToolStripMenuItem.Click += refreshToolStripMenuItem_Click;
 			// 
-			// label8
+			// передатьВExcelToolStripMenuItem
 			// 
-			label8.Anchor = AnchorStyles.None;
-			label8.AutoSize = true;
-			label8.Location = new Point(874, 7);
-			label8.Name = "label8";
-			label8.Size = new Size(78, 15);
-			label8.TabIndex = 32;
-			label8.Text = "Примечание";
+			передатьВExcelToolStripMenuItem.Name = "передатьВExcelToolStripMenuItem";
+			передатьВExcelToolStripMenuItem.Size = new Size(109, 20);
+			передатьВExcelToolStripMenuItem.Text = "Передать в Excel";
+			передатьВExcelToolStripMenuItem.Click += передатьВExcelToolStripMenuItem_Click;
 			// 
-			// fullListNotesTBox
+			// выгрузитьQRкодыToolStripMenuItem
 			// 
-			fullListNotesTBox.Dock = DockStyle.Fill;
-			fullListNotesTBox.Location = new Point(859, 33);
-			fullListNotesTBox.Name = "fullListNotesTBox";
-			fullListNotesTBox.Size = new Size(108, 23);
-			fullListNotesTBox.TabIndex = 33;
-			fullListNotesTBox.TextChanged += fullListSearchTBox_TextChanged;
+			выгрузитьQRкодыToolStripMenuItem.Name = "выгрузитьQRкодыToolStripMenuItem";
+			выгрузитьQRкодыToolStripMenuItem.Size = new Size(128, 20);
+			выгрузитьQRкодыToolStripMenuItem.Text = "Выгрузить QR-коды";
+			выгрузитьQRкодыToolStripMenuItem.Click += выгрузитьQRкодыToolStripMenuItem_Click;
 			// 
 			// MainForm
 			// 
@@ -1283,5 +1299,7 @@
 		private Label fullListNumberOfDevicesLabel;
 		private Label label8;
 		private TextBox fullListNotesTBox;
+		private ToolStripMenuItem передатьВExcelToolStripMenuItem;
+		private ToolStripMenuItem выгрузитьQRкодыToolStripMenuItem;
 	}
 }

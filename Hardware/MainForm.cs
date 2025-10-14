@@ -1,6 +1,9 @@
 using Hardware.Forms;
 using Hardware.Models;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using QRCoder;
+using System.Drawing.Drawing2D;
 
 namespace Hardware
 {
@@ -70,7 +73,7 @@ namespace Hardware
 					lBox.SelectedItem = selectedItem;
 		}
 
-		// Блок работы со списком зданий
+		#region Блок работы со списком зданий		
 		private void RefreshBuildings()
 		{
 			RefreshBuildingsLBoxLeft();
@@ -151,8 +154,9 @@ namespace Hardware
 			else if (sender as ListBox == buildingsLBoxRight)
 				RefreshCabinetsLBoxRight();
 		}
+		#endregion
 
-		// Блок работы со списком кабинетов
+		#region Блок работы со списком кабинетов
 		private void RefreshCabinetsLBoxLeft()
 		{
 			var selectedItem = cabinetsLBoxLeft.SelectedItem;
@@ -371,8 +375,9 @@ namespace Hardware
 			if (success)
 				RefreshBuildings();
 		}
+		#endregion
 
-		// Блок работы со списком комплектов
+		#region Блок работы со списком комплектов
 		private void RefreshComplectsLBoxLeft()
 		{
 			var selectedItem = complectsLBoxLeft.SelectedItem;
@@ -595,8 +600,9 @@ namespace Hardware
 			if (success)
 				RefreshBuildings();
 		}
+		#endregion
 
-		// Блок работы со списком единиц техники
+		#region Блок работы со списком единиц техники
 		private void RefreshDevicesLBoxes()
 		{
 			RefreshDevicesLBoxLeft();
@@ -780,8 +786,9 @@ namespace Hardware
 			if (success)
 				RefreshBuildings();
 		}
+		#endregion
 
-		// Блок работы со списком типов техники
+		#region Блок работы со списком типов техники
 		private void deviceTypeEditBtn_Click(object sender, EventArgs e)
 		{
 			var deviceType = deviceTypesLBox.SelectedItem as DeviceType;
@@ -820,8 +827,9 @@ namespace Hardware
 		{
 			RefreshDeviceNames();
 		}
+		#endregion
 
-		// Блок работы со списком названий техники
+		#region Блок работы со списком названий техники
 		private void deviceNameEditBtn_Click(object sender, EventArgs e)
 		{
 			var deviceName = deviceNamesLBox.SelectedItem as DeviceName;
@@ -844,8 +852,9 @@ namespace Hardware
 			SwitchEditDeviceBtnLeft();
 			SwitchEditDeviceBtnRight();
 		}
+		#endregion
 
-		// Блок работы со списком предоставителей техники
+		#region Блок работы со списком предоставителей техники
 		private void deviceProviderEditBtn_Click(object sender, EventArgs e)
 		{
 			var deviceProvider = deviceProvidersLBox.SelectedItem as DeviceProvider;
@@ -865,8 +874,9 @@ namespace Hardware
 			SwitchEditDeviceBtnLeft();
 			SwitchEditDeviceBtnRight();
 		}
+		#endregion
 
-		// Блок работы с историей перемещений
+		#region Блок работы с историей перемещений
 		private void InitializeHistoryDGW()
 		{
 			historyDGW.DataSource = context.History.OrderByDescending(h => h.ChangedAt).ToList();
@@ -898,8 +908,9 @@ namespace Hardware
 		{
 			RefreshHistoryDGW();
 		}
+		#endregion
 
-		// Блок работы с полным списком техники
+		#region Блок работы с полным списком техники
 		private void InitializeFullListDGW()
 		{
 			fullListDGW.DataSource = context.Devices.Select(d => new
@@ -982,6 +993,139 @@ namespace Hardware
 		private void tabPage4_Enter(object sender, EventArgs e)
 		{
 			RefreshFullListDGW();
+		}
+		#endregion
+
+		private void передатьВExcelToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+			path = Path.Combine(path, "Hardware");
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+			path = Path.Combine(path, $"{DateTime.Now.ToShortDateString().Replace('.', '-')}.xlsx");
+			try
+			{
+				if (File.Exists(path))
+					File.Delete(path);
+			}
+			catch
+			{
+				MessageBox.Show($"Файл {path} занят");
+				return;
+			}
+
+			var devices = context.Devices.Select(d => new
+			{
+				d.Complect.Cabinet.Building,
+				d.Complect.Cabinet,
+				d.Complect,
+				d.DeviceName.DeviceType,
+				d.DeviceName,
+				d.DeviceProvider,
+				d.Serial,
+				d.Inventory,
+				d.Notes
+			}).OrderBy(d => d.Building.Name)
+			.ThenBy(d => d.Cabinet.Name)
+			.ThenBy(d => d.Complect.Name)
+			.ThenBy(d => d.DeviceName.Name)
+			.ToList();
+
+			using ExcelPackage package = new(path);
+			ExcelWorkbook workbook = package.Workbook;
+			ExcelWorksheet worksheet = workbook.Worksheets.Add("Техника");
+
+			worksheet.Cells.Style.Font.Name = "Courier New";
+			worksheet.Cells.Style.Font.Size = 12;
+			worksheet.Cells.Style.WrapText = true;
+			worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+			worksheet.Cells[1, 1].Value = "Здание";
+			worksheet.Cells[1, 2].Value = "Кабинет";
+			worksheet.Cells[1, 3].Value = "Комплект";
+			worksheet.Cells[1, 4].Value = "Тип";
+			worksheet.Cells[1, 5].Value = "Название";
+			worksheet.Cells[1, 6].Value = "Получено от";
+			worksheet.Cells[1, 7].Value = "С/н";
+			worksheet.Cells[1, 8].Value = "И/н";
+			worksheet.Cells[1, 9].Value = "Примечание";
+
+			int row = 2;
+
+			foreach (var device in devices)
+			{
+				worksheet.Cells[row, 1].Value = device.Complect.Cabinet.Building;
+				worksheet.Cells[row, 2].Value = device.Complect.Cabinet;
+				worksheet.Cells[row, 3].Value = device.Complect;
+				worksheet.Cells[row, 4].Value = device.DeviceName.DeviceType;
+				worksheet.Cells[row, 5].Value = device.DeviceName;
+				worksheet.Cells[row, 6].Value = device.DeviceProvider;
+				worksheet.Cells[row, 7].Value = device.Serial;
+				worksheet.Cells[row, 8].Value = device.Inventory;
+				worksheet.Cells[row, 9].Value = device.Notes;
+
+				row++;
+			}
+
+			ExcelRange range = worksheet.Cells[1, 1, row, 9];
+			OfficeOpenXml.Table.ExcelTable table = worksheet.Tables.Add(range, "Техника");
+			table.TableStyle = OfficeOpenXml.Table.TableStyles.Light16;
+			range.AutoFitColumns();
+
+			try
+			{
+				package.Save();
+				MessageBox.Show($"Файл сохранён по пути {path}");
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Ошибка: {ex.Message}");
+			}
+		}
+
+		private void выгрузитьQRкодыToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+			path = Path.Combine(path, "Hardware", "QR");
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+
+			var devices = context.Devices.Select(d => new
+			{
+				d.DeviceName.DeviceType,
+				d.DeviceName,
+				d.Serial,
+				d.Inventory
+			}).ToList();
+
+			using QRCodeGenerator qrGenerator = new();
+			foreach (var device in devices)
+			{
+				using QRCodeData qrCodeData = qrGenerator.CreateQrCode($"Тип: {device.DeviceType.Name}\nНазвание: {device.DeviceName.Name}\nС/н: {device.Serial}\nИ/н: {device.Inventory}", QRCodeGenerator.ECCLevel.Q);
+				using QRCode qrCode = new(qrCodeData);
+
+				Bitmap originalQrCode = qrCode.GetGraphic(5, Color.Black, Color.White, false);
+
+				// Изменяем размер под нужный
+				Bitmap resizedBitmap = new(100, 100);
+				using (Graphics graphics = Graphics.FromImage(resizedBitmap))
+				{
+					// Настройки для качественного масштабирования
+					graphics.CompositingQuality = CompositingQuality.HighQuality;
+					graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+					graphics.SmoothingMode = SmoothingMode.HighQuality;
+					graphics.DrawImage(originalQrCode, 0, 0, 100, 100);
+				}
+
+				// Сохраняем в JPG
+				try
+				{
+					resizedBitmap.Save(Path.Combine(path, $"{device.Serial}.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg);
+				}
+				catch { }
+			}
+
+			MessageBox.Show($"Выгрузка завершена по пути {path}");
 		}
 	}
 }
