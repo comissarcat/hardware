@@ -10,7 +10,7 @@ namespace Hardware.Forms
 		public EditCabinetForm(Cabinet? cabinet, Building building)
 		{
 			InitializeComponent();
-			context = ApplicationContext.Instanse();
+			context = ApplicationContext.Instance();
 			DialogResult = DialogResult.Cancel;
 			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
 													   .ToList();

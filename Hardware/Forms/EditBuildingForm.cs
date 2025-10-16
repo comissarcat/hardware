@@ -10,7 +10,7 @@ namespace Hardware.Forms
 		public EditBuildingForm(Building? building)
 		{
 			InitializeComponent();
-			context = ApplicationContext.Instanse();
+			context = ApplicationContext.Instance();
 			DialogResult = DialogResult.Cancel;
 			this.building = building;
 			if (this.building is not null)

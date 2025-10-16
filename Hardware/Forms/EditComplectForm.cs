@@ -10,7 +10,7 @@ namespace Hardware.Forms
 		public EditComplectForm(Complect? complect, Cabinet cabinet)
 		{
 			InitializeComponent();
-			context = ApplicationContext.Instanse();
+			context = ApplicationContext.Instance();
 			DialogResult = DialogResult.Cancel;
 			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
 													   .ToList();

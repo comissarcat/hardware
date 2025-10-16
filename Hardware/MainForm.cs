@@ -2,8 +2,6 @@ using Hardware.Forms;
 using Hardware.Models;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
-using QRCoder;
-using System.Drawing.Drawing2D;
 
 namespace Hardware
 {
@@ -17,7 +15,7 @@ namespace Hardware
 			var result = form.ShowDialog();
 			if (result == DialogResult.OK)
 			{
-				context = ApplicationContext.Instanse();
+				context = ApplicationContext.Instance();
 				Init();
 			}
 			else
@@ -1032,8 +1030,8 @@ namespace Hardware
 			.ToList();
 
 			using ExcelPackage package = new(path);
-			ExcelWorkbook workbook = package.Workbook;
-			ExcelWorksheet worksheet = workbook.Worksheets.Add("Техника");
+			using ExcelWorkbook workbook = package.Workbook;
+			using ExcelWorksheet worksheet = workbook.Worksheets.Add("Техника");
 
 			worksheet.Cells.Style.Font.Name = "Courier New";
 			worksheet.Cells.Style.Font.Size = 12;
@@ -1067,7 +1065,7 @@ namespace Hardware
 				row++;
 			}
 
-			ExcelRange range = worksheet.Cells[1, 1, row, 9];
+			ExcelRange range = worksheet.Cells[1, 1, row - 1, 9];
 			OfficeOpenXml.Table.ExcelTable table = worksheet.Tables.Add(range, "Техника");
 			table.TableStyle = OfficeOpenXml.Table.TableStyles.Light16;
 			range.AutoFitColumns();
@@ -1085,47 +1083,8 @@ namespace Hardware
 
 		private void выгрузитьQRкодыToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-			path = Path.Combine(path, "Hardware", "QR");
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-
-			var devices = context.Devices.Select(d => new
-			{
-				d.DeviceName.DeviceType,
-				d.DeviceName,
-				d.Serial,
-				d.Inventory
-			}).ToList();
-
-			using QRCodeGenerator qrGenerator = new();
-			foreach (var device in devices)
-			{
-				using QRCodeData qrCodeData = qrGenerator.CreateQrCode($"Тип: {device.DeviceType.Name}\nНазвание: {device.DeviceName.Name}\nС/н: {device.Serial}\nИ/н: {device.Inventory}", QRCodeGenerator.ECCLevel.Q);
-				using QRCode qrCode = new(qrCodeData);
-
-				Bitmap originalQrCode = qrCode.GetGraphic(5, Color.Black, Color.White, false);
-
-				// Изменяем размер под нужный
-				Bitmap resizedBitmap = new(100, 100);
-				using (Graphics graphics = Graphics.FromImage(resizedBitmap))
-				{
-					// Настройки для качественного масштабирования
-					graphics.CompositingQuality = CompositingQuality.HighQuality;
-					graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-					graphics.SmoothingMode = SmoothingMode.HighQuality;
-					graphics.DrawImage(originalQrCode, 0, 0, 100, 100);
-				}
-
-				// Сохраняем в JPG
-				try
-				{
-					resizedBitmap.Save(Path.Combine(path, $"{device.Serial}.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg);
-				}
-				catch { }
-			}
-
-			MessageBox.Show($"Выгрузка завершена по пути {path}");
+			QrManager qrManager = new();
+			qrManager.CreateQrImages();
 		}
 	}
 }

@@ -9,7 +9,7 @@ namespace Hardware.Forms
 		public EditDeviceProviderForm(DeviceProvider? deviceProvider)
 		{
 			InitializeComponent();
-			context = ApplicationContext.Instanse();
+			context = ApplicationContext.Instance();
 			DialogResult = DialogResult.Cancel;
 			this.deviceProvider = deviceProvider;
 			if (this.deviceProvider is not null)

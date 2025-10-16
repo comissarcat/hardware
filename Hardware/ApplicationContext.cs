@@ -9,7 +9,7 @@ namespace Hardware
 
 		public ApplicationContext() { }
 
-		public static ApplicationContext Instanse()
+		public static ApplicationContext Instance()
 		{
 			instanse ??= new ApplicationContext();
 			return instanse;

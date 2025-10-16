@@ -9,7 +9,7 @@ namespace Hardware.Forms
 		public EditDeviceNameForm(DeviceName? deviceName, DeviceType deviceType)
 		{
 			InitializeComponent();
-			context = ApplicationContext.Instanse();
+			context = ApplicationContext.Instance();
 			DialogResult = DialogResult.Cancel;
 			typeCBox.DataSource = context.DeviceTypes.OrderBy(d => d.Name)
 													 .ToList();

@@ -10,7 +10,7 @@ namespace Hardware.Forms
 		public EditDeviceTypeForm(DeviceType? deviceType)
 		{
 			InitializeComponent();
-			context = ApplicationContext.Instanse();
+			context = ApplicationContext.Instance();
 			DialogResult = DialogResult.Cancel;
 			this.deviceType = deviceType;
 			if (this.deviceType is not null)

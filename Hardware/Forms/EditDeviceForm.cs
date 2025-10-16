@@ -9,7 +9,7 @@ namespace Hardware.Forms
 		public EditDeviceForm(Device? device, Complect complect)
 		{
 			InitializeComponent();
-			context = ApplicationContext.Instanse();
+			context = ApplicationContext.Instance();
 			DialogResult = DialogResult.Cancel;
 			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
 													   .ToList();
