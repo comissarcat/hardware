@@ -82,7 +82,8 @@ namespace Hardware
 			PdfFont font;
 			try
 			{
-				font = PdfFontFactory.CreateFont("couriernew.ttf", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+				string fontFile = Directory.GetFiles(AppContext.BaseDirectory, "*.ttf").First();
+				font = PdfFontFactory.CreateFont(fontFile, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
 			}
 			catch
 			{
