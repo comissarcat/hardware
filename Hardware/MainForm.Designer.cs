@@ -114,6 +114,7 @@
 			refreshToolStripMenuItem = new ToolStripMenuItem();
 			передатьВExcelToolStripMenuItem = new ToolStripMenuItem();
 			выгрузитьQRкодыToolStripMenuItem = new ToolStripMenuItem();
+			выгрузитьИнвентарныеКарточкиToolStripMenuItem = new ToolStripMenuItem();
 			tabControl.SuspendLayout();
 			tabPage1.SuspendLayout();
 			devicesTLP.SuspendLayout();
@@ -1143,7 +1144,7 @@
 			// 
 			// menuStrip
 			// 
-			menuStrip.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem, передатьВExcelToolStripMenuItem, выгрузитьQRкодыToolStripMenuItem });
+			menuStrip.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem, передатьВExcelToolStripMenuItem, выгрузитьQRкодыToolStripMenuItem, выгрузитьИнвентарныеКарточкиToolStripMenuItem });
 			menuStrip.Location = new Point(0, 0);
 			menuStrip.Name = "menuStrip";
 			menuStrip.Size = new Size(984, 24);
@@ -1170,6 +1171,13 @@
 			выгрузитьQRкодыToolStripMenuItem.Size = new Size(128, 20);
 			выгрузитьQRкодыToolStripMenuItem.Text = "Выгрузить QR-коды";
 			выгрузитьQRкодыToolStripMenuItem.Click += выгрузитьQRкодыToolStripMenuItem_Click;
+			// 
+			// выгрузитьИнвентарныеКарточкиToolStripMenuItem
+			// 
+			выгрузитьИнвентарныеКарточкиToolStripMenuItem.Name = "выгрузитьИнвентарныеКарточкиToolStripMenuItem";
+			выгрузитьИнвентарныеКарточкиToolStripMenuItem.Size = new Size(206, 20);
+			выгрузитьИнвентарныеКарточкиToolStripMenuItem.Text = "Выгрузить инвентарные карточки";
+			выгрузитьИнвентарныеКарточкиToolStripMenuItem.Click += выгрузитьИнвентарныеКарточкиToolStripMenuItem_Click;
 			// 
 			// MainForm
 			// 
@@ -1301,5 +1309,6 @@
 		private TextBox fullListNotesTBox;
 		private ToolStripMenuItem передатьВExcelToolStripMenuItem;
 		private ToolStripMenuItem выгрузитьQRкодыToolStripMenuItem;
+		private ToolStripMenuItem выгрузитьИнвентарныеКарточкиToolStripMenuItem;
 	}
 }
