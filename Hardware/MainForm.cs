@@ -1127,11 +1127,12 @@ namespace Hardware
 			ExcelPackage package = new(fileName);
 			ExcelWorkbook workbook = package.Workbook;
 
+			List<string> savedCabinets = [];
 			foreach (var device in devices)
 			{
 				string worksheetName = $"{device.Complect.Cabinet.Building.Name} {device.Complect.Cabinet.Name}";
 				worksheetName = NonAlphabetNoNumberNoSpace().Replace(worksheetName, "_");
-				if (workbook.Worksheets.Any(item => item.Name == worksheetName))
+				if (savedCabinets.Any(item => item == worksheetName))
 					continue;
 
 				var devicesInCabinet = (from d in devices where d.Building.Id == device.Building.Id && d.Cabinet.Id == device.Cabinet.Id select d).ToList();
@@ -1391,6 +1392,8 @@ namespace Hardware
 					package = new(fileName);
 					workbook = package.Workbook;
 				}
+
+				savedCabinets.Add(worksheetName);
 			}
 
 			try
