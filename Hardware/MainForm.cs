@@ -1169,6 +1169,8 @@ namespace Hardware
 				worksheet.Cells[1, 1].Style.Font.Bold = true;
 				worksheet.Cells[1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
 
+				worksheet.Cells[2, 1].Value = $"{device.Complect.Cabinet.Building.Name} {device.Complect.Cabinet.Name}";
+
 				worksheet.Cells[4, 1].Value = "Ó÷ğåæäåíèå";
 				worksheet.Cells[4, 3, 4, 8].Merge = true;
 				worksheet.Cells[4, 3].Value = "×ÅÒÂÅĞÒÛÉ ÊÀÑÑÀÖÈÎÍÍÛÉ ÑÓÄ ÎÁÙÅÉ ŞĞÈÑÄÈÊÖÈÈ";
