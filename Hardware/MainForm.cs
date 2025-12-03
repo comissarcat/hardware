@@ -1,7 +1,5 @@
 using Hardware.Forms;
 using Hardware.Models;
-using iText.Layout;
-using iText.Layout.Element;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
@@ -15,7 +13,7 @@ namespace Hardware
 		{
 			InitializeComponent();
 			EnterPasswordForm form = new();
-			var result = form.ShowDialog();
+			DialogResult result = form.ShowDialog();
 			if (result == DialogResult.OK)
 			{
 				context = ApplicationContext.Instance();
@@ -35,14 +33,29 @@ namespace Hardware
 
 		private void InitializeButtons()
 		{
-			editBuildingBtnLeft.Text = "Добавить\nизменить";
-			editBuildingBtnRight.Text = "Добавить\nизменить";
-			editCabinetBtnLeft.Text = "Добавить\nизменить";
-			editCabinetBtnRight.Text = "Добавить\nизменить";
-			editComplectBtnLeft.Text = "Добавить\nизменить";
-			editComplectBtnRight.Text = "Добавить\nизменить";
-			editDeviceBtnLeft.Text = "Добавить\nизменить";
-			editDeviceBtnRight.Text = "Добавить\nизменить";
+			editBuildingBtnLeft.Text = "Изменить";
+			addBuildingBtnLeft.Text = "Добавить";
+
+			editBuildingBtnRight.Text = "Изменить";
+			addBuildingBtnRight.Text = "Добавить";
+
+			editCabinetBtnLeft.Text = "Изменить";
+			addCabinetBtnLeft.Text = "Добавить";
+
+			editCabinetBtnRight.Text = "Изменить";
+			addCabinetBtnRight.Text = "Добавить";
+
+			editComplectBtnLeft.Text = "Изменить";
+			addComplectBtnLeft.Text = "Добавить";
+
+			editComplectBtnRight.Text = "Изменить";
+			addComplectBtnRight.Text = "Добавить";
+
+			editDeviceBtnLeft.Text = "Изменить";
+			addDeviceBtnLeft.Text = "Добавить";
+
+			editDeviceBtnRight.Text = "Изменить";
+			addDeviceBtnRight.Text = "Добавить";
 		}
 
 		private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
@@ -83,10 +96,10 @@ namespace Hardware
 
 		private void RefreshBuildingsLBoxLeft()
 		{
-			var selectedItem = buildingsLBoxLeft.SelectedItem;
-			var selectedCabinet = cabinetsLBoxLeft.SelectedItem;
-			var selectedComplect = complectsLBoxLeft.SelectedItem;
-			var selectedDevice = devicesLBoxLeft.SelectedItem;
+			object? selectedItem = buildingsLBoxLeft.SelectedItem;
+			object? selectedCabinet = cabinetsLBoxLeft.SelectedItem;
+			object? selectedComplect = complectsLBoxLeft.SelectedItem;
+			object? selectedDevice = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				buildingsLBoxLeft.DataSource = context.Buildings.OrderBy(b => b.Name).ToList();
 			else
@@ -100,10 +113,10 @@ namespace Hardware
 
 		private void RefreshBuildingsLBoxRight()
 		{
-			var selectedItem = buildingsLBoxRight.SelectedItem;
-			var selectedCabinet = cabinetsLBoxRight.SelectedItem;
-			var selectedComplect = complectsLBoxRight.SelectedItem;
-			var selectedDevice = devicesLBoxRight.SelectedItem;
+			object? selectedItem = buildingsLBoxRight.SelectedItem;
+			object? selectedCabinet = cabinetsLBoxRight.SelectedItem;
+			object? selectedComplect = complectsLBoxRight.SelectedItem;
+			object? selectedDevice = devicesLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				buildingsLBoxRight.DataSource = context.Buildings.OrderBy(b => b.Name).ToList();
 			else
@@ -130,20 +143,22 @@ namespace Hardware
 		{
 			if (sender as Button == editBuildingBtnLeft)
 			{
-				var building = buildingsLBoxLeft.SelectedItem as Building;
+				Building? building = buildingsLBoxLeft.SelectedItem as Building;
 				EditBuilding(building);
 			}
 			else if (sender as Button == editBuildingBtnRight)
 			{
-				var building = buildingsLBoxRight.SelectedItem as Building;
+				Building? building = buildingsLBoxRight.SelectedItem as Building;
 				EditBuilding(building);
 			}
+			else
+				EditBuilding(null);
 		}
 
 		private void EditBuilding(Building? building)
 		{
-			var form = new EditBuildingForm(building);
-			var result = form.ShowDialog();
+			EditBuildingForm form = new EditBuildingForm(building);
+			DialogResult result = form.ShowDialog();
 			if (result == DialogResult.OK)
 				RefreshBuildings();
 		}
@@ -160,9 +175,9 @@ namespace Hardware
 		#region Блок работы со списком кабинетов
 		private void RefreshCabinetsLBoxLeft()
 		{
-			var selectedItem = cabinetsLBoxLeft.SelectedItem;
-			var selectedComplect = complectsLBoxLeft.SelectedItem;
-			var selectedDevice = devicesLBoxLeft.SelectedItem;
+			object? selectedItem = cabinetsLBoxLeft.SelectedItem;
+			object? selectedComplect = complectsLBoxLeft.SelectedItem;
+			object? selectedDevice = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				cabinetsLBoxLeft.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxLeft.SelectedItem)
 					.OrderBy(c => c.Name)
@@ -178,9 +193,9 @@ namespace Hardware
 
 		private void RefreshCabinetsLBoxRight()
 		{
-			var selectedItem = cabinetsLBoxRight.SelectedItem;
-			var selectedComplect = complectsLBoxRight.SelectedItem;
-			var selectedDevice = devicesLBoxLeft.SelectedItem;
+			object? selectedItem = cabinetsLBoxRight.SelectedItem;
+			object? selectedComplect = complectsLBoxRight.SelectedItem;
+			object? selectedDevice = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				cabinetsLBoxRight.DataSource = context.Cabinets.Where(c => c.Building == buildingsLBoxRight.SelectedItem)
 					.OrderBy(c => c.Name)
@@ -210,17 +225,29 @@ namespace Hardware
 		private void SwitchEditCabinetBtnLeft()
 		{
 			if (buildingsLBoxLeft.SelectedIndex != -1)
+			{
 				editCabinetBtnLeft.Enabled = true;
+				addCabinetBtnLeft.Enabled = true;
+			}
 			else
+			{
 				editCabinetBtnLeft.Enabled = false;
+				addCabinetBtnLeft.Enabled = false;
+			}
 		}
 
 		private void SwitchEditCabinetBtnRight()
 		{
 			if (buildingsLBoxRight.SelectedIndex != -1)
+			{
 				editCabinetBtnRight.Enabled = true;
+				addCabinetBtnRight.Enabled = true;
+			}
 			else
+			{
 				editCabinetBtnRight.Enabled = false;
+				addCabinetBtnRight.Enabled = false;
+			}
 		}
 
 		private void SwitchMoveCabinetBtns()
@@ -273,22 +300,32 @@ namespace Hardware
 		{
 			if (sender as Button == editCabinetBtnLeft)
 			{
-				var cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
-				var building = cabinet is null ? buildingsLBoxLeft.SelectedItem as Building : cabinet.Building;
+				Cabinet? cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
+				Building? building = cabinet is null ? buildingsLBoxLeft.SelectedItem as Building : cabinet.Building;
 				EditCabinet(cabinet, building);
 			}
 			else if (sender as Button == editCabinetBtnRight)
 			{
-				var cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
-				var building = cabinet is null ? buildingsLBoxRight.SelectedItem as Building : cabinet.Building;
+				Cabinet? cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
+				Building? building = cabinet is null ? buildingsLBoxRight.SelectedItem as Building : cabinet.Building;
 				EditCabinet(cabinet, building);
+			}
+			else if (sender as Button == addCabinetBtnLeft)
+			{
+				Building? building = buildingsLBoxLeft.SelectedItem as Building;
+				EditCabinet(null, building);
+			}
+			else
+			{
+				Building? building = buildingsLBoxRight.SelectedItem as Building;
+				EditCabinet(null, building);
 			}
 		}
 
 		private void EditCabinet(Cabinet? cabinet, Building building)
 		{
-			var form = new EditCabinetForm(cabinet, building);
-			var result = form.ShowDialog();
+			EditCabinetForm form = new EditCabinetForm(cabinet, building);
+			DialogResult result = form.ShowDialog();
 			if (result == DialogResult.OK)
 				RefreshBuildings();
 		}
@@ -303,19 +340,19 @@ namespace Hardware
 
 		private async void moveCabinetToRightBtn_Click(object sender, EventArgs e)
 		{
-			var before = new List<string>();
-			var after = new List<string>();
-			var cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
-			var devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
+			List<string> before = [];
+			List<string> after = [];
+			Cabinet? cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
+			List<Device> devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
 				.Where(d => d.Complect.Cabinet == cabinet)
 				.ToList();
 
-			foreach (var device in devicesInCabinet)
+			foreach (Device device in devicesInCabinet)
 				before.Add(device.ToStringForHistory());
 
 			cabinet.Building = buildingsLBoxRight.SelectedItem as Building;
 
-			foreach (var device in devicesInCabinet)
+			foreach (Device device in devicesInCabinet)
 				after.Add(device.ToStringForHistory());
 
 			for (int i = 0; i < devicesInCabinet.Count; i++)
@@ -341,19 +378,19 @@ namespace Hardware
 
 		private async void moveCabinetToLeftBtn_Click(object sender, EventArgs e)
 		{
-			var before = new List<string>();
-			var after = new List<string>();
-			var cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
-			var devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
+			List<string> before = [];
+			List<string> after = [];
+			Cabinet? cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
+			List<Device> devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
 				.Where(d => d.Complect.Cabinet == cabinet)
 				.ToList();
 
-			foreach (var device in devicesInCabinet)
+			foreach (Device device in devicesInCabinet)
 				before.Add(device.ToStringForHistory());
 
 			cabinet.Building = buildingsLBoxLeft.SelectedItem as Building;
 
-			foreach (var device in devicesInCabinet)
+			foreach (Device device in devicesInCabinet)
 				after.Add(device.ToStringForHistory());
 
 			for (int i = 0; i < devicesInCabinet.Count; i++)
@@ -381,8 +418,8 @@ namespace Hardware
 		#region Блок работы со списком комплектов
 		private void RefreshComplectsLBoxLeft()
 		{
-			var selectedItem = complectsLBoxLeft.SelectedItem;
-			var selectedDevice = devicesLBoxLeft.SelectedItem;
+			object? selectedItem = complectsLBoxLeft.SelectedItem;
+			object? selectedDevice = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				complectsLBoxLeft.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxLeft.SelectedItem)
 					.OrderBy(c => c.Name)
@@ -401,8 +438,8 @@ namespace Hardware
 
 		private void RefreshComplectsLBoxRight()
 		{
-			var selectedItem = complectsLBoxRight.SelectedItem;
-			var selectedDevice = devicesLBoxRight.SelectedItem;
+			object? selectedItem = complectsLBoxRight.SelectedItem;
+			object? selectedDevice = devicesLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				complectsLBoxRight.DataSource = context.Complects.Where(c => c.Cabinet == cabinetsLBoxRight.SelectedItem)
 					.OrderBy(c => c.Name)
@@ -435,17 +472,29 @@ namespace Hardware
 		private void SwitchEditComplectBtnLeft()
 		{
 			if (cabinetsLBoxLeft.SelectedIndex != -1)
+			{
 				editComplectBtnLeft.Enabled = true;
+				addComplectBtnLeft.Enabled = true;
+			}
 			else
+			{
 				editComplectBtnLeft.Enabled = false;
+				addComplectBtnLeft.Enabled = false;
+			}
 		}
 
 		private void SwitchEditComplectBtnRight()
 		{
 			if (cabinetsLBoxRight.SelectedIndex != -1)
+			{
 				editComplectBtnRight.Enabled = true;
+				addComplectBtnRight.Enabled = true;
+			}
 			else
+			{
 				editComplectBtnRight.Enabled = false;
+				addComplectBtnRight.Enabled = false;
+			}
 		}
 
 		private void SwitchMoveComplectBtns()
@@ -498,22 +547,32 @@ namespace Hardware
 		{
 			if (sender as Button == editComplectBtnLeft)
 			{
-				var complect = complectsLBoxLeft.SelectedItem as Complect;
-				var cabinet = complect is null ? cabinetsLBoxLeft.SelectedItem as Cabinet : complect.Cabinet;
+				Complect? complect = complectsLBoxLeft.SelectedItem as Complect;
+				Cabinet? cabinet = complect is null ? cabinetsLBoxLeft.SelectedItem as Cabinet : complect.Cabinet;
 				EditComplect(complect, cabinet);
 			}
 			else if (sender as Button == editComplectBtnRight)
 			{
-				var complect = complectsLBoxRight.SelectedItem as Complect;
-				var cabinet = complect is null ? cabinetsLBoxRight.SelectedItem as Cabinet : complect.Cabinet;
+				Complect? complect = complectsLBoxRight.SelectedItem as Complect;
+				Cabinet? cabinet = complect is null ? cabinetsLBoxRight.SelectedItem as Cabinet : complect.Cabinet;
 				EditComplect(complect, cabinet);
+			}
+			else if (sender as Button == addComplectBtnLeft)
+			{
+				Cabinet? cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
+				EditComplect(null, cabinet);
+			}
+			else
+			{
+				Cabinet? cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
+				EditComplect(null, cabinet);
 			}
 		}
 
 		private void EditComplect(Complect? complect, Cabinet cabinet)
 		{
-			var form = new EditComplectForm(complect, cabinet);
-			var result = form.ShowDialog();
+			EditComplectForm form = new EditComplectForm(complect, cabinet);
+			DialogResult result = form.ShowDialog();
 			if (result == DialogResult.OK)
 				RefreshBuildings();
 		}
@@ -528,19 +587,19 @@ namespace Hardware
 
 		private async void moveComplectToRightBtn_Click(object sender, EventArgs e)
 		{
-			var before = new List<string>();
-			var after = new List<string>();
-			var complect = complectsLBoxLeft.SelectedItem as Complect;
-			var devicesInComplect = context.Devices.Include(d => d.Complect.Cabinet.Building)
+			List<string> before = [];
+			List<string> after = [];
+			Complect? complect = complectsLBoxLeft.SelectedItem as Complect;
+			List<Device> devicesInComplect = context.Devices.Include(d => d.Complect.Cabinet.Building)
 				.Where(d => d.Complect == complect)
 				.ToList();
 
-			foreach (var device in devicesInComplect)
+			foreach (Device device in devicesInComplect)
 				before.Add(device.ToStringForHistory());
 
 			complect.Cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
 
-			foreach (var device in devicesInComplect)
+			foreach (Device device in devicesInComplect)
 				after.Add(device.ToStringForHistory());
 
 			for (int i = 0; i < devicesInComplect.Count; i++)
@@ -566,19 +625,19 @@ namespace Hardware
 
 		private async void moveComplectToLeftBtn_Click(object sender, EventArgs e)
 		{
-			var before = new List<string>();
-			var after = new List<string>();
-			var complect = complectsLBoxRight.SelectedItem as Complect;
-			var devicesInComplect = context.Devices.Include(d => d.Complect.Cabinet.Building)
+			List<string> before = [];
+			List<string> after = [];
+			Complect? complect = complectsLBoxRight.SelectedItem as Complect;
+			List<Device> devicesInComplect = context.Devices.Include(d => d.Complect.Cabinet.Building)
 				.Where(d => d.Complect == complect)
 				.ToList();
 
-			foreach (var device in devicesInComplect)
+			foreach (Device device in devicesInComplect)
 				before.Add(device.ToStringForHistory());
 
 			complect.Cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
 
-			foreach (var device in devicesInComplect)
+			foreach (Device device in devicesInComplect)
 				after.Add(device.ToStringForHistory());
 
 			for (int i = 0; i < devicesInComplect.Count; i++)
@@ -612,7 +671,7 @@ namespace Hardware
 
 		private void RefreshDevicesLBoxLeft()
 		{
-			var selectedItem = devicesLBoxLeft.SelectedItem;
+			object? selectedItem = devicesLBoxLeft.SelectedItem;
 			if (searchTBoxLeft.Text.Length == 0)
 				devicesLBoxLeft.DataSource = context.Devices.Include(d => d.DeviceName)
 					.Where(d => d.Complect == complectsLBoxLeft.SelectedItem)
@@ -626,7 +685,7 @@ namespace Hardware
 
 		private void RefreshDevicesLBoxRight()
 		{
-			var selectedItem = devicesLBoxRight.SelectedItem;
+			object? selectedItem = devicesLBoxRight.SelectedItem;
 			if (searchTBoxRight.Text.Length == 0)
 				devicesLBoxRight.DataSource = context.Devices.Include(d => d.DeviceName)
 					.Where(d => d.Complect == complectsLBoxRight.SelectedItem)
@@ -650,17 +709,29 @@ namespace Hardware
 		private void SwitchEditDeviceBtnLeft()
 		{
 			if (complectsLBoxLeft.SelectedIndex != -1 && context.DeviceNames.Any() && context.DeviceProviders.Any())
+			{
 				editDeviceBtnLeft.Enabled = true;
+				addDeviceBtnLeft.Enabled = true;
+			}
 			else
+			{
 				editDeviceBtnLeft.Enabled = false;
+				addDeviceBtnLeft.Enabled = false;
+			}
 		}
 
 		private void SwitchEditDeviceBtnRight()
 		{
 			if (complectsLBoxRight.SelectedIndex != -1 && context.DeviceNames.Any() && context.DeviceProviders.Any())
+			{
 				editDeviceBtnRight.Enabled = true;
+				addDeviceBtnRight.Enabled = true;
+			}
 			else
+			{
 				editDeviceBtnRight.Enabled = false;
+				addDeviceBtnRight.Enabled = false;
+			}
 		}
 
 		private void SwitchMoveDeviceBtns()
@@ -713,15 +784,25 @@ namespace Hardware
 		{
 			if (sender as Button == editDeviceBtnLeft)
 			{
-				var device = (Device?)devicesLBoxLeft.SelectedItem;
-				var complect = device is null ? complectsLBoxLeft.SelectedItem as Complect : device.Complect;
+				Device? device = (Device?)devicesLBoxLeft.SelectedItem;
+				Complect? complect = device is null ? complectsLBoxLeft.SelectedItem as Complect : device.Complect;
 				EditDevice(device, complect);
 			}
 			else if (sender as Button == editDeviceBtnRight)
 			{
-				var device = (Device?)devicesLBoxRight.SelectedItem;
-				var complect = device is null ? complectsLBoxRight.SelectedItem as Complect : device.Complect;
+				Device? device = (Device?)devicesLBoxRight.SelectedItem;
+				Complect? complect = device is null ? complectsLBoxRight.SelectedItem as Complect : device.Complect;
 				EditDevice(device, complect);
+			}
+			else if (sender as Button == addDeviceBtnLeft)
+			{
+				Complect? complect = complectsLBoxLeft.SelectedItem as Complect;
+				EditDevice(null, complect);
+			}
+			else
+			{
+				Complect? complect = complectsLBoxRight.SelectedItem as Complect;
+				EditDevice(null, complect);
 			}
 		}
 

@@ -33,6 +33,10 @@
 			tabPage1 = new TabPage();
 			devicesTLP = new TableLayoutPanel();
 			devicesTLPLeft = new TableLayoutPanel();
+			addDeviceBtnLeft = new Button();
+			addComplectBtnLeft = new Button();
+			addCabinetBtnLeft = new Button();
+			addBuildingBtnLeft = new Button();
 			searchLabelLeft = new Label();
 			searchTBoxLeft = new TextBox();
 			buildingsLabelLeft = new Label();
@@ -115,6 +119,10 @@
 			передатьВExcelToolStripMenuItem = new ToolStripMenuItem();
 			выгрузитьQRкодыToolStripMenuItem = new ToolStripMenuItem();
 			выгрузитьИнвентарныеКарточкиToolStripMenuItem = new ToolStripMenuItem();
+			addBuildingBtnRight = new Button();
+			addCabinetBtnRight = new Button();
+			addComplectBtnRight = new Button();
+			addDeviceBtnRight = new Button();
 			tabControl.SuspendLayout();
 			tabPage1.SuspendLayout();
 			devicesTLP.SuspendLayout();
@@ -183,6 +191,10 @@
 			devicesTLPLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
 			devicesTLPLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
 			devicesTLPLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+			devicesTLPLeft.Controls.Add(addDeviceBtnLeft, 3, 3);
+			devicesTLPLeft.Controls.Add(addComplectBtnLeft, 2, 3);
+			devicesTLPLeft.Controls.Add(addCabinetBtnLeft, 1, 3);
+			devicesTLPLeft.Controls.Add(addBuildingBtnLeft, 0, 3);
 			devicesTLPLeft.Controls.Add(searchLabelLeft, 0, 0);
 			devicesTLPLeft.Controls.Add(searchTBoxLeft, 1, 0);
 			devicesTLPLeft.Controls.Add(buildingsLabelLeft, 0, 1);
@@ -193,20 +205,72 @@
 			devicesTLPLeft.Controls.Add(editCabinetBtnLeft, 1, 2);
 			devicesTLPLeft.Controls.Add(editComplectBtnLeft, 2, 2);
 			devicesTLPLeft.Controls.Add(editDeviceBtnLeft, 3, 2);
-			devicesTLPLeft.Controls.Add(buildingsLBoxLeft, 0, 3);
-			devicesTLPLeft.Controls.Add(cabinetsLBoxLeft, 1, 3);
-			devicesTLPLeft.Controls.Add(complectsLBoxLeft, 2, 3);
-			devicesTLPLeft.Controls.Add(devicesLBoxLeft, 3, 3);
+			devicesTLPLeft.Controls.Add(buildingsLBoxLeft, 0, 4);
+			devicesTLPLeft.Controls.Add(cabinetsLBoxLeft, 1, 4);
+			devicesTLPLeft.Controls.Add(complectsLBoxLeft, 2, 4);
+			devicesTLPLeft.Controls.Add(devicesLBoxLeft, 3, 4);
 			devicesTLPLeft.Dock = DockStyle.Fill;
 			devicesTLPLeft.Location = new Point(3, 3);
 			devicesTLPLeft.Name = "devicesTLPLeft";
-			devicesTLPLeft.RowCount = 4;
+			devicesTLPLeft.RowCount = 5;
+			devicesTLPLeft.RowStyles.Add(new RowStyle());
 			devicesTLPLeft.RowStyles.Add(new RowStyle());
 			devicesTLPLeft.RowStyles.Add(new RowStyle());
 			devicesTLPLeft.RowStyles.Add(new RowStyle());
 			devicesTLPLeft.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 			devicesTLPLeft.Size = new Size(419, 397);
 			devicesTLPLeft.TabIndex = 0;
+			// 
+			// addDeviceBtnLeft
+			// 
+			addDeviceBtnLeft.Anchor = AnchorStyles.None;
+			addDeviceBtnLeft.AutoSize = true;
+			addDeviceBtnLeft.Enabled = false;
+			addDeviceBtnLeft.Location = new Point(286, 78);
+			addDeviceBtnLeft.Name = "addDeviceBtnLeft";
+			addDeviceBtnLeft.Size = new Size(96, 25);
+			addDeviceBtnLeft.TabIndex = 19;
+			addDeviceBtnLeft.Text = "editDeviceBtn1";
+			addDeviceBtnLeft.UseVisualStyleBackColor = true;
+			addDeviceBtnLeft.Click += editDeviceBtn_Click;
+			// 
+			// addComplectBtnLeft
+			// 
+			addComplectBtnLeft.Anchor = AnchorStyles.None;
+			addComplectBtnLeft.AutoSize = true;
+			addComplectBtnLeft.Enabled = false;
+			addComplectBtnLeft.Location = new Point(169, 78);
+			addComplectBtnLeft.Name = "addComplectBtnLeft";
+			addComplectBtnLeft.Size = new Size(77, 25);
+			addComplectBtnLeft.TabIndex = 18;
+			addComplectBtnLeft.Text = "editComplectBtn1";
+			addComplectBtnLeft.UseVisualStyleBackColor = true;
+			addComplectBtnLeft.Click += editComplectBtn_Click;
+			// 
+			// addCabinetBtnLeft
+			// 
+			addCabinetBtnLeft.Anchor = AnchorStyles.None;
+			addCabinetBtnLeft.AutoSize = true;
+			addCabinetBtnLeft.Enabled = false;
+			addCabinetBtnLeft.Location = new Point(86, 78);
+			addCabinetBtnLeft.Name = "addCabinetBtnLeft";
+			addCabinetBtnLeft.Size = new Size(77, 25);
+			addCabinetBtnLeft.TabIndex = 17;
+			addCabinetBtnLeft.Text = "editCabinetBtn1";
+			addCabinetBtnLeft.UseVisualStyleBackColor = true;
+			addCabinetBtnLeft.Click += editCabinetBtn_Click;
+			// 
+			// addBuildingBtnLeft
+			// 
+			addBuildingBtnLeft.Anchor = AnchorStyles.None;
+			addBuildingBtnLeft.AutoSize = true;
+			addBuildingBtnLeft.Location = new Point(3, 78);
+			addBuildingBtnLeft.Name = "addBuildingBtnLeft";
+			addBuildingBtnLeft.Size = new Size(77, 25);
+			addBuildingBtnLeft.TabIndex = 16;
+			addBuildingBtnLeft.Text = "editBuildingBtn1";
+			addBuildingBtnLeft.UseVisualStyleBackColor = true;
+			addBuildingBtnLeft.Click += editBuildingBtn_Click;
 			// 
 			// searchLabelLeft
 			// 
@@ -324,9 +388,9 @@
 			buildingsLBoxLeft.Dock = DockStyle.Fill;
 			buildingsLBoxLeft.FormattingEnabled = true;
 			buildingsLBoxLeft.ItemHeight = 15;
-			buildingsLBoxLeft.Location = new Point(3, 78);
+			buildingsLBoxLeft.Location = new Point(3, 109);
 			buildingsLBoxLeft.Name = "buildingsLBoxLeft";
-			buildingsLBoxLeft.Size = new Size(77, 316);
+			buildingsLBoxLeft.Size = new Size(77, 285);
 			buildingsLBoxLeft.TabIndex = 0;
 			buildingsLBoxLeft.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
 			// 
@@ -335,9 +399,9 @@
 			cabinetsLBoxLeft.Dock = DockStyle.Fill;
 			cabinetsLBoxLeft.FormattingEnabled = true;
 			cabinetsLBoxLeft.ItemHeight = 15;
-			cabinetsLBoxLeft.Location = new Point(86, 78);
+			cabinetsLBoxLeft.Location = new Point(86, 109);
 			cabinetsLBoxLeft.Name = "cabinetsLBoxLeft";
-			cabinetsLBoxLeft.Size = new Size(77, 316);
+			cabinetsLBoxLeft.Size = new Size(77, 285);
 			cabinetsLBoxLeft.TabIndex = 1;
 			cabinetsLBoxLeft.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
 			// 
@@ -346,9 +410,9 @@
 			complectsLBoxLeft.Dock = DockStyle.Fill;
 			complectsLBoxLeft.FormattingEnabled = true;
 			complectsLBoxLeft.ItemHeight = 15;
-			complectsLBoxLeft.Location = new Point(169, 78);
+			complectsLBoxLeft.Location = new Point(169, 109);
 			complectsLBoxLeft.Name = "complectsLBoxLeft";
-			complectsLBoxLeft.Size = new Size(77, 316);
+			complectsLBoxLeft.Size = new Size(77, 285);
 			complectsLBoxLeft.TabIndex = 6;
 			complectsLBoxLeft.SelectedValueChanged += complectsLBox_SelectedValueChanged;
 			// 
@@ -357,9 +421,9 @@
 			devicesLBoxLeft.Dock = DockStyle.Fill;
 			devicesLBoxLeft.FormattingEnabled = true;
 			devicesLBoxLeft.ItemHeight = 15;
-			devicesLBoxLeft.Location = new Point(252, 78);
+			devicesLBoxLeft.Location = new Point(252, 109);
 			devicesLBoxLeft.Name = "devicesLBoxLeft";
-			devicesLBoxLeft.Size = new Size(164, 316);
+			devicesLBoxLeft.Size = new Size(164, 285);
 			devicesLBoxLeft.TabIndex = 15;
 			devicesLBoxLeft.SelectedValueChanged += devicesLBox_SelectedValueChanged;
 			// 
@@ -370,6 +434,10 @@
 			devicesTLPRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
 			devicesTLPRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
 			devicesTLPRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
+			devicesTLPRight.Controls.Add(addDeviceBtnRight, 3, 3);
+			devicesTLPRight.Controls.Add(addComplectBtnRight, 2, 3);
+			devicesTLPRight.Controls.Add(addCabinetBtnRight, 1, 3);
+			devicesTLPRight.Controls.Add(addBuildingBtnRight, 0, 3);
 			devicesTLPRight.Controls.Add(searchLabelRight, 0, 0);
 			devicesTLPRight.Controls.Add(searchTBoxRight, 1, 0);
 			devicesTLPRight.Controls.Add(buildingsLabelRight, 0, 1);
@@ -380,14 +448,15 @@
 			devicesTLPRight.Controls.Add(editCabinetBtnRight, 1, 2);
 			devicesTLPRight.Controls.Add(editComplectBtnRight, 2, 2);
 			devicesTLPRight.Controls.Add(editDeviceBtnRight, 3, 2);
-			devicesTLPRight.Controls.Add(buildingsLBoxRight, 0, 3);
-			devicesTLPRight.Controls.Add(cabinetsLBoxRight, 1, 3);
-			devicesTLPRight.Controls.Add(complectsLBoxRight, 2, 3);
-			devicesTLPRight.Controls.Add(devicesLBoxRight, 3, 3);
+			devicesTLPRight.Controls.Add(buildingsLBoxRight, 0, 4);
+			devicesTLPRight.Controls.Add(cabinetsLBoxRight, 1, 4);
+			devicesTLPRight.Controls.Add(complectsLBoxRight, 2, 4);
+			devicesTLPRight.Controls.Add(devicesLBoxRight, 3, 4);
 			devicesTLPRight.Dock = DockStyle.Fill;
 			devicesTLPRight.Location = new Point(547, 3);
 			devicesTLPRight.Name = "devicesTLPRight";
-			devicesTLPRight.RowCount = 4;
+			devicesTLPRight.RowCount = 5;
+			devicesTLPRight.RowStyles.Add(new RowStyle());
 			devicesTLPRight.RowStyles.Add(new RowStyle());
 			devicesTLPRight.RowStyles.Add(new RowStyle());
 			devicesTLPRight.RowStyles.Add(new RowStyle());
@@ -511,9 +580,9 @@
 			buildingsLBoxRight.Dock = DockStyle.Fill;
 			buildingsLBoxRight.FormattingEnabled = true;
 			buildingsLBoxRight.ItemHeight = 15;
-			buildingsLBoxRight.Location = new Point(3, 78);
+			buildingsLBoxRight.Location = new Point(3, 109);
 			buildingsLBoxRight.Name = "buildingsLBoxRight";
-			buildingsLBoxRight.Size = new Size(78, 316);
+			buildingsLBoxRight.Size = new Size(78, 285);
 			buildingsLBoxRight.TabIndex = 0;
 			buildingsLBoxRight.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
 			// 
@@ -522,9 +591,9 @@
 			cabinetsLBoxRight.Dock = DockStyle.Fill;
 			cabinetsLBoxRight.FormattingEnabled = true;
 			cabinetsLBoxRight.ItemHeight = 15;
-			cabinetsLBoxRight.Location = new Point(87, 78);
+			cabinetsLBoxRight.Location = new Point(87, 109);
 			cabinetsLBoxRight.Name = "cabinetsLBoxRight";
-			cabinetsLBoxRight.Size = new Size(78, 316);
+			cabinetsLBoxRight.Size = new Size(78, 285);
 			cabinetsLBoxRight.TabIndex = 1;
 			cabinetsLBoxRight.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
 			// 
@@ -533,9 +602,9 @@
 			complectsLBoxRight.Dock = DockStyle.Fill;
 			complectsLBoxRight.FormattingEnabled = true;
 			complectsLBoxRight.ItemHeight = 15;
-			complectsLBoxRight.Location = new Point(171, 78);
+			complectsLBoxRight.Location = new Point(171, 109);
 			complectsLBoxRight.Name = "complectsLBoxRight";
-			complectsLBoxRight.Size = new Size(78, 316);
+			complectsLBoxRight.Size = new Size(78, 285);
 			complectsLBoxRight.TabIndex = 7;
 			complectsLBoxRight.SelectedValueChanged += complectsLBox_SelectedValueChanged;
 			// 
@@ -544,9 +613,9 @@
 			devicesLBoxRight.Dock = DockStyle.Fill;
 			devicesLBoxRight.FormattingEnabled = true;
 			devicesLBoxRight.ItemHeight = 15;
-			devicesLBoxRight.Location = new Point(255, 78);
+			devicesLBoxRight.Location = new Point(255, 109);
 			devicesLBoxRight.Name = "devicesLBoxRight";
-			devicesLBoxRight.Size = new Size(162, 316);
+			devicesLBoxRight.Size = new Size(162, 285);
 			devicesLBoxRight.TabIndex = 16;
 			devicesLBoxRight.SelectedValueChanged += devicesLBox_SelectedValueChanged;
 			// 
@@ -1179,6 +1248,57 @@
 			выгрузитьИнвентарныеКарточкиToolStripMenuItem.Text = "Выгрузить инвентарные карточки";
 			выгрузитьИнвентарныеКарточкиToolStripMenuItem.Click += выгрузитьИнвентарныеКарточкиToolStripMenuItem_Click;
 			// 
+			// addBuildingBtnRight
+			// 
+			addBuildingBtnRight.Anchor = AnchorStyles.None;
+			addBuildingBtnRight.AutoSize = true;
+			addBuildingBtnRight.Location = new Point(3, 78);
+			addBuildingBtnRight.Name = "addBuildingBtnRight";
+			addBuildingBtnRight.Size = new Size(78, 25);
+			addBuildingBtnRight.TabIndex = 17;
+			addBuildingBtnRight.Text = "editBuildingBtn1";
+			addBuildingBtnRight.UseVisualStyleBackColor = true;
+			addBuildingBtnRight.Click += editBuildingBtn_Click;
+			// 
+			// addCabinetBtnRight
+			// 
+			addCabinetBtnRight.Anchor = AnchorStyles.None;
+			addCabinetBtnRight.AutoSize = true;
+			addCabinetBtnRight.Enabled = false;
+			addCabinetBtnRight.Location = new Point(87, 78);
+			addCabinetBtnRight.Name = "addCabinetBtnRight";
+			addCabinetBtnRight.Size = new Size(78, 25);
+			addCabinetBtnRight.TabIndex = 18;
+			addCabinetBtnRight.Text = "editCabinetBtn1";
+			addCabinetBtnRight.UseVisualStyleBackColor = true;
+			addCabinetBtnRight.Click += editCabinetBtn_Click;
+			// 
+			// addComplectBtnRight
+			// 
+			addComplectBtnRight.Anchor = AnchorStyles.None;
+			addComplectBtnRight.AutoSize = true;
+			addComplectBtnRight.Enabled = false;
+			addComplectBtnRight.Location = new Point(171, 78);
+			addComplectBtnRight.Name = "addComplectBtnRight";
+			addComplectBtnRight.Size = new Size(78, 25);
+			addComplectBtnRight.TabIndex = 19;
+			addComplectBtnRight.Text = "editComplectBtn1";
+			addComplectBtnRight.UseVisualStyleBackColor = true;
+			addComplectBtnRight.Click += editComplectBtn_Click;
+			// 
+			// addDeviceBtnRight
+			// 
+			addDeviceBtnRight.Anchor = AnchorStyles.None;
+			addDeviceBtnRight.AutoSize = true;
+			addDeviceBtnRight.Enabled = false;
+			addDeviceBtnRight.Location = new Point(288, 78);
+			addDeviceBtnRight.Name = "addDeviceBtnRight";
+			addDeviceBtnRight.Size = new Size(96, 25);
+			addDeviceBtnRight.TabIndex = 20;
+			addDeviceBtnRight.Text = "editDeviceBtn1";
+			addDeviceBtnRight.UseVisualStyleBackColor = true;
+			addDeviceBtnRight.Click += editDeviceBtn_Click;
+			// 
 			// MainForm
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1310,5 +1430,13 @@
 		private ToolStripMenuItem передатьВExcelToolStripMenuItem;
 		private ToolStripMenuItem выгрузитьQRкодыToolStripMenuItem;
 		private ToolStripMenuItem выгрузитьИнвентарныеКарточкиToolStripMenuItem;
+		private Button addDeviceBtnLeft;
+		private Button addComplectBtnLeft;
+		private Button addCabinetBtnLeft;
+		private Button addBuildingBtnLeft;
+		private Button addDeviceBtnRight;
+		private Button addComplectBtnRight;
+		private Button addCabinetBtnRight;
+		private Button addBuildingBtnRight;
 	}
 }
