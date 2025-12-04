@@ -1226,7 +1226,7 @@ namespace Hardware
 				worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
 				worksheet.PrinterSettings.PaperSize = ePaperSize.A4;
 
-				worksheet.Cells.Style.Font.Name = "Arial";
+				worksheet.Cells.Style.Font.Name = "Courier New";
 				worksheet.Cells.Style.Font.Size = 8;
 				worksheet.Cells.Style.WrapText = true;
 				worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
