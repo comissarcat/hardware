@@ -36,26 +36,29 @@ namespace Hardware
 			using QRCodeGenerator qrGenerator = new();
 			foreach (var device in devices)
 			{
-				using QRCodeData qrCodeData = qrGenerator.CreateQrCode($"Тип: {device.DeviceType.Name}\nНазвание: {device.DeviceName.Name}\nС/н: {device.Serial}\nИ/н: {device.Inventory}", QRCodeGenerator.ECCLevel.Q);
+				using QRCodeData qrCodeData = qrGenerator.CreateQrCode($"Тип: {device.DeviceType.Name}\nНазвание: {device.DeviceName.Name}\nС/н: {device.Serial}\nИ/н: {device.Inventory}", QRCodeGenerator.ECCLevel.H);
 				using QRCode qrCode = new(qrCodeData);
 
-				Bitmap originalQrCode = qrCode.GetGraphic(5, System.Drawing.Color.Black, System.Drawing.Color.White, false);
+				Bitmap originalQrCode = qrCode.GetGraphic(25, Color.Black, Color.White, true);
 
 				// Изменяем размер под нужный
-				Bitmap resizedBitmap = new(100, 100);
+				Bitmap resizedBitmap = new(300, 300);
 				using (Graphics graphics = Graphics.FromImage(resizedBitmap))
 				{
 					// Настройки для качественного масштабирования
 					graphics.CompositingQuality = CompositingQuality.HighQuality;
 					graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
 					graphics.SmoothingMode = SmoothingMode.HighQuality;
-					graphics.DrawImage(originalQrCode, 0, 0, 100, 100);
+					graphics.DrawImage(originalQrCode, 0, 0, 300, 300);
 				}
 
 				// Сохраняем в JPG
+				string fileName = Path.Combine(path, $"{device.Serial}.jpg");
+				if (File.Exists(fileName))
+					File.Delete(fileName);
 				try
 				{
-					resizedBitmap.Save(Path.Combine(path, $"{device.Serial}.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg);
+					resizedBitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
 				}
 				catch { }
 			}
