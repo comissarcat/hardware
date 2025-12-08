@@ -118,7 +118,7 @@ namespace Hardware
 				try
 				{
 					ImageData imageData = ImageDataFactory.Create(image);
-					Image pdfImage = new Image(imageData).SetWidth(100).SetHeight(100);
+					Image pdfImage = new Image(imageData).SetWidth(75).SetHeight(75);
 
 					cellContent.Add(pdfImage);
 				}
