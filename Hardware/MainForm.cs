@@ -108,6 +108,8 @@ namespace Hardware
 			RestoreSelectedItem(cabinetsLBoxLeft, selectedCabinet);
 			RestoreSelectedItem(complectsLBoxLeft, selectedComplect);
 			RestoreSelectedItem(devicesLBoxLeft, selectedDevice);
+			if (buildingsLBoxLeft.Items.Count == 0)
+				RefreshCabinetsLBoxLeft();
 			SwitchEditCabinetBtnLeft();
 		}
 
@@ -125,6 +127,8 @@ namespace Hardware
 			RestoreSelectedItem(cabinetsLBoxRight, selectedCabinet);
 			RestoreSelectedItem(complectsLBoxRight, selectedComplect);
 			RestoreSelectedItem(devicesLBoxRight, selectedDevice);
+			if (buildingsLBoxRight.Items.Count == 0)
+				RefreshCabinetsLBoxRight();
 			SwitchEditCabinetBtnRight();
 		}
 
@@ -187,6 +191,8 @@ namespace Hardware
 			RestoreSelectedItem(cabinetsLBoxLeft, selectedItem);
 			RestoreSelectedItem(complectsLBoxLeft, selectedComplect);
 			RestoreSelectedItem(devicesLBoxLeft, selectedDevice);
+			if (cabinetsLBoxLeft.Items.Count == 0)
+				RefreshComplectsLBoxLeft();
 			SwitchEditComplectBtnLeft();
 			SwitchMoveCabinetBtns();
 		}
@@ -205,6 +211,8 @@ namespace Hardware
 			RestoreSelectedItem(cabinetsLBoxRight, selectedItem);
 			RestoreSelectedItem(complectsLBoxRight, selectedComplect);
 			RestoreSelectedItem(devicesLBoxRight, selectedDevice);
+			if (cabinetsLBoxRight.Items.Count == 0)
+				RefreshComplectsLBoxRight();
 			SwitchEditComplectBtnRight();
 			SwitchMoveCabinetBtns();
 		}
@@ -212,6 +220,8 @@ namespace Hardware
 		private List<Cabinet> SearchCabinetByDevice(string text, Building? building)
 		{
 			text = text.ToLower();
+			if (building == null)
+				return [];
 			return context.Devices.ToList()
 				.Where(d => d.ToString().ToLower().Contains(text))
 				.GroupBy(d => d.Complect.Cabinet)
@@ -428,7 +438,7 @@ namespace Hardware
 				complectsLBoxLeft.DataSource = SearchComplectByDevice(searchTBoxLeft.Text, cabinetsLBoxLeft.SelectedItem as Cabinet);
 
 			if (complectsLBoxLeft.Items.Count == 0)
-				devicesLBoxLeft.DataSource = null;
+				RefreshDevicesLBoxLeft();
 
 			RestoreSelectedItem(complectsLBoxLeft, selectedItem);
 			RestoreSelectedItem(devicesLBoxLeft, selectedDevice);
@@ -448,7 +458,7 @@ namespace Hardware
 				complectsLBoxRight.DataSource = SearchComplectByDevice(searchTBoxRight.Text, cabinetsLBoxRight.SelectedItem as Cabinet);
 
 			if (complectsLBoxRight.Items.Count == 0)
-				devicesLBoxRight.DataSource = null;
+				RefreshDevicesLBoxRight();
 
 			RestoreSelectedItem(complectsLBoxRight, selectedItem);
 			RestoreSelectedItem(devicesLBoxRight, selectedDevice);
@@ -459,6 +469,8 @@ namespace Hardware
 		private List<Complect> SearchComplectByDevice(string text, Cabinet? cabinet)
 		{
 			text = text.ToLower();
+			if (cabinet == null)
+				return [];
 			return context.Devices.ToList()
 				.Where(d => d.ToString().ToLower().Contains(text))
 				.GroupBy(d => d.Complect)
@@ -700,6 +712,8 @@ namespace Hardware
 		private List<Device> SearchDevice(string text, Complect? complect)
 		{
 			text = text.ToLower();
+			if (complect == null)
+				return [];
 			return context.Devices.ToList()
 				.Where(d => d.ToString().ToLower().Contains(text) && d.Complect == complect)
 				.OrderBy(d => d.DeviceName.Name)
