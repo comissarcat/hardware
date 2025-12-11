@@ -42,12 +42,12 @@ namespace Hardware.Forms
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Не сохранено", MessageBoxButtons.OK);
+				MessageBox.Show(ex.Message, "Конфигурация не применена", MessageBoxButtons.OK);
 				return;
 			}
+			ApplicationContext context = ApplicationContext.RecreateInstance();
 			try
 			{
-				ApplicationContext context = ApplicationContext.RecreateInstance();
 				context.Database.OpenConnection();
 				context.Database.CloseConnection();
 				MessageBox.Show("Успех!", "Соединение с базой данных установлено!", MessageBoxButtons.OK);
