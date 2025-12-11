@@ -23,16 +23,31 @@ namespace Hardware.Forms
 
 		private void saveBtn_Click(object sender, EventArgs e)
 		{
-			configManager.SetConfig(serverTBox.Text, userTBox.Text, passwordTBox.Text, databaseTBox.Text);
-			MessageBox.Show("Успешно сохранено", "Сохранено", MessageBoxButtons.OK);
+			try
+			{
+				configManager.SetConfig(serverTBox.Text, userTBox.Text, passwordTBox.Text, databaseTBox.Text);
+				MessageBox.Show("Успешно сохранено", "Сохранено", MessageBoxButtons.OK);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Не сохранено", MessageBoxButtons.OK);
+			}
 		}
 
 		private void testBtn_Click(object sender, EventArgs e)
 		{
-			configManager.SetConfig(serverTBox.Text, userTBox.Text, passwordTBox.Text, databaseTBox.Text);
-			ApplicationContext context = ApplicationContext.RecreateInstance();
 			try
 			{
+				configManager.SetConfig(serverTBox.Text, userTBox.Text, passwordTBox.Text, databaseTBox.Text);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Не сохранено", MessageBoxButtons.OK);
+				return;
+			}
+			try
+			{
+				ApplicationContext context = ApplicationContext.RecreateInstance();
 				context.Database.OpenConnection();
 				context.Database.CloseConnection();
 				MessageBox.Show("Успех!", "Соединение с базой данных установлено!", MessageBoxButtons.OK);
