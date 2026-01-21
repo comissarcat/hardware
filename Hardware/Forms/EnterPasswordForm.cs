@@ -5,7 +5,7 @@
 		public EnterPasswordForm()
 		{
 			InitializeComponent();
-			DialogResult = DialogResult.Cancel;
+			DialogResult = DialogResult.Cancel;			
 		}
 
 		private bool CheckPassword()
@@ -35,13 +35,8 @@
 
 		private void configBtn_Click(object sender, EventArgs e)
 		{
-			if (CheckPassword())
-			{
-				var form = new SettingsForm();
-				form.ShowDialog();
-			}
-			else
-				MessageBox.Show("Неверный пароль", "Неверный пароль", MessageBoxButtons.OK);
+			SettingsForm form = new();
+			form.ShowDialog();
 		}
 	}
 }

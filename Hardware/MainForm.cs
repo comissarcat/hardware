@@ -8,7 +8,7 @@ namespace Hardware
 {
 	public partial class MainForm : Form
 	{
-		private readonly ApplicationContext context;
+		private ApplicationContext context;
 		private System.Windows.Forms.Timer searchTimerLeft;
 		private System.Windows.Forms.Timer searchTimerRight;
 		private const int searchTimerDelayMS = 500;
@@ -16,6 +16,11 @@ namespace Hardware
 		public MainForm()
 		{
 			InitializeComponent();
+			Load += OnLoad;
+		}
+
+		private void OnLoad(object sender, EventArgs e)
+		{
 			EnterPasswordForm form = new();
 			DialogResult result = form.ShowDialog();
 			if (result == DialogResult.OK)
