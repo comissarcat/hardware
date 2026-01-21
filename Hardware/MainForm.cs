@@ -9,6 +9,10 @@ namespace Hardware
 	public partial class MainForm : Form
 	{
 		private readonly ApplicationContext context;
+		private System.Windows.Forms.Timer searchTimerLeft;
+		private System.Windows.Forms.Timer searchTimerRight;
+		private const int searchTimerDelayMS = 500;
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -29,6 +33,16 @@ namespace Hardware
 			RefreshBuildings();
 			InitializeHistoryDGW();
 			InitializeFullListDGW();
+			searchTimerLeft = new()
+			{
+				Interval = searchTimerDelayMS
+			};
+			searchTimerLeft.Tick += SearchTimerTick;
+			searchTimerRight = new()
+			{
+				Interval = searchTimerDelayMS
+			};
+			searchTimerRight.Tick += SearchTimerTick;
 		}
 
 		private void InitializeButtons()
@@ -66,8 +80,23 @@ namespace Hardware
 		private void searchTBox_TextChanged(object sender, EventArgs e)
 		{
 			if (sender as TextBox == searchTBoxLeft)
-				RefreshBuildingsLBoxLeft();
+			{
+				searchTimerLeft.Stop();
+				searchTimerLeft.Start();
+			}
 			else if (sender as TextBox == searchTBoxRight)
+			{
+				searchTimerRight.Stop();
+				searchTimerRight.Start();
+			}
+		}
+
+		private void SearchTimerTick(object sender, EventArgs e)
+		{
+			(sender as System.Windows.Forms.Timer).Stop();
+			if (sender as System.Windows.Forms.Timer == searchTimerLeft)
+				RefreshBuildingsLBoxLeft();
+			else if (sender as System.Windows.Forms.Timer == searchTimerRight)
 				RefreshBuildingsLBoxRight();
 		}
 

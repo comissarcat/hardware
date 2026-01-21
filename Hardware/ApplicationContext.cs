@@ -32,10 +32,9 @@ namespace Hardware
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			var configManager = new ConfigManager();
-			var config = configManager.GetConfig();
-			var connectionString = $"server = {config.Server}; user = {config.User}; password = {config.Password}; database = {config.Database}";
-			//var connectionString = $"server = 192.168.1.18; user = root; password = aN271828; database = hardware";
+			ConfigManager configManager = new();
+			Config config = configManager.GetConfig();
+			string connectionString = $"server = {config.Server}; user = {config.User}; password = {config.Password}; database = {config.Database}";
 			optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 		}
 
