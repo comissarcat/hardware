@@ -1217,6 +1217,7 @@ namespace Hardware
 
         private async void выгрузитьQRкодыToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            выгрузить»нвентарные арточкиToolStripMenuItem.Enabled = false;
             выгрузитьQRкодыToolStripMenuItem.Enabled = false;
             progressBar1.Visible = true;
             progressBar1.Value = 0;
@@ -1233,6 +1234,7 @@ namespace Hardware
             }
             finally
             {
+                выгрузить»нвентарные арточкиToolStripMenuItem.Enabled = true;
                 выгрузитьQRкодыToolStripMenuItem.Enabled = true;
                 progressBar1.Visible = false;
             }
@@ -1241,6 +1243,7 @@ namespace Hardware
         private async void выгрузить»нвентарные арточкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
             выгрузить»нвентарные арточкиToolStripMenuItem.Enabled = false;
+            выгрузитьQRкодыToolStripMenuItem.Enabled = false;
             progressBar1.Visible = true;
             progressBar1.Value = 0;
 
@@ -1256,6 +1259,7 @@ namespace Hardware
             finally
             {
                 выгрузить»нвентарные арточкиToolStripMenuItem.Enabled = true;
+                выгрузитьQRкодыToolStripMenuItem.Enabled = true;
                 progressBar1.Visible = false;
             }
         }

@@ -68,8 +68,23 @@ namespace Hardware
 
             using StreamWriter writer = new(filename, false, System.Text.Encoding.UTF8);
             await writer.WriteLineAsync("<html>");
+            await writer.WriteLineAsync("<head>");
+            await writer.WriteLineAsync("<style>");
+            await writer.WriteLineAsync("@media print {" +
+                "tr {" +
+                "page-break-inside: avoid;" +
+                "break-inside: avoid;" +
+                "page-break-after: auto;" +
+                "}\n" +
+                "td {" +
+                "page-break-inside: avoid;" +
+                "break-inside: avoid" +
+                "}\n" +
+                "}");
+            await writer.WriteLineAsync("</style>");
+            await writer.WriteLineAsync("</head>");
             await writer.WriteLineAsync("<body style=\"font-family:'Courier New';font-size:8pt\">");
-            await writer.WriteLineAsync("<table style=\"border:1px solid black; border-collapse:collapse\">");
+            await writer.WriteLineAsync("<table style=\"border:1px solid black; border-collapse:collapse; margin: 0 auto;\">");
             await writer.WriteLineAsync("<tbody>");
 
             int col = 0;
