@@ -88,6 +88,7 @@ namespace Hardware
             await writer.WriteLineAsync("<tbody>");
 
             int col = 0;
+            int row = 0;
             bool isRowOpen = false;
             var devices = ApplicationContext.Instance().Devices.Select(d => new
             {
@@ -102,6 +103,7 @@ namespace Hardware
                 if (col == 0)
                 {
                     await writer.WriteLineAsync("<tr>");
+                    await writer.WriteLineAsync($"<td style=\"border:1px solid black; padding:3px\">{++row}</td>");
                     isRowOpen = true;
                 }
 
