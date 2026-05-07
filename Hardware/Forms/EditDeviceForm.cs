@@ -1,333 +1,341 @@
 ﻿using Hardware.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hardware.Forms
 {
-	public partial class EditDeviceForm : Form
-	{
-		readonly ApplicationContext context;
-		Device? device;
-		public EditDeviceForm(Device? device, Complect complect)
-		{
-			InitializeComponent();
-			context = ApplicationContext.Instance();
-			DialogResult = DialogResult.Cancel;
-			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
-													   .ToList();
-			deviceNameCBox.DataSource = context.DeviceNames.OrderBy(d => d.Name)
-														   .ToList();
-			deviceProviderCBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name)
-																   .ToList();
-			this.device = device;
-			if (this.device is not null)
-			{
-				idTBox.Text = this.device.Id.ToString();
-				serialTBox.Text = this.device.Serial;
-				inventoryTBox.Text = this.device.Inventory;
-				notesTBox.Text = this.device.Notes;
+    public partial class EditDeviceForm : Form
+    {
+        Device? device;
+        private readonly ConfigManager configManager = new();
 
-				buildingCBox.SelectedItem = this.device.Complect.Cabinet.Building;
+        public EditDeviceForm(Device? device, Complect complect)
+        {
+            InitializeComponent();
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            DialogResult = DialogResult.Cancel;
+            buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+                                                       .Include(b => b.Cabinets)
+                                                       .ThenInclude(c => c.Complects)
+                                                       .ThenInclude(c => c.Devices)
+                                                       .ToList();
+            deviceNameCBox.DataSource = context.DeviceNames.Include(dn => dn.DeviceType)
+                                                           .OrderBy(dn => dn.DeviceType.Name)
+                                                           .ThenBy(dn => dn.Name)
+                                                           .ToList();
+            deviceProviderCBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name)
+                                                                   .ToList();
+            this.device = device;
+            if (this.device is not null)
+            {
+                idTBox.Text = this.device.Id.ToString();
+                serialTBox.Text = this.device.Serial;
+                inventoryTBox.Text = this.device.Inventory;
+                notesTBox.Text = this.device.Notes;
 
-				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
-														 .OrderBy(c => c.Name)
-														 .ToList();
-				cabinetCBox.SelectedItem = this.device.Complect.Cabinet;
+                buildingCBox.SelectedItem = this.device.Complect.Cabinet.Building;
 
-				complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
-														   .OrderBy(c => c.Name)
-														   .ToList();
-				complectCBox.SelectedItem = this.device.Complect;
+                cabinetCBox.DataSource = (buildingCBox.SelectedItem as Building).Cabinets.ToList();
+                cabinetCBox.SelectedItem = this.device.Complect.Cabinet;
 
-				deviceNameCBox.SelectedItem = this.device.DeviceName;
-				deviceProviderCBox.SelectedItem = this.device.DeviceProvider;
+                complectCBox.DataSource = (cabinetCBox.SelectedItem as Cabinet).Complects.ToList();
+                complectCBox.SelectedItem = this.device.Complect;
 
-				removeBtn.Enabled = true;
-				editBtn.Enabled = true;
-			}
-			else
-			{
-				buildingCBox.SelectedItem = complect.Cabinet.Building;
+                deviceNameCBox.SelectedItem = this.device.DeviceName;
+                deviceProviderCBox.SelectedItem = this.device.DeviceProvider;
 
-				cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
-														 .OrderBy(c => c.Name)
-														 .ToList();
-				cabinetCBox.SelectedItem = complect.Cabinet;
+                removeBtn.Enabled = true;
+                editBtn.Enabled = true;
+            }
+            else
+            {
+                buildingCBox.SelectedItem = complect.Cabinet.Building;
 
-				complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
-														   .OrderBy(c => c.Name)
-														   .ToList();
-				complectCBox.SelectedItem = complect;
-			}
-		}
+                cabinetCBox.DataSource = (buildingCBox.SelectedItem as Building).Cabinets.ToList();
+                cabinetCBox.SelectedItem = complect.Cabinet;
 
-		private void SwitchEditCabinetBtn()
-		{
-			if (buildingCBox.SelectedIndex != -1)
-				editCabinetBtn.Enabled = true;
-			else
-				editCabinetBtn.Enabled = false;
-		}
+                complectCBox.DataSource = (cabinetCBox.SelectedItem as Cabinet).Complects.ToList();
+                complectCBox.SelectedItem = complect;
+            }
+        }
 
-		private void SwitchEditComplectBtn()
-		{
-			if (cabinetCBox.SelectedIndex != -1)
-				editComplectBtn.Enabled = true;
-			else
-				editComplectBtn.Enabled = false;
-		}
+        private void SwitchEditCabinetBtn()
+        {
+            if (buildingCBox.SelectedIndex != -1)
+                editCabinetBtn.Enabled = true;
+            else
+                editCabinetBtn.Enabled = false;
+        }
 
-		private void SwitchEditDeviceNameBtn()
-		{
-			editDeviceNameBtn.Enabled = context.DeviceTypes.Any();
-		}
+        private void SwitchEditComplectBtn()
+        {
+            if (cabinetCBox.SelectedIndex != -1)
+                editComplectBtn.Enabled = true;
+            else
+                editComplectBtn.Enabled = false;
+        }
 
-		private void RefreshDeviceLocations()
-		{
-			RefreshBuildings();
-			RefreshCabinets();
-			RefreshComplects();
-		}
+        private void SwitchEditDeviceNameBtn()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            editDeviceNameBtn.Enabled = context.DeviceTypes.Any();
+        }
 
-		private void RefreshBuildings()
-		{
-			var selectedItem = buildingCBox.SelectedItem;
+        private void RefreshDeviceLocations()
+        {
+            RefreshBuildings();
+            RefreshCabinets();
+            RefreshComplects();
+        }
 
-			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
-													   .ToList();
+        private void RefreshBuildings()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            object? selectedItem = buildingCBox.SelectedItem;
 
-			if (buildingCBox.Items.Count == 0)
-				buildingCBox.Text = string.Empty;
-			if (selectedItem is not null)
-				if (buildingCBox.Items.Contains(selectedItem))
-					buildingCBox.SelectedItem = selectedItem;
-			SwitchEditCabinetBtn();
-		}
+            buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+                                                       .Include(b => b.Cabinets)
+                                                       .ThenInclude(c => c.Complects)
+                                                       .ThenInclude(c => c.Devices)
+                                                       .ToList();
 
-		private void RefreshCabinets()
-		{
-			var selectedItem = cabinetCBox.SelectedItem;
+            if (buildingCBox.Items.Count == 0)
+                buildingCBox.Text = string.Empty;
+            if (selectedItem is not null)
+                if (buildingCBox.Items.Contains(selectedItem))
+                    buildingCBox.SelectedItem = selectedItem;
+            SwitchEditCabinetBtn();
+        }
 
-			cabinetCBox.DataSource = context.Cabinets.Where(c => c.Building == buildingCBox.SelectedItem)
-													 .OrderBy(c => c.Name)
-													 .ToList();
+        private void RefreshCabinets()
+        {
+            object? selectedItem = cabinetCBox.SelectedItem;
 
-			if (cabinetCBox.Items.Count == 0)
-				cabinetCBox.Text = string.Empty;
-			else if (selectedItem is not null)
-				if (cabinetCBox.Items.Contains(selectedItem))
-					cabinetCBox.SelectedItem = selectedItem;
-			SwitchEditComplectBtn();
-		}
+            cabinetCBox.DataSource = (buildingCBox.SelectedItem as Building).Cabinets.ToList();
 
-		private void RefreshComplects()
-		{
-			var selectedItem = complectCBox.SelectedItem;
+            if (cabinetCBox.Items.Count == 0)
+                cabinetCBox.Text = string.Empty;
+            else if (selectedItem is not null)
+                if (cabinetCBox.Items.Contains(selectedItem))
+                    cabinetCBox.SelectedItem = selectedItem;
+            SwitchEditComplectBtn();
+        }
 
-			complectCBox.DataSource = context.Complects.Where(c => c.Cabinet == cabinetCBox.SelectedItem)
-													   .OrderBy(c => c.Name)
-													   .ToList();
+        private void RefreshComplects()
+        {
+            object? selectedItem = complectCBox.SelectedItem;
 
-			if (complectCBox.Items.Count == 0)
-				complectCBox.Text = string.Empty;
-			else if (selectedItem is not null)
-				if (complectCBox.Items.Contains(selectedItem))
-					complectCBox.SelectedItem = selectedItem;
-		}
+            complectCBox.DataSource = (cabinetCBox.SelectedItem as Cabinet).Complects.ToList();
 
-		private void RefreshDeviceNames()
-		{
-			var selectedItem = deviceNameCBox.SelectedItem;
+            if (complectCBox.Items.Count == 0)
+                complectCBox.Text = string.Empty;
+            else if (selectedItem is not null)
+                if (complectCBox.Items.Contains(selectedItem))
+                    complectCBox.SelectedItem = selectedItem;
+        }
 
-			deviceNameCBox.DataSource = context.DeviceNames.OrderBy(d => d.Name)
-														   .ToList();
+        private void RefreshDeviceNames()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            object? selectedItem = deviceNameCBox.SelectedItem;
 
-			if (deviceNameCBox.Items.Count == 0)
-				deviceNameCBox.Text = string.Empty;
-			else if (selectedItem is not null)
-				if (deviceNameCBox.Items.Contains(selectedItem))
-					deviceNameCBox.SelectedItem = selectedItem;
-			SwitchEditDeviceNameBtn();
-		}
+            deviceNameCBox.DataSource = context.DeviceNames.Include(dn => dn.DeviceType)
+                                                           .OrderBy(dn => dn.DeviceType.Name)
+                                                           .ThenBy(dn => dn.Name)
+                                                           .ToList();
 
-		private void RefreshDeviceProviders()
-		{
-			var selectedItem = deviceProviderCBox.SelectedItem;
+            if (deviceNameCBox.Items.Count == 0)
+                deviceNameCBox.Text = string.Empty;
+            else if (selectedItem is not null)
+                if (deviceNameCBox.Items.Contains(selectedItem))
+                    deviceNameCBox.SelectedItem = selectedItem;
+            SwitchEditDeviceNameBtn();
+        }
 
-			deviceProviderCBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name)
-																   .ToList();
+        private void RefreshDeviceProviders()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            object? selectedItem = deviceProviderCBox.SelectedItem;
 
-			if (deviceProviderCBox.Items.Count == 0)
-				deviceProviderCBox.Text = string.Empty;
-			else if (selectedItem is not null)
-				if (deviceProviderCBox.Items.Contains(selectedItem))
-					deviceProviderCBox.SelectedItem = selectedItem;
-		}
+            deviceProviderCBox.DataSource = context.DeviceProviders.OrderBy(d => d.Name)
+                                                                   .ToList();
 
-		private async Task<string?> AddDevice()
-		{
-			var before = string.Empty;
-			device = new()
-			{
-				Serial = serialTBox.Text,
-				Inventory = inventoryTBox.Text,
-				Complect = (Complect)complectCBox.SelectedItem,
-				DeviceName = (DeviceName)deviceNameCBox.SelectedItem,
-				DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem,
-				Notes = notesTBox.Text
-			};
-			var after = device.ToStringForHistory();
-			await context.Devices.AddAsync(device);
-			await context.History.AddAsync(new History() { Before = before, After = after });
-			try
-			{
-				await context.SaveChangesAsync();
-			}
-			catch (Exception ex)
-			{
-				return $"{ex.Message}\n{ex.InnerException}";
-			}
-			return null;
-		}
+            if (deviceProviderCBox.Items.Count == 0)
+                deviceProviderCBox.Text = string.Empty;
+            else if (selectedItem is not null)
+                if (deviceProviderCBox.Items.Contains(selectedItem))
+                    deviceProviderCBox.SelectedItem = selectedItem;
+        }
 
-		private async Task<string?> EditDevice()
-		{
-			var before = device.ToStringForHistory();
-			device.Serial = serialTBox.Text;
-			device.Inventory = inventoryTBox.Text;
-			device.Complect = (Complect)complectCBox.SelectedItem;
-			device.DeviceName = (DeviceName)deviceNameCBox.SelectedItem;
-			device.DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem;
-			device.Notes = notesTBox.Text;
-			var after = device.ToStringForHistory();
-			await context.History.AddAsync(new History() { Before = before, After = after });
-			try
-			{
-				await context.SaveChangesAsync();
-			}
-			catch (Exception ex)
-			{
-				return $"{ex.Message}\n{ex.InnerException}";
-			}
-			return null;
-		}
+        private async Task<string?> AddDevice()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            string before = string.Empty;
+            device = new()
+            {
+                Serial = serialTBox.Text,
+                Inventory = inventoryTBox.Text,
+                Complect = (Complect)complectCBox.SelectedItem,
+                DeviceName = (DeviceName)deviceNameCBox.SelectedItem,
+                DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem,
+                Notes = notesTBox.Text
+            };
+            string after = device.ToStringForHistory();
+            await context.Devices.AddAsync(device);
+            await context.History.AddAsync(new History() { Before = before, After = after });
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return $"{ex.Message}\n{ex.InnerException}";
+            }
+            return null;
+        }
 
-		private async Task<string?> RemoveDevice()
-		{
-			var before = device.ToStringForHistory();
-			var after = string.Empty;
-			context.Devices.Remove(device);
-			await context.History.AddAsync(new History() { Before = before, After = after });
-			try
-			{
-				await context.SaveChangesAsync();
-			}
-			catch (Exception ex)
-			{
-				return $"{ex.Message}\n{ex.InnerException}";
-			}
-			return null;
-		}
+        private async Task<string?> EditDevice()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            string before = device.ToStringForHistory();
+            device.Serial = serialTBox.Text;
+            device.Inventory = inventoryTBox.Text;
+            device.Complect = (Complect)complectCBox.SelectedItem;
+            device.DeviceName = (DeviceName)deviceNameCBox.SelectedItem;
+            device.DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem;
+            device.Notes = notesTBox.Text;
+            string after = device.ToStringForHistory();
+            await context.History.AddAsync(new History() { Before = before, After = after });
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return $"{ex.Message}\n{ex.InnerException}";
+            }
+            return null;
+        }
 
-		private async void addBtn_Click(object sender, EventArgs e)
-		{
-			string? result = await AddDevice();
-			if (result != null)
-				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
-			else
-			{
-				MessageBox.Show("Успешно добавлено", "Успех", MessageBoxButtons.OK);
-				DialogResult = DialogResult.OK;
-				Close();
-			}
-		}
+        private async Task<string?> RemoveDevice()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            string before = device.ToStringForHistory();
+            string after = string.Empty;
+            context.Devices.Remove(device);
+            await context.History.AddAsync(new History() { Before = before, After = after });
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return $"{ex.Message}\n{ex.InnerException}";
+            }
+            return null;
+        }
 
-		private async void editBtn_Click(object sender, EventArgs e)
-		{
-			string? result = await EditDevice();
-			if (result != null)
-				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
-			else
-			{
-				MessageBox.Show("Успешно изменено", "Успех", MessageBoxButtons.OK);
-				DialogResult = DialogResult.OK;
-				Close();
-			}
-		}
+        private async void addBtn_Click(object sender, EventArgs e)
+        {
+            string? result = await AddDevice();
+            if (result != null)
+                MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
+            else
+            {
+                MessageBox.Show("Успешно добавлено", "Успех", MessageBoxButtons.OK);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
 
-		private async void removeBtn_Click(object sender, EventArgs e)
-		{
-			string? result = await RemoveDevice();
-			if (result != null)
-				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
-			else
-			{
-				MessageBox.Show("Успешно удалено", "Успех", MessageBoxButtons.OK);
-				DialogResult = DialogResult.OK;
-				Close();
-			}
-		}
+        private async void editBtn_Click(object sender, EventArgs e)
+        {
+            string? result = await EditDevice();
+            if (result != null)
+                MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
+            else
+            {
+                MessageBox.Show("Успешно изменено", "Успех", MessageBoxButtons.OK);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
 
-		private void cancelBtn_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Cancel;
-			Close();
-		}
+        private async void removeBtn_Click(object sender, EventArgs e)
+        {
+            string? result = await RemoveDevice();
+            if (result != null)
+                MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
+            else
+            {
+                MessageBox.Show("Успешно удалено", "Успех", MessageBoxButtons.OK);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
 
-		private void editBuildingBtn_Click(object sender, EventArgs e)
-		{
-			var building = (Building)buildingCBox.SelectedItem;
-			var form = new EditBuildingForm(building);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshDeviceLocations();
-		}
+        private void cancelBtn_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
 
-		private void editCabinetBtn_Click(object sender, EventArgs e)
-		{
-			var cabinet = (Cabinet?)cabinetCBox.SelectedItem;
-			var building = cabinet is null ? (Building)buildingCBox.SelectedItem : cabinet.Building;
-			var form = new EditCabinetForm(cabinet, building);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshDeviceLocations();
-		}
+        private void editBuildingBtn_Click(object sender, EventArgs e)
+        {
+            Building? building = (Building)buildingCBox.SelectedItem;
+            EditBuildingForm form = new(building);
+            DialogResult result = form.ShowDialog();
+            if (result == DialogResult.OK)
+                RefreshDeviceLocations();
+        }
 
-		private void editComplectBtn_Click(object sender, EventArgs e)
-		{
-			var complect = (Complect?)complectCBox.SelectedItem;
-			var cabinet = complect is null ? (Cabinet)cabinetCBox.SelectedItem : complect.Cabinet;
-			var form = new EditComplectForm(complect, cabinet);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshDeviceLocations();
-		}
+        private void editCabinetBtn_Click(object sender, EventArgs e)
+        {
+            Cabinet? cabinet = (Cabinet?)cabinetCBox.SelectedItem;
+            Building? building = cabinet is null ? (Building)buildingCBox.SelectedItem : cabinet.Building;
+            EditCabinetForm form = new(cabinet, building);
+            DialogResult result = form.ShowDialog();
+            if (result == DialogResult.OK)
+                RefreshDeviceLocations();
+        }
 
-		private void editDeviceNameBtn_Click(object sender, EventArgs e)
-		{
-			var deviceName = (DeviceName?)deviceNameCBox.SelectedItem;
-			var deviceType = deviceName is null ? context.DeviceTypes.First() : deviceName.DeviceType;
-			var form = new EditDeviceNameForm(deviceName, deviceType);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshDeviceNames();
-		}
+        private void editComplectBtn_Click(object sender, EventArgs e)
+        {
+            Complect? complect = (Complect?)complectCBox.SelectedItem;
+            Cabinet? cabinet = complect is null ? (Cabinet)cabinetCBox.SelectedItem : complect.Cabinet;
+            EditComplectForm form = new(complect, cabinet);
+            DialogResult result = form.ShowDialog();
+            if (result == DialogResult.OK)
+                RefreshDeviceLocations();
+        }
 
-		private void editDeviceProviderBtn_Click(object sender, EventArgs e)
-		{
-			var deviceProvider = (DeviceProvider?)deviceProviderCBox.SelectedItem;
-			var form = new EditDeviceProviderForm(deviceProvider);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshDeviceProviders();
-		}
+        private void editDeviceNameBtn_Click(object sender, EventArgs e)
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            DeviceName? deviceName = (DeviceName?)deviceNameCBox.SelectedItem;
+            DeviceType deviceType = deviceName is null ? context.DeviceTypes.First() : deviceName.DeviceType;
+            EditDeviceNameForm form = new(deviceName, deviceType);
+            DialogResult result = form.ShowDialog();
+            if (result == DialogResult.OK)
+                RefreshDeviceNames();
+        }
 
-		private void buildingCBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			RefreshCabinets();
-		}
+        private void editDeviceProviderBtn_Click(object sender, EventArgs e)
+        {
+            DeviceProvider? deviceProvider = (DeviceProvider?)deviceProviderCBox.SelectedItem;
+            EditDeviceProviderForm form = new(deviceProvider);
+            DialogResult result = form.ShowDialog();
+            if (result == DialogResult.OK)
+                RefreshDeviceProviders();
+        }
 
-		private void cabinetCBox_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			RefreshComplects();
-		}
-	}
+        private void buildingCBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshCabinets();
+        }
+
+        private void cabinetCBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshComplects();
+        }
+    }
 }

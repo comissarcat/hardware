@@ -6,14 +6,17 @@ namespace Hardware
 {
     internal class QrManager
     {
+        private readonly ConfigManager configManager = new();
         public async void CreateQrImages(IProgress<int> progress)
         {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             path = Path.Combine(path, "Hardware", "QR");
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            var devices = ApplicationContext.Instance().Devices.Select(d => new
+            var devices = context.Devices.Select(d => new
             {
                 d.DeviceName.DeviceType,
                 d.DeviceName,
@@ -62,6 +65,8 @@ namespace Hardware
 
         private async void MakeHtml(string path)
         {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+
             string filename = Path.Combine(path, "qr.html");
             if (File.Exists(filename))
                 File.Delete(filename);
@@ -90,7 +95,7 @@ namespace Hardware
             int col = 0;
             int row = 0;
             bool isRowOpen = false;
-            var devices = ApplicationContext.Instance().Devices.Select(d => new
+            var devices = context.Devices.Select(d => new
             {
                 d.Complect.Cabinet.Building,
                 d.Complect.Cabinet,
@@ -131,79 +136,5 @@ namespace Hardware
             await writer.WriteLineAsync("</body>");
             await writer.WriteLineAsync("</html>");
         }
-
-        //private void MakePdf(string path)
-        //{
-        //    int cols = 4;
-
-        //    string filename = Path.Combine(path, "qr.pdf");
-        //    if (File.Exists(filename))
-        //        File.Delete(filename);
-        //    using PdfWriter writer = new(filename);
-        //    using PdfDocument pdf = new(writer);
-        //    using Document document = new(pdf, PageSize.A4);
-
-        //    float margin = 36;
-        //    document.SetMargins(margin, margin, margin, margin);
-
-        //    PdfFont font;
-        //    try
-        //    {
-        //        string fontFile = Directory.GetFiles(AppContext.BaseDirectory, "*.ttf").First();
-        //        font = PdfFontFactory.CreateFont(fontFile, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
-        //    }
-        //    catch
-        //    {
-        //        font = PdfFontFactory.CreateFont("Times-Roman", "Cp1251", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
-        //    }
-
-
-        //    var devices = ApplicationContext.Instance().Devices.Select(d => new
-        //    {
-        //        d.Complect.Cabinet.Building,
-        //        d.Complect.Cabinet,
-        //        d.Complect,
-        //        d.Serial
-        //    }).OrderBy(d => d.Building.Name)
-        //    .ThenBy(d => d.Cabinet.Name)
-        //    .ThenBy(d => d.Complect.Name)
-        //    .ToList();
-
-        //    Table table = new Table(UnitValue.CreatePercentArray(cols)).UseAllAvailableWidth().SetHorizontalAlignment(HorizontalAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE).SetBorder(Border.NO_BORDER);
-
-        //    foreach (var device in devices)
-        //    {
-        //        string image = Path.Combine(path, $"{device.Serial}.jpg");
-        //        if (!File.Exists(image))
-        //            continue;
-
-        //        Div cellContent = new Div().SetTextAlignment(TextAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE).SetPadding(5);
-
-        //        try
-        //        {
-        //            ImageData imageData = ImageDataFactory.Create(image);
-        //            Image pdfImage = new Image(imageData).SetWidth(75).SetHeight(75);
-
-        //            cellContent.Add(pdfImage);
-        //        }
-        //        catch
-        //        {
-
-        //        }
-
-        //        string sign = $"{device.Complect.Cabinet.Building.Name}\n{device.Complect.Cabinet.Name}\n{device.Complect.Name}\n{device.Serial}";
-
-        //        Paragraph paragraph = new Paragraph(sign).SetFontSize(8).SetMarginTop(3).SetTextAlignment(TextAlignment.CENTER).SetFont(font);
-
-        //        cellContent.Add(paragraph);
-
-        //        Cell cell = new Cell().Add(cellContent).SetBorder(Border.NO_BORDER).SetHorizontalAlignment(HorizontalAlignment.CENTER).SetVerticalAlignment(VerticalAlignment.MIDDLE).SetPadding(0);
-
-        //        table.AddCell(cell);
-        //    }
-
-        //    document.Add(table);
-        //    document.Close();
-        //}
     }
 }

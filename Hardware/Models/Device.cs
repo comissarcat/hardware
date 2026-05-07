@@ -1,35 +1,42 @@
 ﻿namespace Hardware.Models
 {
-	public class Device
-	{
-		public int Id { get; set; }
-		public string Serial { get; set; }
-		public string? Inventory { get; set; }
-		public DeviceName DeviceName { get; set; }
-		public Complect Complect { get; set; }
-		public DeviceProvider DeviceProvider { get; set; }
-		public string? Notes { get; set; }
+    public class Device
+    {
+        public int Id { get; set; }
+        public string Serial { get; set; }
+        public string? Inventory { get; set; }
 
-		public override string ToString()
-		{
-			return $"{DeviceName.Name} {Serial} {Inventory}";
-		}
+        public int DeviceNameId { get; set; }
+        public DeviceName DeviceName { get; set; }
 
-		public string ToFullString()
-		{
-			return $"{Complect.Cabinet.Building.Name} {Complect.Cabinet.Name} {Complect.Name} {DeviceName.DeviceType.Name} {DeviceName.Name} {DeviceProvider.Name} {Serial} {Inventory} {Notes}";
-		}
+        public int ComplectId { get; set; }
+        public Complect Complect { get; set; }
 
-		public string ToStringForHistory()
-		{
-			return $"Здание: {Complect.Cabinet.Building.Name}; кабинет: {Complect.Cabinet.Name}; комплект: {Complect.Name}; название: {DeviceName}; с/н: {Serial}; и/н: {Inventory}; примечание: {Notes}";
-		}
+        public int DeviceProviderId { get; set; }
+        public DeviceProvider DeviceProvider { get; set; }
 
-		public override bool Equals(object? obj)
-		{
-			if (obj is Device)
-				return Id == (obj as Device).Id;
-			return false;
-		}
-	}
+        public string? Notes { get; set; }
+
+        public override string ToString()
+        {
+            return $"{DeviceName.Name} {Serial} {Inventory}";
+        }
+
+        public string ToFullString()
+        {
+            return $"{Complect.Cabinet.Building.Name} {Complect.Cabinet.Name} {Complect.Name} {DeviceName.DeviceType.Name} {DeviceName.Name} {DeviceProvider.Name} {Serial} {Inventory} {Notes}";
+        }
+
+        public string ToStringForHistory()
+        {
+            return $"Здание: {Complect.Cabinet.Building.Name}; кабинет: {Complect.Cabinet.Name}; комплект: {Complect.Name}; название: {DeviceName}; с/н: {Serial}; и/н: {Inventory}; примечание: {Notes}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Device)
+                return Id == (obj as Device).Id;
+            return false;
+        }
+    }
 }

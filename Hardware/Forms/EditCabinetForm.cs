@@ -1,170 +1,172 @@
 ﻿using Hardware.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Hardware.Forms
 {
-	public partial class EditCabinetForm : Form
-	{
-		readonly ApplicationContext context;
-		private Cabinet? cabinet;
-		public EditCabinetForm(Cabinet? cabinet, Building building)
-		{
-			InitializeComponent();
-			context = ApplicationContext.Instance();
-			DialogResult = DialogResult.Cancel;
-			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
-													   .ToList();
-			this.cabinet = cabinet;
-			if (this.cabinet is not null)
-			{
-				idTBox.Text = this.cabinet.Id.ToString();
-				nameTBox.Text = this.cabinet.Name;
-				buildingCBox.SelectedItem = this.cabinet.Building;
-				editBtn.Enabled = true;
-				SwitchRemoveBtn();
-			}
-			buildingCBox.SelectedItem = building;
-		}
+    public partial class EditCabinetForm : Form
+    {
+        private Cabinet? cabinet;
+        private readonly ConfigManager configManager = new();
+        public EditCabinetForm(Cabinet? cabinet, Building building)
+        {
+            InitializeComponent();
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            DialogResult = DialogResult.Cancel;
+            buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+                                                       .ToList();
+            this.cabinet = cabinet;
+            if (this.cabinet is not null)
+            {
+                idTBox.Text = this.cabinet.Id.ToString();
+                nameTBox.Text = this.cabinet.Name;
+                buildingCBox.SelectedItem = this.cabinet.Building;
+                editBtn.Enabled = true;
+                SwitchRemoveBtn();
+            }
+            buildingCBox.SelectedItem = building;
+        }
 
-		private void SwitchRemoveBtn()
-		{
-			var cabinetHasDevices = context.Devices.Include(d => d.Complect.Cabinet)
-												   .Where(d => d.Complect.Cabinet == cabinet)
-												   .Any();
-			removeBtn.Enabled = !cabinetHasDevices;
-		}
+        private void SwitchRemoveBtn()
+        {
+            bool cabinetHasDevices = cabinet?.Complects.Any(c => c.Devices.Count != 0) ?? false;
+            removeBtn.Enabled = !cabinetHasDevices;
+        }
 
-		private void RefreshBuildings()
-		{
-			var selectedItem = buildingCBox.SelectedItem;
+        private void RefreshBuildings()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-			buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
-													   .ToList();
+            object? selectedItem = buildingCBox.SelectedItem;
 
-			if (selectedItem is not null)
-				if (buildingCBox.Items.Contains(selectedItem))
-					buildingCBox.SelectedItem = selectedItem;
-		}
+            buildingCBox.DataSource = context.Buildings.OrderBy(b => b.Name)
+                                                       .ToList();
 
-		private async Task<string?> AddCabinet()
-		{
-			cabinet = new() { Name = nameTBox.Text, Building = (Building)buildingCBox.SelectedItem };
-			await context.Cabinets.AddAsync(cabinet);
-			try
-			{
-				await context.SaveChangesAsync();
-			}
-			catch (Exception ex)
-			{
-				return $"{ex.Message}\n{ex.InnerException}";
-			}
-			return null;
-		}
+            if (selectedItem is not null)
+                if (buildingCBox.Items.Contains(selectedItem))
+                    buildingCBox.SelectedItem = selectedItem;
+        }
 
-		private async Task<string?> EditCabinet()
-		{
-			List<string> before = [];
-			List<string> after = [];
-			var devicesInCabinet = context.Devices.Include(d => d.Complect.Cabinet.Building)
-												  .Where(d => d.Complect.Cabinet == cabinet)
-												  .ToList();
-			if (devicesInCabinet.Count > 0)
-			{
-				foreach (var device in devicesInCabinet)
-					before.Add(device.ToStringForHistory());
+        private async Task<string?> AddCabinet()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-				cabinet.Name = nameTBox.Text;
-				cabinet.Building = (Building)buildingCBox.SelectedItem;
+            cabinet = new() { Name = nameTBox.Text, Building = (Building)buildingCBox.SelectedItem };
+            await context.Cabinets.AddAsync(cabinet);
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return $"{ex.Message}\n{ex.InnerException}";
+            }
+            return null;
+        }
 
-				foreach (var device in devicesInCabinet)
-					after.Add(device.ToStringForHistory());
+        private async Task<string?> EditCabinet()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-				for (int i = 0; i < devicesInCabinet.Count; i++)
-					await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
-			}
-			else
-			{
-				cabinet.Name = nameTBox.Text;
-				cabinet.Building = (Building)buildingCBox.SelectedItem;
-			}
-			try
-			{
-				await context.SaveChangesAsync();
-			}
-			catch (Exception ex)
-			{
-				return $"{ex.Message}\n{ex.InnerException}";
-			}
-			return null;
-		}
+            List<string> before = [];
+            List<string> after = [];
+            List<Device> devicesInCabinet = cabinet?.Complects.SelectMany(c => c.Devices).ToList() ?? [];
+            if (devicesInCabinet.Count > 0)
+            {
+                foreach (var device in devicesInCabinet)
+                    before.Add(device.ToStringForHistory());
 
-		private async Task<string?> RemoveCabinet()
-		{
-			context.Cabinets.Remove(cabinet);
-			try
-			{
-				await context.SaveChangesAsync();
-			}
-			catch (Exception ex)
-			{
-				return $"{ex.Message}\n{ex.InnerException}";
-			}
-			return null;
-		}
+                cabinet.Name = nameTBox.Text;
+                cabinet.Building = (Building)buildingCBox.SelectedItem;
 
-		private async void addBtn_Click(object sender, EventArgs e)
-		{
-			string? result = await AddCabinet();
-			if (result != null)
-				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
-			else
-			{
-				MessageBox.Show("Успешно добавлено", "Успех", MessageBoxButtons.OK);
-				DialogResult = DialogResult.OK;
-				Close();
-			}
-		}
+                foreach (var device in devicesInCabinet)
+                    after.Add(device.ToStringForHistory());
 
-		private async void editBtn_Click(object sender, EventArgs e)
-		{
-			string? result = await EditCabinet();
-			if (result != null)
-				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
-			else
-			{
-				MessageBox.Show("Успешно изменено", "Успех", MessageBoxButtons.OK);
-				DialogResult = DialogResult.OK;
-				Close();
-			}
-		}
+                for (int i = 0; i < devicesInCabinet.Count; i++)
+                    await context.History.AddAsync(new History() { Before = before[i], After = after[i] });
+            }
+            else
+            {
+                cabinet.Name = nameTBox.Text;
+                cabinet.Building = (Building)buildingCBox.SelectedItem;
+            }
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return $"{ex.Message}\n{ex.InnerException}";
+            }
+            return null;
+        }
 
-		private async void removeBtn_Click(object sender, EventArgs e)
-		{
-			string? result = await RemoveCabinet();
-			if (result != null)
-				MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
-			else
-			{
-				MessageBox.Show("Успешно удалено", "Успех", MessageBoxButtons.OK);
-				DialogResult = DialogResult.OK;
-				Close();
-			}
-		}
+        private async Task<string?> RemoveCabinet()
+        {
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            context.Cabinets.Remove(cabinet);
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return $"{ex.Message}\n{ex.InnerException}";
+            }
+            return null;
+        }
 
-		private void cancelBtn_Click(object sender, EventArgs e)
-		{
-			DialogResult = DialogResult.Cancel;
-			Close();
-		}
+        private async void addBtn_Click(object sender, EventArgs e)
+        {
+            string? result = await AddCabinet();
+            if (result != null)
+                MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
+            else
+            {
+                MessageBox.Show("Успешно добавлено", "Успех", MessageBoxButtons.OK);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
 
-		private void editBuildingBtn_Click(object sender, EventArgs e)
-		{
+        private async void editBtn_Click(object sender, EventArgs e)
+        {
+            string? result = await EditCabinet();
+            if (result != null)
+                MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
+            else
+            {
+                MessageBox.Show("Успешно изменено", "Успех", MessageBoxButtons.OK);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
 
-			var building = (Building?)buildingCBox.SelectedItem;
-			var form = new EditBuildingForm(building);
-			var result = form.ShowDialog();
-			if (result == DialogResult.OK)
-				RefreshBuildings();
-		}
-	}
+        private async void removeBtn_Click(object sender, EventArgs e)
+        {
+            string? result = await RemoveCabinet();
+            if (result != null)
+                MessageBox.Show(result, "Ошибка", MessageBoxButtons.OK);
+            else
+            {
+                MessageBox.Show("Успешно удалено", "Успех", MessageBoxButtons.OK);
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
+
+        private void cancelBtn_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void editBuildingBtn_Click(object sender, EventArgs e)
+        {
+
+            Building? building = (Building?)buildingCBox.SelectedItem;
+            EditBuildingForm form = new EditBuildingForm(building);
+            DialogResult result = form.ShowDialog();
+            if (result == DialogResult.OK)
+                RefreshBuildings();
+        }
+    }
 }
