@@ -12,6 +12,7 @@ namespace Hardware
         private System.Windows.Forms.Timer searchTimerRight;
         private const int searchTimerDelayMS = 500;
         private readonly ConfigManager configManager = new();
+        private List<ToolStripMenuItem> downloadButtons;
 
         public MainForm()
         {
@@ -47,8 +48,8 @@ namespace Hardware
                 Interval = searchTimerDelayMS
             };
             searchTimerRight.Tick += SearchTimerTick;
-            progressBar1.Visible = false;
-            progressBar1.Value = 0;
+            ProgressOff();
+            downloadButtons = [передать¬ExcelToolStripMenuItem, выгрузитьQRкодыToolStripMenuItem, выгрузить»нвентарные арточкиToolStripMenuItem];
         }
 
         private void InitializeButtons()
@@ -120,6 +121,26 @@ namespace Hardware
             if (selectedItem is not null)
                 if (lBox.Items.Contains(selectedItem))
                     lBox.SelectedItem = selectedItem;
+        }
+
+        private void SwitchDownloadButtons()
+        {
+            foreach (ToolStripMenuItem button in downloadButtons)
+                button.Enabled = !button.Enabled;
+        }
+
+        private void ProgressOff()
+        {
+            progressBar1.Value = 0;
+            progressBar1.Visible = false;
+            progressLabel.Text = string.Empty;
+            progressLabel.Visible = false;
+        }
+
+        private void ProgressOn()
+        {
+            progressBar1.Visible = true;
+            progressLabel.Visible = true;
         }
 
         #region Ѕлок работы со списком зданий		
@@ -1099,7 +1120,32 @@ namespace Hardware
         }
         #endregion
 
-        private void передать¬ExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void передать¬ExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SwitchDownloadButtons();
+            ProgressOn();
+
+            try
+            {
+                Progress<(int percent, string message)> progress = new(report =>
+                {
+                    progressBar1.Value = report.percent;
+                    progressLabel.Text = report.message;
+                });
+                await Task.Run(() => DownloadFullTable(progress));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"ќшибка: {ex.Message}");
+            }
+            finally
+            {
+                SwitchDownloadButtons();
+                ProgressOff();
+            }
+        }
+
+        private async void DownloadFullTable(IProgress<(int percent, string message)> progress)
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
@@ -1156,6 +1202,7 @@ namespace Hardware
             worksheet.Cells[1, 9].Value = "ѕримечание";
 
             int row = 2;
+            int i = 0;
 
             foreach (var device in devices)
             {
@@ -1168,6 +1215,10 @@ namespace Hardware
                 worksheet.Cells[row, 7].Value = device.Serial;
                 worksheet.Cells[row, 8].Value = device.Inventory;
                 worksheet.Cells[row, 9].Value = device.Notes;
+
+                double percent = ++i / (double)devices.Count * 100;
+                string message = $"‘ормирование таблицы {i} из {devices.Count}";
+                progress.Report(((int)percent, message));
 
                 row++;
             }
@@ -1190,15 +1241,17 @@ namespace Hardware
 
         private async void выгрузитьQRкодыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            выгрузить»нвентарные арточкиToolStripMenuItem.Enabled = false;
-            выгрузитьQRкодыToolStripMenuItem.Enabled = false;
-            progressBar1.Visible = true;
-            progressBar1.Value = 0;
+            SwitchDownloadButtons();
+            ProgressOn();
 
             try
             {
                 QrManager qrManager = new();
-                Progress<int> progress = new(percent => progressBar1.Value = percent);
+                Progress<(int percent, string message)> progress = new(report =>
+                {
+                    progressBar1.Value = report.percent;
+                    progressLabel.Text = report.message;
+                });
                 await Task.Run(() => qrManager.CreateQrImages(progress));
             }
             catch (Exception ex)
@@ -1207,23 +1260,24 @@ namespace Hardware
             }
             finally
             {
-                выгрузить»нвентарные арточкиToolStripMenuItem.Enabled = true;
-                выгрузитьQRкодыToolStripMenuItem.Enabled = true;
-                progressBar1.Visible = false;
+                SwitchDownloadButtons();
+                ProgressOff();
             }
         }
 
         private async void выгрузить»нвентарные арточкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            выгрузить»нвентарные арточкиToolStripMenuItem.Enabled = false;
-            выгрузитьQRкодыToolStripMenuItem.Enabled = false;
-            progressBar1.Visible = true;
-            progressBar1.Value = 0;
+            SwitchDownloadButtons();
+            ProgressOn();
 
             try
             {
-                Progress<int> progress = new(percent => progressBar1.Value = percent);
-                await Task.Run(() => UploadInventoryCards(progress));
+                Progress<(int percent, string message)> progress = new(report =>
+                {
+                    progressBar1.Value = report.percent;
+                    progressLabel.Text = report.message;
+                });
+                await Task.Run(() => DownloadInventoryCards(progress));
             }
             catch (Exception ex)
             {
@@ -1231,13 +1285,12 @@ namespace Hardware
             }
             finally
             {
-                выгрузить»нвентарные арточкиToolStripMenuItem.Enabled = true;
-                выгрузитьQRкодыToolStripMenuItem.Enabled = true;
-                progressBar1.Visible = false;
+                SwitchDownloadButtons();
+                ProgressOff();
             }
         }
 
-        private async void UploadInventoryCards(IProgress<int> progress)
+        private async void DownloadInventoryCards(IProgress<(int percent, string message)> progress)
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
@@ -1280,8 +1333,9 @@ namespace Hardware
             int iterator = 0;
             foreach (var device in devices)
             {
-                double percent = (double)++iterator / (double)devices.Count * 100;
-                progress.Report((int)percent);
+                double percent = ++iterator / (double)devices.Count * 100;
+                string message = $"«аполнение инвентарных карточек {iterator} из {devices.Count}";
+                progress.Report(((int)percent, message));
 
                 string worksheetName = $"{device.Complect.Cabinet.Building.Name} {device.Complect.Cabinet.Name}";
                 worksheetName = NonAlphabetNoNumberNoSpace().Replace(worksheetName, "_");

@@ -17,6 +17,7 @@ namespace Hardware.Forms
                                                        .Include(b => b.Cabinets)
                                                        .ThenInclude(c => c.Complects)
                                                        .ThenInclude(c => c.Devices)
+                                                       .AsSplitQuery()
                                                        .ToList();
             deviceNameCBox.DataSource = context.DeviceNames.Include(dn => dn.DeviceType)
                                                            .OrderBy(dn => dn.DeviceType.Name)

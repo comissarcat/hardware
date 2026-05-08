@@ -7,7 +7,7 @@ namespace Hardware
     internal class QrManager
     {
         private readonly ConfigManager configManager = new();
-        public async void CreateQrImages(IProgress<int> progress)
+        public async void CreateQrImages(IProgress<(int percent, string message)> progress)
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
@@ -53,17 +53,17 @@ namespace Hardware
                     resizedBitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
                 }
                 catch { }
-                double percent = (double)++i / (double)devices.Count * 100;
-                progress.Report((int)percent);
+                double percent = ++i / (double)devices.Count * 100;
+                string message = $"Создание qr-кода {i} из {devices.Count}";
+                progress.Report(((int)percent, message));
             }
 
-            //MakePdf(path);
-            MakeHtml(path);
+            MakeHtml(path, progress);
 
             MessageBox.Show($"Выгрузка завершена по пути {path}");
         }
 
-        private async void MakeHtml(string path)
+        private async void MakeHtml(string path, IProgress<(int percent, string message)> progress)
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
@@ -126,6 +126,10 @@ namespace Hardware
                 col++;
                 if (col > 4)
                     col = 0;
+
+                double percent = (i + 1) / (double)devices.Count * 100;
+                string message = $"Формирование таблицы {i + 1} из {devices.Count}";
+                progress.Report(((int)percent, message));
             }
 
             if (isRowOpen)

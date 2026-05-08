@@ -125,6 +125,7 @@
             выгрузитьИнвентарныеКарточкиToolStripMenuItem = new ToolStripMenuItem();
             tableLayoutPanel1 = new TableLayoutPanel();
             progressBar1 = new ProgressBar();
+            progressLabel = new Label();
             tabControl.SuspendLayout();
             tabPage1.SuspendLayout();
             devicesTLP.SuspendLayout();
@@ -156,7 +157,7 @@
             tabControl.Location = new Point(3, 27);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(978, 402);
+            tabControl.Size = new Size(978, 382);
             tabControl.TabIndex = 0;
             // 
             // tabPage1
@@ -165,7 +166,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(970, 374);
+            tabPage1.Size = new Size(970, 354);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Перемещение техники";
             tabPage1.UseVisualStyleBackColor = true;
@@ -185,7 +186,7 @@
             devicesTLP.RowCount = 2;
             devicesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             devicesTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            devicesTLP.Size = new Size(964, 368);
+            devicesTLP.Size = new Size(964, 348);
             devicesTLP.TabIndex = 0;
             // 
             // devicesTLPLeft
@@ -222,7 +223,7 @@
             devicesTLPLeft.RowStyles.Add(new RowStyle());
             devicesTLPLeft.RowStyles.Add(new RowStyle());
             devicesTLPLeft.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            devicesTLPLeft.Size = new Size(369, 342);
+            devicesTLPLeft.Size = new Size(369, 322);
             devicesTLPLeft.TabIndex = 0;
             // 
             // addDeviceBtnLeft
@@ -394,7 +395,7 @@
             buildingsLBoxLeft.ItemHeight = 15;
             buildingsLBoxLeft.Location = new Point(3, 124);
             buildingsLBoxLeft.Name = "buildingsLBoxLeft";
-            buildingsLBoxLeft.Size = new Size(67, 215);
+            buildingsLBoxLeft.Size = new Size(67, 195);
             buildingsLBoxLeft.TabIndex = 0;
             buildingsLBoxLeft.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
             // 
@@ -405,7 +406,7 @@
             cabinetsLBoxLeft.ItemHeight = 15;
             cabinetsLBoxLeft.Location = new Point(76, 124);
             cabinetsLBoxLeft.Name = "cabinetsLBoxLeft";
-            cabinetsLBoxLeft.Size = new Size(67, 215);
+            cabinetsLBoxLeft.Size = new Size(67, 195);
             cabinetsLBoxLeft.TabIndex = 1;
             cabinetsLBoxLeft.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
             // 
@@ -416,7 +417,7 @@
             complectsLBoxLeft.ItemHeight = 15;
             complectsLBoxLeft.Location = new Point(149, 124);
             complectsLBoxLeft.Name = "complectsLBoxLeft";
-            complectsLBoxLeft.Size = new Size(67, 215);
+            complectsLBoxLeft.Size = new Size(67, 195);
             complectsLBoxLeft.TabIndex = 6;
             complectsLBoxLeft.SelectedValueChanged += complectsLBox_SelectedValueChanged;
             // 
@@ -427,7 +428,7 @@
             devicesLBoxLeft.ItemHeight = 15;
             devicesLBoxLeft.Location = new Point(222, 124);
             devicesLBoxLeft.Name = "devicesLBoxLeft";
-            devicesLBoxLeft.Size = new Size(144, 215);
+            devicesLBoxLeft.Size = new Size(144, 195);
             devicesLBoxLeft.TabIndex = 15;
             devicesLBoxLeft.SelectedValueChanged += devicesLBox_SelectedValueChanged;
             // 
@@ -466,7 +467,7 @@
             devicesTLPRight.RowStyles.Add(new RowStyle());
             devicesTLPRight.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             devicesTLPRight.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            devicesTLPRight.Size = new Size(371, 342);
+            devicesTLPRight.Size = new Size(371, 322);
             devicesTLPRight.TabIndex = 1;
             // 
             // addDeviceBtnRight
@@ -638,7 +639,7 @@
             buildingsLBoxRight.ItemHeight = 15;
             buildingsLBoxRight.Location = new Point(3, 124);
             buildingsLBoxRight.Name = "buildingsLBoxRight";
-            buildingsLBoxRight.Size = new Size(68, 195);
+            buildingsLBoxRight.Size = new Size(68, 175);
             buildingsLBoxRight.TabIndex = 0;
             buildingsLBoxRight.SelectedValueChanged += buildingsLBox_SelectedValueChanged;
             // 
@@ -649,7 +650,7 @@
             cabinetsLBoxRight.ItemHeight = 15;
             cabinetsLBoxRight.Location = new Point(77, 124);
             cabinetsLBoxRight.Name = "cabinetsLBoxRight";
-            cabinetsLBoxRight.Size = new Size(68, 195);
+            cabinetsLBoxRight.Size = new Size(68, 175);
             cabinetsLBoxRight.TabIndex = 1;
             cabinetsLBoxRight.SelectedValueChanged += cabinetsLBox_SelectedValueChanged;
             // 
@@ -660,7 +661,7 @@
             complectsLBoxRight.ItemHeight = 15;
             complectsLBoxRight.Location = new Point(151, 124);
             complectsLBoxRight.Name = "complectsLBoxRight";
-            complectsLBoxRight.Size = new Size(68, 195);
+            complectsLBoxRight.Size = new Size(68, 175);
             complectsLBoxRight.TabIndex = 7;
             complectsLBoxRight.SelectedValueChanged += complectsLBox_SelectedValueChanged;
             // 
@@ -671,7 +672,7 @@
             devicesLBoxRight.ItemHeight = 15;
             devicesLBoxRight.Location = new Point(225, 124);
             devicesLBoxRight.Name = "devicesLBoxRight";
-            devicesLBoxRight.Size = new Size(143, 195);
+            devicesLBoxRight.Size = new Size(143, 175);
             devicesLBoxRight.TabIndex = 16;
             devicesLBoxRight.SelectedValueChanged += devicesLBox_SelectedValueChanged;
             // 
@@ -687,7 +688,7 @@
             moveLeftRightBtnsTLP.Controls.Add(moveComplectToLeftBtn, 0, 4);
             moveLeftRightBtnsTLP.Controls.Add(moveDeviceToRightBtn, 0, 6);
             moveLeftRightBtnsTLP.Controls.Add(moveDeviceToLeftBtn, 0, 7);
-            moveLeftRightBtnsTLP.Location = new Point(378, 50);
+            moveLeftRightBtnsTLP.Location = new Point(378, 40);
             moveLeftRightBtnsTLP.Name = "moveLeftRightBtnsTLP";
             moveLeftRightBtnsTLP.RowCount = 8;
             moveLeftRightBtnsTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5F));
@@ -781,7 +782,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(976, 409);
+            tabPage2.Size = new Size(970, 374);
             tabPage2.TabIndex = 3;
             tabPage2.Text = "Типы, названия, предоставители техники";
             tabPage2.UseVisualStyleBackColor = true;
@@ -798,7 +799,7 @@
             deviceTypesNamesProvidersTLP.Name = "deviceTypesNamesProvidersTLP";
             deviceTypesNamesProvidersTLP.RowCount = 1;
             deviceTypesNamesProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            deviceTypesNamesProvidersTLP.Size = new Size(970, 403);
+            deviceTypesNamesProvidersTLP.Size = new Size(964, 368);
             deviceTypesNamesProvidersTLP.TabIndex = 0;
             // 
             // deviceTypesNamesGBox
@@ -807,7 +808,7 @@
             deviceTypesNamesGBox.Dock = DockStyle.Fill;
             deviceTypesNamesGBox.Location = new Point(3, 3);
             deviceTypesNamesGBox.Name = "deviceTypesNamesGBox";
-            deviceTypesNamesGBox.Size = new Size(640, 397);
+            deviceTypesNamesGBox.Size = new Size(636, 362);
             deviceTypesNamesGBox.TabIndex = 3;
             deviceTypesNamesGBox.TabStop = false;
             deviceTypesNamesGBox.Text = "Типы и названия";
@@ -830,14 +831,14 @@
             deviceTypesNamesTLP.RowStyles.Add(new RowStyle());
             deviceTypesNamesTLP.RowStyles.Add(new RowStyle());
             deviceTypesNamesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            deviceTypesNamesTLP.Size = new Size(634, 375);
+            deviceTypesNamesTLP.Size = new Size(630, 340);
             deviceTypesNamesTLP.TabIndex = 0;
             // 
             // deviceTypesLabel
             // 
             deviceTypesLabel.Anchor = AnchorStyles.None;
             deviceTypesLabel.AutoSize = true;
-            deviceTypesLabel.Location = new Point(117, 0);
+            deviceTypesLabel.Location = new Point(116, 0);
             deviceTypesLabel.Name = "deviceTypesLabel";
             deviceTypesLabel.Size = new Size(83, 15);
             deviceTypesLabel.TabIndex = 2;
@@ -847,7 +848,7 @@
             // 
             deviceNamesLabel.Anchor = AnchorStyles.None;
             deviceNamesLabel.AutoSize = true;
-            deviceNamesLabel.Location = new Point(423, 0);
+            deviceNamesLabel.Location = new Point(420, 0);
             deviceNamesLabel.Name = "deviceNamesLabel";
             deviceNamesLabel.Size = new Size(105, 15);
             deviceNamesLabel.TabIndex = 2;
@@ -857,7 +858,7 @@
             // 
             editDeviceTypeBtn.Anchor = AnchorStyles.None;
             editDeviceTypeBtn.AutoSize = true;
-            editDeviceTypeBtn.Location = new Point(95, 18);
+            editDeviceTypeBtn.Location = new Point(94, 18);
             editDeviceTypeBtn.Name = "editDeviceTypeBtn";
             editDeviceTypeBtn.Size = new Size(126, 25);
             editDeviceTypeBtn.TabIndex = 1;
@@ -869,7 +870,7 @@
             // 
             editDeviceNameBtn.Anchor = AnchorStyles.None;
             editDeviceNameBtn.AutoSize = true;
-            editDeviceNameBtn.Location = new Point(412, 18);
+            editDeviceNameBtn.Location = new Point(409, 18);
             editDeviceNameBtn.Name = "editDeviceNameBtn";
             editDeviceNameBtn.Size = new Size(126, 25);
             editDeviceNameBtn.TabIndex = 1;
@@ -884,7 +885,7 @@
             deviceTypesLBox.ItemHeight = 15;
             deviceTypesLBox.Location = new Point(3, 49);
             deviceTypesLBox.Name = "deviceTypesLBox";
-            deviceTypesLBox.Size = new Size(311, 323);
+            deviceTypesLBox.Size = new Size(309, 288);
             deviceTypesLBox.TabIndex = 0;
             deviceTypesLBox.SelectedValueChanged += typesLBox_SelectedValueChanged;
             // 
@@ -893,9 +894,9 @@
             deviceNamesLBox.Dock = DockStyle.Fill;
             deviceNamesLBox.FormattingEnabled = true;
             deviceNamesLBox.ItemHeight = 15;
-            deviceNamesLBox.Location = new Point(320, 49);
+            deviceNamesLBox.Location = new Point(318, 49);
             deviceNamesLBox.Name = "deviceNamesLBox";
-            deviceNamesLBox.Size = new Size(311, 323);
+            deviceNamesLBox.Size = new Size(309, 288);
             deviceNamesLBox.TabIndex = 3;
             // 
             // deviceProvidersTLP
@@ -906,20 +907,20 @@
             deviceProvidersTLP.Controls.Add(editDeviceProviderBtn, 0, 1);
             deviceProvidersTLP.Controls.Add(deviceProvidersLBox, 0, 2);
             deviceProvidersTLP.Dock = DockStyle.Fill;
-            deviceProvidersTLP.Location = new Point(649, 3);
+            deviceProvidersTLP.Location = new Point(645, 3);
             deviceProvidersTLP.Name = "deviceProvidersTLP";
             deviceProvidersTLP.RowCount = 3;
             deviceProvidersTLP.RowStyles.Add(new RowStyle());
             deviceProvidersTLP.RowStyles.Add(new RowStyle());
             deviceProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            deviceProvidersTLP.Size = new Size(318, 397);
+            deviceProvidersTLP.Size = new Size(316, 362);
             deviceProvidersTLP.TabIndex = 1;
             // 
             // deviceProvidersLabel
             // 
             deviceProvidersLabel.Anchor = AnchorStyles.None;
             deviceProvidersLabel.AutoSize = true;
-            deviceProvidersLabel.Location = new Point(120, 0);
+            deviceProvidersLabel.Location = new Point(119, 0);
             deviceProvidersLabel.Name = "deviceProvidersLabel";
             deviceProvidersLabel.Size = new Size(78, 15);
             deviceProvidersLabel.TabIndex = 2;
@@ -929,7 +930,7 @@
             // 
             editDeviceProviderBtn.Anchor = AnchorStyles.None;
             editDeviceProviderBtn.AutoSize = true;
-            editDeviceProviderBtn.Location = new Point(96, 18);
+            editDeviceProviderBtn.Location = new Point(95, 18);
             editDeviceProviderBtn.Name = "editDeviceProviderBtn";
             editDeviceProviderBtn.Size = new Size(126, 25);
             editDeviceProviderBtn.TabIndex = 1;
@@ -944,7 +945,7 @@
             deviceProvidersLBox.ItemHeight = 15;
             deviceProvidersLBox.Location = new Point(3, 49);
             deviceProvidersLBox.Name = "deviceProvidersLBox";
-            deviceProvidersLBox.Size = new Size(312, 345);
+            deviceProvidersLBox.Size = new Size(310, 310);
             deviceProvidersLBox.TabIndex = 0;
             // 
             // tabPage3
@@ -953,7 +954,7 @@
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(976, 409);
+            tabPage3.Size = new Size(970, 374);
             tabPage3.TabIndex = 4;
             tabPage3.Text = "История перемещений";
             tabPage3.UseVisualStyleBackColor = true;
@@ -974,7 +975,7 @@
             historyTLP.RowStyles.Add(new RowStyle());
             historyTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             historyTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            historyTLP.Size = new Size(970, 403);
+            historyTLP.Size = new Size(964, 368);
             historyTLP.TabIndex = 0;
             // 
             // historySearchLabel
@@ -1010,7 +1011,7 @@
             historyDGW.Name = "historyDGW";
             historyDGW.ReadOnly = true;
             historyDGW.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            historyDGW.Size = new Size(964, 368);
+            historyDGW.Size = new Size(964, 333);
             historyDGW.TabIndex = 16;
             // 
             // tabPage4
@@ -1019,7 +1020,7 @@
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(976, 409);
+            tabPage4.Size = new Size(970, 374);
             tabPage4.TabIndex = 5;
             tabPage4.Text = "Полный список (только чтение)";
             tabPage4.UseVisualStyleBackColor = true;
@@ -1065,7 +1066,7 @@
             fullListTLP.RowStyles.Add(new RowStyle());
             fullListTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             fullListTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            fullListTLP.Size = new Size(970, 403);
+            fullListTLP.Size = new Size(964, 368);
             fullListTLP.TabIndex = 1;
             // 
             // fullListNotesTBox
@@ -1073,7 +1074,7 @@
             fullListNotesTBox.Dock = DockStyle.Fill;
             fullListNotesTBox.Location = new Point(859, 33);
             fullListNotesTBox.Name = "fullListNotesTBox";
-            fullListNotesTBox.Size = new Size(108, 23);
+            fullListNotesTBox.Size = new Size(102, 23);
             fullListNotesTBox.TabIndex = 33;
             fullListNotesTBox.TextChanged += fullListSearchTBox_TextChanged;
             // 
@@ -1081,7 +1082,7 @@
             // 
             label8.Anchor = AnchorStyles.None;
             label8.AutoSize = true;
-            label8.Location = new Point(874, 7);
+            label8.Location = new Point(871, 7);
             label8.Name = "label8";
             label8.Size = new Size(78, 15);
             label8.TabIndex = 32;
@@ -1253,7 +1254,7 @@
             fullListDGW.Name = "fullListDGW";
             fullListDGW.ReadOnly = true;
             fullListDGW.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            fullListDGW.Size = new Size(964, 318);
+            fullListDGW.Size = new Size(958, 283);
             fullListDGW.TabIndex = 16;
             // 
             // fullListNumberOfDevicesLabel
@@ -1261,7 +1262,7 @@
             fullListNumberOfDevicesLabel.Anchor = AnchorStyles.Left;
             fullListNumberOfDevicesLabel.AutoSize = true;
             fullListTLP.SetColumnSpan(fullListNumberOfDevicesLabel, 8);
-            fullListNumberOfDevicesLabel.Location = new Point(3, 385);
+            fullListNumberOfDevicesLabel.Location = new Point(3, 350);
             fullListNumberOfDevicesLabel.Name = "fullListNumberOfDevicesLabel";
             fullListNumberOfDevicesLabel.Size = new Size(139, 15);
             fullListNumberOfDevicesLabel.TabIndex = 31;
@@ -1312,23 +1313,36 @@
             tableLayoutPanel1.Controls.Add(menuStrip, 0, 0);
             tableLayoutPanel1.Controls.Add(tabControl, 0, 1);
             tableLayoutPanel1.Controls.Add(progressBar1, 0, 2);
+            tableLayoutPanel1.Controls.Add(progressLabel, 0, 3);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(984, 461);
             tableLayoutPanel1.TabIndex = 6;
             // 
             // progressBar1
             // 
-            progressBar1.Dock = DockStyle.Top;
-            progressBar1.Location = new Point(3, 435);
+            progressBar1.Dock = DockStyle.Fill;
+            progressBar1.Location = new Point(3, 415);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(978, 23);
             progressBar1.TabIndex = 2;
+            // 
+            // progressLabel
+            // 
+            progressLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            progressLabel.AutoSize = true;
+            progressLabel.Location = new Point(3, 441);
+            progressLabel.Name = "progressLabel";
+            progressLabel.Size = new Size(978, 20);
+            progressLabel.TabIndex = 3;
+            progressLabel.Text = "label9";
+            progressLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -1472,5 +1486,6 @@
 		private Button addBuildingBtnRight;
         private TableLayoutPanel tableLayoutPanel1;
         private ProgressBar progressBar1;
+        private Label progressLabel;
     }
 }
