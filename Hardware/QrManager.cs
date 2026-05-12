@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using iText.Kernel.Geom;
+using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using System.Drawing.Drawing2D;
 using Path = System.IO.Path;
@@ -17,46 +18,31 @@ namespace Hardware
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            var devices = await context.Devices.Select(d => new
+            List<QrData> devices = await context.Devices.Select(d => new QrData
             {
                 DeviceType = d.DeviceName.DeviceType.Name,
                 DeviceName = d.DeviceName.Name,
-                d.Serial,
-                d.Inventory
+                Serial = d.Serial,
+                Inventory = d.Inventory
             }).ToListAsync();
 
-            using QRCodeGenerator qrGenerator = new();
-            int i = 0;
-            foreach (var device in devices)
+            int iterator = 0;
+            const int batchSize = 50;
+            for (int i = 0; i < devices.Count; i += batchSize)
             {
-                using QRCodeData qrCodeData = qrGenerator.CreateQrCode($"Тип: {device.DeviceType}\nНазвание: {device.DeviceName}\nС/н: {device.Serial}\nИ/н: {device.Inventory}", QRCodeGenerator.ECCLevel.H);
-                using QRCode qrCode = new(qrCodeData);
-
-                Bitmap originalQrCode = qrCode.GetGraphic(25, Color.Black, Color.White, true);
-
-                // Изменяем размер под нужный
-                Bitmap resizedBitmap = new(300, 300);
-                using (Graphics graphics = Graphics.FromImage(resizedBitmap))
+                IEnumerable<QrData> batch = devices.Skip(i).Take(batchSize);
+                foreach (QrData device in batch)
                 {
-                    // Настройки для качественного масштабирования
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphics.SmoothingMode = SmoothingMode.HighQuality;
-                    graphics.DrawImage(originalQrCode, 0, 0, 300, 300);
+                    await Task.Run(() => GenerateSingleQrImage(device, path));
+                    double percent = ++iterator / (double)devices.Count * 100;
+                    string message = $"Создание qr-кода {iterator} из {devices.Count}";
+                    progress.Report(((int)percent, message));
                 }
 
-                // Сохраняем в JPG
-                string fileName = Path.Combine(path, $"{device.Serial}.jpg");
-                if (File.Exists(fileName))
-                    File.Delete(fileName);
-                try
-                {
-                    resizedBitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
-                }
-                catch { }
-                double percent = ++i / (double)devices.Count * 100;
-                string message = $"Создание qr-кода {i} из {devices.Count}";
-                progress.Report(((int)percent, message));
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                await Task.Delay(100);
             }
 
             await MakeHtml(path, progress);
@@ -64,6 +50,33 @@ namespace Hardware
             MessageBox.Show($"Выгрузка завершена по пути {path}");
 
             return true;
+        }
+
+        private async Task GenerateSingleQrImage(QrData qrData, string path)
+        {
+            using QRCodeGenerator qrGenerator = new();
+            using QRCodeData qrCodeData = qrGenerator.CreateQrCode($"Тип: {qrData.DeviceType}\nНазвание: {qrData.DeviceName}\nС/н: {qrData.Serial}\nИ/н: {qrData.Inventory}", QRCodeGenerator.ECCLevel.H);
+            using QRCode qrCode = new(qrCodeData);
+
+            Bitmap originalQrCode = qrCode.GetGraphic(25, Color.Black, Color.White, true);
+
+            Bitmap resizedBitmap = new(300, 300);
+            using (Graphics graphics = Graphics.FromImage(resizedBitmap))
+            {
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.DrawImage(originalQrCode, 0, 0, 300, 300);
+            }
+
+            string fileName = Path.Combine(path, $"{qrData.Serial}.jpg");
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+            try
+            {
+                resizedBitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            catch { }
         }
 
         private async Task<bool> MakeHtml(string path, IProgress<(int percent, string message)> progress)
@@ -144,6 +157,14 @@ namespace Hardware
             await writer.WriteLineAsync("</html>");
 
             return true;
+        }
+
+        struct QrData
+        {
+            public string DeviceType;
+            public string DeviceName;
+            public string Serial;
+            public string? Inventory;
         }
     }
 }
