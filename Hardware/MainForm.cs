@@ -10,6 +10,8 @@ namespace Hardware
     {
         private System.Windows.Forms.Timer searchTimerLeft;
         private System.Windows.Forms.Timer searchTimerRight;
+        private System.Windows.Forms.Timer searchTimerHistory;
+        private System.Windows.Forms.Timer searchTimerFullTable;
         private const int searchTimerDelayMS = 500;
         private readonly ConfigManager configManager = new();
         private List<ToolStripMenuItem> downloadButtons;
@@ -38,16 +40,31 @@ namespace Hardware
             RefreshBuildings();
             InitializeHistoryDGW();
             InitializeFullListDGW();
+
             searchTimerLeft = new()
             {
                 Interval = searchTimerDelayMS
             };
             searchTimerLeft.Tick += SearchTimerTick;
+
             searchTimerRight = new()
             {
                 Interval = searchTimerDelayMS
             };
             searchTimerRight.Tick += SearchTimerTick;
+
+            searchTimerHistory = new()
+            {
+                Interval = searchTimerDelayMS
+            };
+            searchTimerHistory.Tick += SearchTimerHistoryTick;
+
+            searchTimerFullTable = new()
+            {
+                Interval = searchTimerDelayMS
+            };
+            searchTimerFullTable.Tick += SearchTimerFullTableTick;
+
             ProgressOff();
             downloadButtons = [передатьВExcelToolStripMenuItem, выгрузитьQRкодыToolStripMenuItem, выгрузитьИнвентарныеКарточкиToolStripMenuItem];
         }
@@ -107,6 +124,18 @@ namespace Hardware
                 RefreshBuildingsLBoxRight();
         }
 
+        private void SearchTimerHistoryTick(object sender, EventArgs e)
+        {
+            (sender as System.Windows.Forms.Timer).Stop();
+            RefreshHistoryDGW();
+        }
+
+        private void SearchTimerFullTableTick(object sender, EventArgs e)
+        {
+            (sender as System.Windows.Forms.Timer).Stop();
+            RefreshFullListDGW();
+        }
+
         private void RefreshAll()
         {
             RefreshBuildings();
@@ -159,6 +188,7 @@ namespace Hardware
                                                               .ThenInclude(c => c.Complects)
                                                               .ThenInclude(c => c.Devices)
                                                               .ThenInclude(d => d.DeviceName)
+                                                              .OrderBy(b => b.Name)
                                                               .AsSplitQuery()
                                                               .ToListAsync();
             if (filter.Length != 0)
@@ -474,7 +504,7 @@ namespace Hardware
         {
             List<Complect> complects = [.. cabinet.Complects.OrderBy(c => c.Name)];
             if (filter.Length != 0)
-                complects = complects.Where(c => c.Devices.Any(d => d.ToString().ToLower().Contains(filter))).ToList();
+                complects = [.. complects.Where(c => c.Devices.Any(d => d.ToString().ToLower().Contains(filter)))];
             return complects;
         }
 
@@ -990,38 +1020,45 @@ namespace Hardware
             SwitchEditDeviceBtnLeft();
             SwitchEditDeviceBtnRight();
         }
+
+        private void tabPage2_Enter(object sender, EventArgs e)
+        {
+            RefreshDeviceTypes();
+            RefreshDeviceProviders();
+        }
         #endregion
 
         #region Блок работы с историей перемещений
-        private void InitializeHistoryDGW()
+        private async void InitializeHistoryDGW()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-            historyDGW.DataSource = context.History.OrderByDescending(h => h.ChangedAt).ToList();
+            historyDGW.DataSource = await context.History.OrderByDescending(h => h.ChangedAt).ToListAsync();
             historyDGW.Columns[0].Visible = false;
             historyDGW.Columns[1].HeaderText = "Было";
             historyDGW.Columns[2].HeaderText = "Стало";
             historyDGW.Columns[3].HeaderText = "Дата и время изменения";
         }
 
-        private void RefreshHistoryDGW()
+        private async void RefreshHistoryDGW()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
             if (historySearchTBox.Text.Length == 0)
-                historyDGW.DataSource = context.History.OrderByDescending(h => h.ChangedAt).ToList();
+                historyDGW.DataSource = await context.History.OrderByDescending(h => h.ChangedAt).ToListAsync();
             else
             {
                 string text = historySearchTBox.Text.ToLower();
-                historyDGW.DataSource = context.History.Where(h => h.Before.ToLower().Contains(text) || h.After.ToLower().Contains(text))
+                historyDGW.DataSource = await context.History.Where(h => h.Before.ToLower().Contains(text) || h.After.ToLower().Contains(text))
                     .OrderByDescending(h => h.ChangedAt)
-                    .ToList();
+                    .ToListAsync();
             }
         }
 
         private void historySearchTBox_TextChanged(object sender, EventArgs e)
         {
-            RefreshHistoryDGW();
+            searchTimerHistory.Stop();
+            searchTimerHistory.Start();
         }
 
         private void tabPage3_Enter(object sender, EventArgs e)
@@ -1031,26 +1068,26 @@ namespace Hardware
         #endregion
 
         #region Блок работы с полным списком техники
-        private void InitializeFullListDGW()
+        private async void InitializeFullListDGW()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-            fullListDGW.DataSource = context.Devices.Select(d => new
+            fullListDGW.DataSource = await context.Devices.Select(d => new
             {
-                d.Complect.Cabinet.Building,
-                d.Complect.Cabinet,
-                d.Complect,
-                d.DeviceName.DeviceType,
-                d.DeviceName,
-                d.DeviceProvider,
+                BuildingName = d.Complect.Cabinet.Building.Name,
+                CabinetName = d.Complect.Cabinet.Name,
+                ComplectName = d.Complect.Name,
+                DeviceTypeName = d.DeviceName.DeviceType.Name,
+                DeviceName = d.DeviceName.Name,
+                DeviceProviderName = d.DeviceProvider.Name,
                 d.Serial,
                 d.Inventory,
                 d.Notes
-            }).OrderBy(d => d.Building.Name)
-            .ThenBy(d => d.Cabinet.Name)
-            .ThenBy(d => d.Complect.Name)
-            .ThenBy(d => d.DeviceName.Name)
-            .ToList();
+            }).OrderBy(d => d.BuildingName)
+            .ThenBy(d => d.CabinetName)
+            .ThenBy(d => d.ComplectName)
+            .ThenBy(d => d.Inventory)
+            .ToListAsync();
 
             fullListDGW.Columns[0].HeaderText = "Здание";
             fullListDGW.Columns[1].HeaderText = "Кабинет";
@@ -1065,45 +1102,45 @@ namespace Hardware
             fullListNumberOfDevicesLabel.Text = $"Всего единиц техники: {fullListDGW.RowCount}";
         }
 
-        private void RefreshFullListDGW()
+        private async void RefreshFullListDGW()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-            var list = context.Devices.Select(d => new
+            var list = await context.Devices.Select(d => new
             {
-                d.Complect.Cabinet.Building,
-                d.Complect.Cabinet,
-                d.Complect,
-                d.DeviceName.DeviceType,
-                d.DeviceName,
-                d.DeviceProvider,
+                BuildingName = d.Complect.Cabinet.Building.Name,
+                CabinetName = d.Complect.Cabinet.Name,
+                ComplectName = d.Complect.Name,
+                DeviceTypeName = d.DeviceName.DeviceType.Name,
+                DeviceName = d.DeviceName.Name,
+                DeviceProviderName = d.DeviceProvider.Name,
                 d.Serial,
                 d.Inventory,
                 d.Notes
-            }).OrderBy(d => d.Building.Name)
-            .ThenBy(d => d.Cabinet.Name)
-            .ThenBy(d => d.Complect.Name)
-            .ThenBy(d => d.DeviceName.Name)
-            .ToList();
+            }).OrderBy(d => d.BuildingName)
+            .ThenBy(d => d.CabinetName)
+            .ThenBy(d => d.ComplectName)
+            .ThenBy(d => d.Inventory)
+            .ToListAsync();
 
             if (fullListBuildingTBox.Text.Length != 0)
-                list = list.Where(d => d.Building.Name.ToLower().Contains(fullListBuildingTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.BuildingName.ToLower().Contains(fullListBuildingTBox.Text.ToLower()))];
             if (fullListCabinetTBox.Text.Length != 0)
-                list = list.Where(d => d.Cabinet.Name.ToLower().Contains(fullListCabinetTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.CabinetName.ToLower().Contains(fullListCabinetTBox.Text.ToLower()))];
             if (fullListComplectTBox.Text.Length != 0)
-                list = list.Where(d => d.Complect.Name.ToLower().Contains(fullListComplectTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.ComplectName.ToLower().Contains(fullListComplectTBox.Text.ToLower()))];
             if (fullListDeviceTypeTBox.Text.Length != 0)
-                list = list.Where(d => d.DeviceType.Name.ToLower().Contains(fullListDeviceTypeTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.DeviceTypeName.ToLower().Contains(fullListDeviceTypeTBox.Text.ToLower()))];
             if (fullListDeviceNameTBox.Text.Length != 0)
-                list = list.Where(d => d.DeviceName.Name.ToLower().Contains(fullListDeviceNameTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.DeviceName.ToLower().Contains(fullListDeviceNameTBox.Text.ToLower()))];
             if (fullListDeviceProviderTBox.Text.Length != 0)
-                list = list.Where(d => d.DeviceProvider.Name.ToLower().Contains(fullListDeviceProviderTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.DeviceProviderName.ToLower().Contains(fullListDeviceProviderTBox.Text.ToLower()))];
             if (fullListSerialTBox.Text.Length != 0)
-                list = list.Where(d => d.Serial.ToLower().Contains(fullListSerialTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.Serial.ToLower().Contains(fullListSerialTBox.Text.ToLower()))];
             if (fullListInventoryTBox.Text.Length != 0)
-                list = list.Where(d => d.Inventory.ToLower().Contains(fullListInventoryTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.Inventory.ToLower().Contains(fullListInventoryTBox.Text.ToLower()))];
             if (fullListNotesTBox.Text.Length != 0)
-                list = list.Where(d => d.Notes.ToLower().Contains(fullListNotesTBox.Text.ToLower())).ToList();
+                list = [.. list.Where(d => d.Notes.ToLower().Contains(fullListNotesTBox.Text.ToLower()))];
 
             fullListDGW.DataSource = list;
             fullListNumberOfDevicesLabel.Text = $"Всего единиц техники: {fullListDGW.RowCount}";
@@ -1111,7 +1148,8 @@ namespace Hardware
 
         private void fullListSearchTBox_TextChanged(object sender, EventArgs e)
         {
-            RefreshFullListDGW();
+            searchTimerFullTable.Stop();
+            searchTimerFullTable.Start();
         }
 
         private void tabPage4_Enter(object sender, EventArgs e)
@@ -1165,22 +1203,28 @@ namespace Hardware
                 return;
             }
 
-            var devices = context.Devices.Select(d => new
+            List<Building> buildings = await context.Buildings.Include(b => b.Cabinets)
+                                                              .ThenInclude(c => c.Complects)
+                                                              .ThenInclude(c => c.Devices)
+                                                              .ThenInclude(d => d.DeviceName)
+                                                              .ThenInclude(dn => dn.DeviceType)
+                                                              .Include(b => b.Cabinets)
+                                                              .ThenInclude(c => c.Complects)
+                                                              .ThenInclude(c => c.Devices)
+                                                              .ThenInclude(d => d.DeviceProvider)
+                                                              .OrderBy(b => b.Name)
+                                                              .AsSplitQuery()
+                                                              .ToListAsync();
+            foreach (Building building in buildings)
             {
-                d.Complect.Cabinet.Building,
-                d.Complect.Cabinet,
-                d.Complect,
-                d.DeviceName.DeviceType,
-                d.DeviceName,
-                d.DeviceProvider,
-                d.Serial,
-                d.Inventory,
-                d.Notes
-            }).OrderBy(d => d.Building.Name)
-            .ThenBy(d => d.Cabinet.Name)
-            .ThenBy(d => d.Complect.Name)
-            .ThenBy(d => d.DeviceName.Name)
-            .ToList();
+                building.Cabinets = [.. building.Cabinets.OrderBy(c => c.Name)];
+                foreach (Cabinet cabinet in building.Cabinets)
+                {
+                    cabinet.Complects = [.. cabinet.Complects.OrderBy(c => c.Name)];
+                    foreach (Complect complect in cabinet.Complects)
+                        complect.Devices = [.. complect.Devices.OrderBy(d => d.Inventory).ThenBy(d => d.Serial)];
+                }
+            }
 
             using ExcelPackage package = new(path);
             using ExcelWorkbook workbook = package.Workbook;
@@ -1202,26 +1246,30 @@ namespace Hardware
             worksheet.Cells[1, 9].Value = "Примечание";
 
             int row = 2;
-            int i = 0;
+            int iterator = 0;
+            int devicesCount = await context.Devices.CountAsync();
 
-            foreach (var device in devices)
-            {
-                worksheet.Cells[row, 1].Value = device.Complect.Cabinet.Building;
-                worksheet.Cells[row, 2].Value = device.Complect.Cabinet;
-                worksheet.Cells[row, 3].Value = device.Complect;
-                worksheet.Cells[row, 4].Value = device.DeviceName.DeviceType;
-                worksheet.Cells[row, 5].Value = device.DeviceName;
-                worksheet.Cells[row, 6].Value = device.DeviceProvider;
-                worksheet.Cells[row, 7].Value = device.Serial;
-                worksheet.Cells[row, 8].Value = device.Inventory;
-                worksheet.Cells[row, 9].Value = device.Notes;
+            foreach (Building building in buildings)
+                foreach (Cabinet cabinet in building.Cabinets)
+                    foreach (Complect complect in cabinet.Complects)
+                        foreach (Device device in complect.Devices)
+                        {
+                            worksheet.Cells[row, 1].Value = building.Name;
+                            worksheet.Cells[row, 2].Value = cabinet.Name;
+                            worksheet.Cells[row, 3].Value = complect.Name;
+                            worksheet.Cells[row, 4].Value = device.DeviceName.DeviceType.Name;
+                            worksheet.Cells[row, 5].Value = device.DeviceName.Name;
+                            worksheet.Cells[row, 6].Value = device.DeviceProvider.Name;
+                            worksheet.Cells[row, 7].Value = device.Serial;
+                            worksheet.Cells[row, 8].Value = device.Inventory;
+                            worksheet.Cells[row, 9].Value = device.Notes;
 
-                double percent = ++i / (double)devices.Count * 100;
-                string message = $"Формирование таблицы {i} из {devices.Count}";
-                progress.Report(((int)percent, message));
+                            double percent = ++iterator / (double)devicesCount * 100;
+                            string message = $"Формирование таблицы {iterator} из {devicesCount}";
+                            progress.Report(((int)percent, message));
 
-                row++;
-            }
+                            row++;
+                        }
 
             ExcelRange range = worksheet.Cells[1, 1, row - 1, 9];
             OfficeOpenXml.Table.ExcelTable table = worksheet.Tables.Add(range, "Техника");
@@ -1311,299 +1359,302 @@ namespace Hardware
                 return;
             }
 
-            var devices = context.Devices.Select(d => new
+            List<Building> buildings = await context.Buildings.Include(b => b.Cabinets)
+                                                              .ThenInclude(c => c.Complects)
+                                                              .ThenInclude(c => c.Devices)
+                                                              .ThenInclude(d => d.DeviceName)
+                                                              .ThenInclude(dn => dn.DeviceType)
+                                                              .OrderBy(b => b.Name)
+                                                              .AsSplitQuery()
+                                                              .ToListAsync();
+            foreach (Building building in buildings)
             {
-                d.Complect.Cabinet.Building,
-                d.Complect.Cabinet,
-                d.Complect,
-                d.DeviceName.DeviceType,
-                d.DeviceName,
-                d.Serial,
-                d.Inventory
-            }).OrderBy(d => d.Building.Name)
-            .ThenBy(d => d.Cabinet.Name)
-            .ThenBy(d => d.Complect.Name)
-            .ThenBy(d => d.DeviceName.Name)
-            .ToList();
+                building.Cabinets = [.. building.Cabinets.OrderBy(c => c.Name)];
+                foreach (Cabinet cabinet in building.Cabinets)
+                {
+                    cabinet.Complects = [.. cabinet.Complects.OrderBy(c => c.Name)];
+                    foreach (Complect complect in cabinet.Complects)
+                        complect.Devices = [.. complect.Devices.OrderBy(d => d.Inventory).ThenBy(d => d.Serial)];
+                }
+            }
 
             ExcelPackage package = new(fileName);
             ExcelWorkbook workbook = package.Workbook;
-
-            List<string> savedCabinets = [];
             int iterator = 0;
-            foreach (var device in devices)
-            {
-                double percent = ++iterator / (double)devices.Count * 100;
-                string message = $"Заполнение инвентарных карточек {iterator} из {devices.Count}";
-                progress.Report(((int)percent, message));
+            int devicesCount = await context.Devices.CountAsync();
 
-                string worksheetName = $"{device.Complect.Cabinet.Building.Name} {device.Complect.Cabinet.Name}";
-                worksheetName = NonAlphabetNoNumberNoSpace().Replace(worksheetName, "_");
-                if (savedCabinets.Any(item => item == worksheetName))
-                    continue;
-
-                var devicesInCabinet = (from d in devices where d.Building.Id == device.Building.Id && d.Cabinet.Id == device.Cabinet.Id select d).ToList();
-
-                ExcelWorksheet worksheet = workbook.Worksheets.Add(worksheetName);
-
-                worksheet.PrinterSettings.FitToPage = true;
-                worksheet.PrinterSettings.FitToWidth = 1;
-                worksheet.PrinterSettings.FitToHeight = 1;
-                worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
-                worksheet.PrinterSettings.PaperSize = ePaperSize.A5;
-                worksheet.PrinterSettings.HorizontalCentered = true;
-
-                worksheet.Cells.Style.Font.Name = "Courier New";
-                worksheet.Cells.Style.Font.Size = 8;
-                worksheet.Cells.Style.WrapText = true;
-                worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-
-                worksheet.Columns[1].Width = 6.17;
-                worksheet.Columns[2].Width = 18.67;
-                worksheet.Columns[3].Width = 12.67;
-                worksheet.Columns[4].Width = 12.17;
-                worksheet.Columns[5].Width = 4.5;
-                worksheet.Columns[6].Width = 7.67;
-                worksheet.Columns[7].Width = 28.33;
-                worksheet.Columns[8].Width = 2.67;
-                worksheet.Columns[9].Width = 12.67;
-                worksheet.Columns[10].Width = 7.67;
-                worksheet.Columns[11].Width = 8.67;
-
-                #region Шапка
-                worksheet.Cells[1, 1, 1, 11].Merge = true;
-                worksheet.Cells[1, 1].Value = "Инвентарный список нефинансовых активов";
-                worksheet.Cells[1, 1].Style.Font.Size = 10;
-                worksheet.Cells[1, 1].Style.Font.Bold = true;
-                worksheet.Cells[1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[2, 1].Value = $"{device.Complect.Cabinet.Building.Name} {device.Complect.Cabinet.Name}";
-
-                worksheet.Cells[4, 1].Value = "Учреждение";
-                worksheet.Cells[4, 3, 4, 8].Merge = true;
-                worksheet.Cells[4, 3].Value = "ЧЕТВЕРТЫЙ КАССАЦИОННЫЙ СУД ОБЩЕЙ ЮРИСДИКЦИИ";
-                worksheet.Cells[4, 3, 4, 8].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                worksheet.Cells[5, 4, 5, 8].Merge = true;
-                worksheet.Cells[5, 1].Value = "Структурное подразделение";
-                worksheet.Cells[5, 4, 5, 8].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                worksheet.Cells[6, 4, 6, 8].Merge = true;
-                worksheet.Cells[6, 1].Value = "Ответственное(-ые) лицо(-а)";
-                worksheet.Cells[6, 4, 6, 8].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                worksheet.Cells[2, 10, 2, 11].Merge = true;
-                worksheet.Cells[2, 10].Value = "КОДЫ";
-                worksheet.Cells[2, 10, 2, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[3, 10, 3, 11].Merge = true;
-                worksheet.Cells[3, 10].Value = "0504034";
-                worksheet.Cells[3, 10, 3, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[4, 10, 4, 11].Merge = true;
-                worksheet.Cells[4, 10].Value = "32717350";
-                worksheet.Cells[4, 10, 4, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[5, 10].Value = DateTime.Now.ToShortDateString();
-                worksheet.Cells[5, 10, 5, 11].Merge = true;
-                worksheet.Cells[5, 10].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[6, 10, 6, 11].Merge = true;
-
-                worksheet.Cells[3, 9].Value = "Форма по ОКУД";
-                worksheet.Cells[3, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-
-                worksheet.Cells[4, 9].Value = "по ОКПО";
-                worksheet.Cells[4, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-
-                worksheet.Cells[5, 9].Value = "Дата";
-                worksheet.Cells[5, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-
-                for (int i = 2; i <= 6; i++)
-                    for (int j = 10; j <= 11; j++)
-                    {
-                        var cell = worksheet.Cells[i, j];
-                        cell.Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                        cell.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                        cell.Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                        cell.Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                    }
-                worksheet.Cells[3, 10, 6, 11].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Medium);
-
-                worksheet.Rows[1, 6].Style.WrapText = false;
-                #endregion
-
-                #region Шапка таблицы
-                worksheet.Rows[8, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[8, 1].Value = "Номер\nп/п";
-                worksheet.Cells[8, 1, 10, 1].Merge = true;
-
-                worksheet.Cells[8, 2].Value = "Инвентарная\nкарточка";
-                worksheet.Cells[8, 2, 9, 3].Merge = true;
-
-                worksheet.Cells[10, 2].Value = "номер";
-                worksheet.Cells[10, 3].Value = "дата";
-
-                worksheet.Cells[8, 4].Value = "Заводской\nномер";
-                worksheet.Cells[8, 4, 10, 4].Merge = true;
-
-                worksheet.Cells[8, 5].Value = "Инвентарный\nномер";
-                worksheet.Cells[8, 5, 10, 6].Merge = true;
-
-                worksheet.Cells[8, 7].Value = "Полное наименование объекта";
-                worksheet.Cells[8, 7, 10, 8].Merge = true;
-
-                worksheet.Cells[8, 9].Value = "Выбытие (перемещение)";
-                worksheet.Cells[8, 9, 8, 11].Merge = true;
-
-                worksheet.Cells[9, 9].Value = "документ";
-                worksheet.Cells[9, 9, 9, 10].Merge = true;
-
-                worksheet.Cells[10, 9].Value = "дата";
-                worksheet.Cells[10, 10].Value = "номер";
-
-                worksheet.Cells[9, 11].Value = "причина\nвыбытия";
-                worksheet.Cells[9, 11, 10, 11].Merge = true;
-
-                worksheet.Cells[11, 1].Value = "1а";
-                worksheet.Cells[11, 2].Value = "1";
-                worksheet.Cells[11, 3].Value = "2";
-                worksheet.Cells[11, 4].Value = "3";
-
-                worksheet.Cells[11, 5, 11, 6].Merge = true;
-                worksheet.Cells[11, 5].Value = "4";
-
-                worksheet.Cells[11, 7, 11, 8].Merge = true;
-                worksheet.Cells[11, 7].Value = "5";
-
-                worksheet.Cells[11, 9].Value = "6";
-                worksheet.Cells[11, 10].Value = "7";
-                worksheet.Cells[11, 11].Value = "8";
-                #endregion
-
-                #region Тело таблицы
-                int row = 12;
-                int count = 1;
-                foreach (var d in devicesInCabinet)
+            foreach (Building building in buildings)
+                foreach (Cabinet cabinet in building.Cabinets)
                 {
-                    worksheet.Cells[row, 5, row, 6].Merge = true;
-                    worksheet.Cells[row, 7, row, 8].Merge = true;
+                    double percent = ++iterator / (double)devicesCount * 100;
+                    string message = $"Заполнение инвентарных карточек {iterator} из {devicesCount}";
+                    progress.Report(((int)percent, message));
 
-                    worksheet.Cells[row, 1].Value = count++;
-                    worksheet.Cells[row, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    if (d.Inventory != null && d.Inventory.StartsWith("10134"))
-                        worksheet.Cells[row, 2].Value = d.Inventory[^5..];
+                    string worksheetName = $"{building.Name} {cabinet.Name}";
+                    worksheetName = NonAlphabetNoNumberNoSpace().Replace(worksheetName, "_");
 
-                    worksheet.Cells[row, 4].Value = d.Serial;
-                    if (d.Inventory != null)
-                        worksheet.Cells[row, 5].Value = d.Inventory;
+                    ExcelWorksheet worksheet = workbook.Worksheets.Add(worksheetName);
 
-                    worksheet.Cells[row, 7].Value = $"{d.DeviceType.Name} {d.DeviceName}";
+                    worksheet.PrinterSettings.FitToPage = true;
+                    worksheet.PrinterSettings.FitToWidth = 1;
+                    worksheet.PrinterSettings.FitToHeight = 1;
+                    worksheet.PrinterSettings.Orientation = eOrientation.Landscape;
+                    worksheet.PrinterSettings.PaperSize = ePaperSize.A5;
+                    worksheet.PrinterSettings.HorizontalCentered = true;
+
+                    worksheet.Cells.Style.Font.Name = "Courier New";
+                    worksheet.Cells.Style.Font.Size = 8;
+                    worksheet.Cells.Style.WrapText = true;
+                    worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+                    worksheet.Columns[1].Width = 6.17;
+                    worksheet.Columns[2].Width = 18.67;
+                    worksheet.Columns[3].Width = 12.67;
+                    worksheet.Columns[4].Width = 12.17;
+                    worksheet.Columns[5].Width = 4.5;
+                    worksheet.Columns[6].Width = 7.67;
+                    worksheet.Columns[7].Width = 28.33;
+                    worksheet.Columns[8].Width = 2.67;
+                    worksheet.Columns[9].Width = 12.67;
+                    worksheet.Columns[10].Width = 7.67;
+                    worksheet.Columns[11].Width = 8.67;
+
+                    #region Шапка
+                    worksheet.Cells[1, 1, 1, 11].Merge = true;
+                    worksheet.Cells[1, 1].Value = "Инвентарный список нефинансовых активов";
+                    worksheet.Cells[1, 1].Style.Font.Size = 10;
+                    worksheet.Cells[1, 1].Style.Font.Bold = true;
+                    worksheet.Cells[1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[2, 1].Value = $"{building.Name} {cabinet.Name}";
+
+                    worksheet.Cells[4, 1].Value = "Учреждение";
+                    worksheet.Cells[4, 3, 4, 8].Merge = true;
+                    worksheet.Cells[4, 3].Value = "ЧЕТВЕРТЫЙ КАССАЦИОННЫЙ СУД ОБЩЕЙ ЮРИСДИКЦИИ";
+                    worksheet.Cells[4, 3, 4, 8].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                    worksheet.Cells[5, 4, 5, 8].Merge = true;
+                    worksheet.Cells[5, 1].Value = "Структурное подразделение";
+                    worksheet.Cells[5, 4, 5, 8].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                    worksheet.Cells[6, 4, 6, 8].Merge = true;
+                    worksheet.Cells[6, 1].Value = "Ответственное(-ые) лицо(-а)";
+                    worksheet.Cells[6, 4, 6, 8].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                    worksheet.Cells[2, 10, 2, 11].Merge = true;
+                    worksheet.Cells[2, 10].Value = "КОДЫ";
+                    worksheet.Cells[2, 10, 2, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[3, 10, 3, 11].Merge = true;
+                    worksheet.Cells[3, 10].Value = "0504034";
+                    worksheet.Cells[3, 10, 3, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[4, 10, 4, 11].Merge = true;
+                    worksheet.Cells[4, 10].Value = "32717350";
+                    worksheet.Cells[4, 10, 4, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[5, 10].Value = DateTime.Now.ToShortDateString();
+                    worksheet.Cells[5, 10, 5, 11].Merge = true;
+                    worksheet.Cells[5, 10].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[6, 10, 6, 11].Merge = true;
+
+                    worksheet.Cells[3, 9].Value = "Форма по ОКУД";
+                    worksheet.Cells[3, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells[4, 9].Value = "по ОКПО";
+                    worksheet.Cells[4, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+
+                    worksheet.Cells[5, 9].Value = "Дата";
+                    worksheet.Cells[5, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+
+                    for (int i = 2; i <= 6; i++)
+                        for (int j = 10; j <= 11; j++)
+                        {
+                            ExcelRange cell = worksheet.Cells[i, j];
+                            cell.Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                            cell.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                            cell.Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                            cell.Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        }
+                    worksheet.Cells[3, 10, 6, 11].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Medium);
+
+                    worksheet.Rows[1, 6].Style.WrapText = false;
+                    #endregion
+
+                    #region Шапка таблицы
+                    worksheet.Rows[8, 11].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[8, 1].Value = "Номер\nп/п";
+                    worksheet.Cells[8, 1, 10, 1].Merge = true;
+
+                    worksheet.Cells[8, 2].Value = "Инвентарная\nкарточка";
+                    worksheet.Cells[8, 2, 9, 3].Merge = true;
+
+                    worksheet.Cells[10, 2].Value = "номер";
+                    worksheet.Cells[10, 3].Value = "дата";
+
+                    worksheet.Cells[8, 4].Value = "Заводской\nномер";
+                    worksheet.Cells[8, 4, 10, 4].Merge = true;
+
+                    worksheet.Cells[8, 5].Value = "Инвентарный\nномер";
+                    worksheet.Cells[8, 5, 10, 6].Merge = true;
+
+                    worksheet.Cells[8, 7].Value = "Полное наименование объекта";
+                    worksheet.Cells[8, 7, 10, 8].Merge = true;
+
+                    worksheet.Cells[8, 9].Value = "Выбытие (перемещение)";
+                    worksheet.Cells[8, 9, 8, 11].Merge = true;
+
+                    worksheet.Cells[9, 9].Value = "документ";
+                    worksheet.Cells[9, 9, 9, 10].Merge = true;
+
+                    worksheet.Cells[10, 9].Value = "дата";
+                    worksheet.Cells[10, 10].Value = "номер";
+
+                    worksheet.Cells[9, 11].Value = "причина\nвыбытия";
+                    worksheet.Cells[9, 11, 10, 11].Merge = true;
+
+                    worksheet.Cells[11, 1].Value = "1а";
+                    worksheet.Cells[11, 2].Value = "1";
+                    worksheet.Cells[11, 3].Value = "2";
+                    worksheet.Cells[11, 4].Value = "3";
+
+                    worksheet.Cells[11, 5, 11, 6].Merge = true;
+                    worksheet.Cells[11, 5].Value = "4";
+
+                    worksheet.Cells[11, 7, 11, 8].Merge = true;
+                    worksheet.Cells[11, 7].Value = "5";
+
+                    worksheet.Cells[11, 9].Value = "6";
+                    worksheet.Cells[11, 10].Value = "7";
+                    worksheet.Cells[11, 11].Value = "8";
+                    #endregion
+
+                    #region Тело таблицы
+                    int row = 12;
+                    int count = 1;
+                    foreach (Complect complect in cabinet.Complects)
+                        foreach (Device d in complect.Devices)
+                        {
+                            worksheet.Cells[row, 5, row, 6].Merge = true;
+                            worksheet.Cells[row, 7, row, 8].Merge = true;
+
+                            worksheet.Cells[row, 1].Value = count++;
+                            worksheet.Cells[row, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                            if (d.Inventory != null && d.Inventory.StartsWith("10134"))
+                                worksheet.Cells[row, 2].Value = d.Inventory[^5..];
+
+                            worksheet.Cells[row, 4].Value = d.Serial;
+                            if (d.Inventory != null)
+                                worksheet.Cells[row, 5].Value = d.Inventory;
+
+                            worksheet.Cells[row, 7].Value = $"{d.DeviceName.DeviceType.Name} {d.DeviceName.Name}";
+
+                            if (d.Inventory != null && d.Inventory != string.Empty)
+                                worksheet.Row(row).Height = 22.5;
+
+                            row++;
+                        }
+                    row--;
+
+                    for (int i = 8; i <= row; i++)
+                    {
+                        for (int j = 1; j <= 11; j++)
+                        {
+                            ExcelRange cell = worksheet.Cells[i, j];
+                            cell.Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                            cell.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                            cell.Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                            cell.Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        }
+                    }
+                    #endregion
+
+                    #region Днище таблицы
+                    row += 2;
+
+                    worksheet.Rows[row, row + 5].Style.WrapText = false;
+
+                    worksheet.Cells[row, 1].Value = "Исполнитель";
+
+                    worksheet.Cells[row, 3, row, 5].Merge = true;
+                    worksheet.Cells[row, 3, row, 5].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                    worksheet.Cells[row, 7].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                    worksheet.Cells[row, 9, row, 11].Merge = true;
+                    worksheet.Cells[row, 9, row, 11].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
                     row++;
-                }
-                row--;
 
-                for (int i = 8; i <= row; i++)
-                {
-                    for (int j = 1; j <= 11; j++)
+                    worksheet.Cells[row, 3, row, 5].Merge = true;
+                    worksheet.Cells[row, 3].Value = "(должность)";
+                    worksheet.Cells[row, 3].Style.Font.Size = 7;
+                    worksheet.Cells[row, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[row, 7].Value = "(подпись)";
+                    worksheet.Cells[row, 7].Style.Font.Size = 7;
+                    worksheet.Cells[row, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[row, 9, row, 11].Merge = true;
+                    worksheet.Cells[row, 9].Value = "(расшифровка подписи)";
+                    worksheet.Cells[row, 9].Style.Font.Size = 7;
+                    worksheet.Cells[row, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    row++;
+
+                    worksheet.Cells[row, 7].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                    worksheet.Cells[row, 9, row, 11].Merge = true;
+                    worksheet.Cells[row, 9, row, 11].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                    row++;
+
+                    worksheet.Cells[row, 7].Value = "(номер контактного телефона)";
+                    worksheet.Cells[row, 7].Style.Font.Size = 7;
+                    worksheet.Cells[row, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    worksheet.Cells[row, 9, row, 11].Merge = true;
+                    worksheet.Cells[row, 9].Value = "(электронный адрес)";
+                    worksheet.Cells[row, 9].Style.Font.Size = 7;
+                    worksheet.Cells[row, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                    row++;
+
+                    worksheet.Cells[row, 1].Value = "\"_______\"____________________ 20___ г.";
+                    #endregion
+
+                    if (workbook.Worksheets.Count > 24)
                     {
-                        ExcelRange cell = worksheet.Cells[i, j];
-                        cell.Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                        cell.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                        cell.Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                        cell.Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        try
+                        {
+                            package.Save();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Ошибка: {ex.Message}");
+                        }
+
+                        workbook.Dispose();
+                        package.Dispose();
+
+                        fileName = Path.Combine(path, $"Инвентарные карточки {DateTime.Now.ToShortDateString().Replace('.', '-')} ({files++}).xlsx");
+                        try
+                        {
+                            if (File.Exists(fileName))
+                                File.Delete(fileName);
+                        }
+                        catch
+                        {
+                            MessageBox.Show($"Файл {fileName} занят");
+                            return;
+                        }
+
+                        package = new(fileName);
+                        workbook = package.Workbook;
                     }
                 }
-                #endregion
-
-                #region Днище таблицы
-                row += 2;
-
-                worksheet.Rows[row, row + 5].Style.WrapText = false;
-
-                worksheet.Cells[row, 1].Value = "Исполнитель";
-
-                worksheet.Cells[row, 3, row, 5].Merge = true;
-                worksheet.Cells[row, 3, row, 5].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                worksheet.Cells[row, 7].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                worksheet.Cells[row, 9, row, 11].Merge = true;
-                worksheet.Cells[row, 9, row, 11].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                row++;
-
-                worksheet.Cells[row, 3, row, 5].Merge = true;
-                worksheet.Cells[row, 3].Value = "(должность)";
-                worksheet.Cells[row, 3].Style.Font.Size = 7;
-                worksheet.Cells[row, 3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[row, 7].Value = "(подпись)";
-                worksheet.Cells[row, 7].Style.Font.Size = 7;
-                worksheet.Cells[row, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[row, 9, row, 11].Merge = true;
-                worksheet.Cells[row, 9].Value = "(расшифровка подписи)";
-                worksheet.Cells[row, 9].Style.Font.Size = 7;
-                worksheet.Cells[row, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                row++;
-
-                worksheet.Cells[row, 7].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                worksheet.Cells[row, 9, row, 11].Merge = true;
-                worksheet.Cells[row, 9, row, 11].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-
-                row++;
-
-                worksheet.Cells[row, 7].Value = "(номер контактного телефона)";
-                worksheet.Cells[row, 7].Style.Font.Size = 7;
-                worksheet.Cells[row, 7].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                worksheet.Cells[row, 9, row, 11].Merge = true;
-                worksheet.Cells[row, 9].Value = "(электронный адрес)";
-                worksheet.Cells[row, 9].Style.Font.Size = 7;
-                worksheet.Cells[row, 9].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-
-                row++;
-
-                worksheet.Cells[row, 1].Value = "\"_______\"____________________ 20___ г.";
-                #endregion
-
-                if (workbook.Worksheets.Count > 24)
-                {
-                    try
-                    {
-                        package.Save();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Ошибка: {ex.Message}");
-                    }
-
-                    workbook.Dispose();
-                    package.Dispose();
-
-                    fileName = Path.Combine(path, $"Инвентарные карточки {DateTime.Now.ToShortDateString().Replace('.', '-')} ({files++}).xlsx");
-                    try
-                    {
-                        if (File.Exists(fileName))
-                            File.Delete(fileName);
-                    }
-                    catch
-                    {
-                        MessageBox.Show($"Файл {fileName} занят");
-                        return;
-                    }
-
-                    package = new(fileName);
-                    workbook = package.Workbook;
-                }
-
-                savedCabinets.Add(worksheetName);
-            }
 
             try
             {

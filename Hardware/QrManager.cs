@@ -1,4 +1,6 @@
-﻿using QRCoder;
+﻿using Hardware.Models;
+using Microsoft.EntityFrameworkCore;
+using QRCoder;
 using System.Drawing.Drawing2D;
 using Path = System.IO.Path;
 
@@ -16,19 +18,19 @@ namespace Hardware
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            var devices = context.Devices.Select(d => new
+            var devices = await context.Devices.Select(d => new
             {
-                d.DeviceName.DeviceType,
-                d.DeviceName,
+                DeviceType = d.DeviceName.DeviceType.Name,
+                DeviceName = d.DeviceName.Name,
                 d.Serial,
                 d.Inventory
-            }).ToList();
+            }).ToListAsync();
 
             using QRCodeGenerator qrGenerator = new();
             int i = 0;
             foreach (var device in devices)
             {
-                using QRCodeData qrCodeData = qrGenerator.CreateQrCode($"Тип: {device.DeviceType.Name}\nНазвание: {device.DeviceName.Name}\nС/н: {device.Serial}\nИ/н: {device.Inventory}", QRCodeGenerator.ECCLevel.H);
+                using QRCodeData qrCodeData = qrGenerator.CreateQrCode($"Тип: {device.DeviceType}\nНазвание: {device.DeviceName}\nС/н: {device.Serial}\nИ/н: {device.Inventory}", QRCodeGenerator.ECCLevel.H);
                 using QRCode qrCode = new(qrCodeData);
 
                 Bitmap originalQrCode = qrCode.GetGraphic(25, Color.Black, Color.White, true);
@@ -95,13 +97,13 @@ namespace Hardware
             int col = 0;
             int row = 0;
             bool isRowOpen = false;
-            var devices = context.Devices.Select(d => new
+            var devices = await context.Devices.Select(d => new
             {
-                d.Complect.Cabinet.Building,
-                d.Complect.Cabinet,
-                d.Complect,
+                BuildingName = d.Complect.Cabinet.Building.Name,
+                CabinetName = d.Complect.Cabinet.Name,
+                ComplectName = d.Complect.Name,
                 d.Serial
-            }).OrderBy(d => d.Building.Name).ThenBy(d => d.Cabinet.Name).ThenBy(d => d.Complect.Name).ToList();
+            }).OrderBy(d => d.BuildingName).ThenBy(d => d.CabinetName).ThenBy(d => d.ComplectName).ToListAsync();
 
             for (int i = 0; i < devices.Count; i++)
             {
@@ -114,7 +116,7 @@ namespace Hardware
 
                 await writer.WriteLineAsync("<td style=\"border:1px solid black; padding:3px\">");
                 await writer.WriteLineAsync($"<img src=\"{Path.Combine(path, $"{devices[i].Serial}.jpg")}\" width=150px height=150px>");
-                await writer.WriteLineAsync($"<p>{devices[i].Building.Name}<br/>{devices[i].Cabinet.Name}<br/>{devices[i].Complect.Name}<br/>{devices[i].Serial}</p>");
+                await writer.WriteLineAsync($"<p>{devices[i].BuildingName}<br/>{devices[i].CabinetName}<br/>{devices[i].ComplectName}<br/>{devices[i].Serial}</p>");
                 await writer.WriteLineAsync("</td>");
 
                 if (col == 4)

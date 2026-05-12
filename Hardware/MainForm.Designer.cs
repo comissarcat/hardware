@@ -782,10 +782,11 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(970, 374);
+            tabPage2.Size = new Size(970, 354);
             tabPage2.TabIndex = 3;
             tabPage2.Text = "Типы, названия, предоставители техники";
             tabPage2.UseVisualStyleBackColor = true;
+            tabPage2.Enter += tabPage2_Enter;
             // 
             // deviceTypesNamesProvidersTLP
             // 
@@ -799,7 +800,7 @@
             deviceTypesNamesProvidersTLP.Name = "deviceTypesNamesProvidersTLP";
             deviceTypesNamesProvidersTLP.RowCount = 1;
             deviceTypesNamesProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            deviceTypesNamesProvidersTLP.Size = new Size(964, 368);
+            deviceTypesNamesProvidersTLP.Size = new Size(964, 348);
             deviceTypesNamesProvidersTLP.TabIndex = 0;
             // 
             // deviceTypesNamesGBox
@@ -808,7 +809,7 @@
             deviceTypesNamesGBox.Dock = DockStyle.Fill;
             deviceTypesNamesGBox.Location = new Point(3, 3);
             deviceTypesNamesGBox.Name = "deviceTypesNamesGBox";
-            deviceTypesNamesGBox.Size = new Size(636, 362);
+            deviceTypesNamesGBox.Size = new Size(636, 342);
             deviceTypesNamesGBox.TabIndex = 3;
             deviceTypesNamesGBox.TabStop = false;
             deviceTypesNamesGBox.Text = "Типы и названия";
@@ -831,7 +832,7 @@
             deviceTypesNamesTLP.RowStyles.Add(new RowStyle());
             deviceTypesNamesTLP.RowStyles.Add(new RowStyle());
             deviceTypesNamesTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            deviceTypesNamesTLP.Size = new Size(630, 340);
+            deviceTypesNamesTLP.Size = new Size(630, 320);
             deviceTypesNamesTLP.TabIndex = 0;
             // 
             // deviceTypesLabel
@@ -885,7 +886,7 @@
             deviceTypesLBox.ItemHeight = 15;
             deviceTypesLBox.Location = new Point(3, 49);
             deviceTypesLBox.Name = "deviceTypesLBox";
-            deviceTypesLBox.Size = new Size(309, 288);
+            deviceTypesLBox.Size = new Size(309, 268);
             deviceTypesLBox.TabIndex = 0;
             deviceTypesLBox.SelectedValueChanged += typesLBox_SelectedValueChanged;
             // 
@@ -896,7 +897,7 @@
             deviceNamesLBox.ItemHeight = 15;
             deviceNamesLBox.Location = new Point(318, 49);
             deviceNamesLBox.Name = "deviceNamesLBox";
-            deviceNamesLBox.Size = new Size(309, 288);
+            deviceNamesLBox.Size = new Size(309, 268);
             deviceNamesLBox.TabIndex = 3;
             // 
             // deviceProvidersTLP
@@ -913,7 +914,7 @@
             deviceProvidersTLP.RowStyles.Add(new RowStyle());
             deviceProvidersTLP.RowStyles.Add(new RowStyle());
             deviceProvidersTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            deviceProvidersTLP.Size = new Size(316, 362);
+            deviceProvidersTLP.Size = new Size(316, 342);
             deviceProvidersTLP.TabIndex = 1;
             // 
             // deviceProvidersLabel
@@ -945,7 +946,7 @@
             deviceProvidersLBox.ItemHeight = 15;
             deviceProvidersLBox.Location = new Point(3, 49);
             deviceProvidersLBox.Name = "deviceProvidersLBox";
-            deviceProvidersLBox.Size = new Size(310, 310);
+            deviceProvidersLBox.Size = new Size(310, 290);
             deviceProvidersLBox.TabIndex = 0;
             // 
             // tabPage3
@@ -954,7 +955,7 @@
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(970, 374);
+            tabPage3.Size = new Size(970, 354);
             tabPage3.TabIndex = 4;
             tabPage3.Text = "История перемещений";
             tabPage3.UseVisualStyleBackColor = true;
@@ -975,7 +976,7 @@
             historyTLP.RowStyles.Add(new RowStyle());
             historyTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             historyTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            historyTLP.Size = new Size(964, 368);
+            historyTLP.Size = new Size(964, 348);
             historyTLP.TabIndex = 0;
             // 
             // historySearchLabel
@@ -1011,7 +1012,7 @@
             historyDGW.Name = "historyDGW";
             historyDGW.ReadOnly = true;
             historyDGW.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            historyDGW.Size = new Size(964, 333);
+            historyDGW.Size = new Size(964, 313);
             historyDGW.TabIndex = 16;
             // 
             // tabPage4
@@ -1020,7 +1021,7 @@
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(970, 374);
+            tabPage4.Size = new Size(970, 354);
             tabPage4.TabIndex = 5;
             tabPage4.Text = "Полный список (только чтение)";
             tabPage4.UseVisualStyleBackColor = true;
@@ -1066,7 +1067,7 @@
             fullListTLP.RowStyles.Add(new RowStyle());
             fullListTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             fullListTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            fullListTLP.Size = new Size(964, 368);
+            fullListTLP.Size = new Size(964, 348);
             fullListTLP.TabIndex = 1;
             // 
             // fullListNotesTBox
@@ -1254,7 +1255,7 @@
             fullListDGW.Name = "fullListDGW";
             fullListDGW.ReadOnly = true;
             fullListDGW.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            fullListDGW.Size = new Size(958, 283);
+            fullListDGW.Size = new Size(958, 263);
             fullListDGW.TabIndex = 16;
             // 
             // fullListNumberOfDevicesLabel
@@ -1262,7 +1263,7 @@
             fullListNumberOfDevicesLabel.Anchor = AnchorStyles.Left;
             fullListNumberOfDevicesLabel.AutoSize = true;
             fullListTLP.SetColumnSpan(fullListNumberOfDevicesLabel, 8);
-            fullListNumberOfDevicesLabel.Location = new Point(3, 350);
+            fullListNumberOfDevicesLabel.Location = new Point(3, 330);
             fullListNumberOfDevicesLabel.Name = "fullListNumberOfDevicesLabel";
             fullListNumberOfDevicesLabel.Size = new Size(139, 15);
             fullListNumberOfDevicesLabel.TabIndex = 31;
