@@ -1,5 +1,4 @@
-﻿using Hardware.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using System.Drawing.Drawing2D;
 using Path = System.IO.Path;
@@ -9,7 +8,7 @@ namespace Hardware
     internal class QrManager
     {
         private readonly ConfigManager configManager = new();
-        public async void CreateQrImages(IProgress<(int percent, string message)> progress)
+        public async Task<bool> CreateQrImages(IProgress<(int percent, string message)> progress)
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
@@ -60,12 +59,14 @@ namespace Hardware
                 progress.Report(((int)percent, message));
             }
 
-            MakeHtml(path, progress);
+            await MakeHtml(path, progress);
 
             MessageBox.Show($"Выгрузка завершена по пути {path}");
+
+            return true;
         }
 
-        private async void MakeHtml(string path, IProgress<(int percent, string message)> progress)
+        private async Task<bool> MakeHtml(string path, IProgress<(int percent, string message)> progress)
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
@@ -141,6 +142,8 @@ namespace Hardware
             await writer.WriteLineAsync("</table>");
             await writer.WriteLineAsync("</body>");
             await writer.WriteLineAsync("</html>");
+
+            return true;
         }
     }
 }

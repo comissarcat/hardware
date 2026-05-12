@@ -1183,7 +1183,7 @@ namespace Hardware
             }
         }
 
-        private async void DownloadFullTable(IProgress<(int percent, string message)> progress)
+        private async Task<bool> DownloadFullTable(IProgress<(int percent, string message)> progress)
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
@@ -1200,7 +1200,7 @@ namespace Hardware
             catch
             {
                 MessageBox.Show($"Файл {path} занят");
-                return;
+                return false;
             }
 
             List<Building> buildings = await context.Buildings.Include(b => b.Cabinets)
@@ -1285,6 +1285,7 @@ namespace Hardware
             {
                 MessageBox.Show($"Ошибка: {ex.Message}");
             }
+            return true;
         }
 
         private async void выгрузитьQRкодыToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1338,7 +1339,7 @@ namespace Hardware
             }
         }
 
-        private async void DownloadInventoryCards(IProgress<(int percent, string message)> progress)
+        private async Task<bool> DownloadInventoryCards(IProgress<(int percent, string message)> progress)
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
@@ -1356,7 +1357,7 @@ namespace Hardware
             catch
             {
                 MessageBox.Show($"Файл {fileName} занят");
-                return;
+                return false;
             }
 
             List<Building> buildings = await context.Buildings.Include(b => b.Cabinets)
@@ -1386,10 +1387,6 @@ namespace Hardware
             foreach (Building building in buildings)
                 foreach (Cabinet cabinet in building.Cabinets)
                 {
-                    double percent = ++iterator / (double)devicesCount * 100;
-                    string message = $"Заполнение инвентарных карточек {iterator} из {devicesCount}";
-                    progress.Report(((int)percent, message));
-
                     string worksheetName = $"{building.Name} {cabinet.Name}";
                     worksheetName = NonAlphabetNoNumberNoSpace().Replace(worksheetName, "_");
 
@@ -1555,6 +1552,10 @@ namespace Hardware
                                 worksheet.Row(row).Height = 22.5;
 
                             row++;
+
+                            double percent = ++iterator / (double)devicesCount * 100;
+                            string message = $"Заполнение инвентарных карточек {iterator} из {devicesCount}";
+                            progress.Report(((int)percent, message));
                         }
                     row--;
 
@@ -1648,7 +1649,7 @@ namespace Hardware
                         catch
                         {
                             MessageBox.Show($"Файл {fileName} занят");
-                            return;
+                            return false;
                         }
 
                         package = new(fileName);
@@ -1668,6 +1669,7 @@ namespace Hardware
             {
                 MessageBox.Show("Выгрузка инвентарных карточек завершена");
             }
+            return true;
         }
 
         [GeneratedRegex(@"[^\p{L}\p{N}\s]")]
