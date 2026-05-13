@@ -171,13 +171,19 @@ namespace Hardware.Forms
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
             string before = string.Empty;
+            Complect? complect = complectCBox.SelectedItem as Complect;
+            complect = await context.Complects.FindAsync(complect.Id);
+            DeviceName? deviceName = deviceNameCBox.SelectedItem as DeviceName;
+            deviceName = await context.DeviceNames.FindAsync(deviceName.Id);
+            DeviceProvider? deviceProvider = deviceProviderCBox.SelectedItem as DeviceProvider;
+            deviceProvider = await context.DeviceProviders.FindAsync(deviceProvider.Id);
             device = new()
             {
                 Serial = serialTBox.Text,
                 Inventory = inventoryTBox.Text,
-                Complect = (Complect)complectCBox.SelectedItem,
-                DeviceName = (DeviceName)deviceNameCBox.SelectedItem,
-                DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem,
+                Complect = complect,
+                DeviceName = deviceName,
+                DeviceProvider = deviceProvider,
                 Notes = notesTBox.Text
             };
             string after = device.ToStringForHistory();
@@ -197,12 +203,19 @@ namespace Hardware.Forms
         private async Task<string?> EditDevice()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            device = await context.Devices.FindAsync(device.Id);
             string before = device.ToStringForHistory();
+            Complect? complect = complectCBox.SelectedItem as Complect;
+            complect = await context.Complects.FindAsync(complect.Id);
+            DeviceName? deviceName = deviceNameCBox.SelectedItem as DeviceName;
+            deviceName = await context.DeviceNames.FindAsync(deviceName.Id);
+            DeviceProvider? deviceProvider = deviceProviderCBox.SelectedItem as DeviceProvider;
+            deviceProvider = await context.DeviceProviders.FindAsync(deviceProvider.Id);
             device.Serial = serialTBox.Text;
             device.Inventory = inventoryTBox.Text;
-            device.Complect = (Complect)complectCBox.SelectedItem;
-            device.DeviceName = (DeviceName)deviceNameCBox.SelectedItem;
-            device.DeviceProvider = (DeviceProvider)deviceProviderCBox.SelectedItem;
+            device.Complect = complect;
+            device.DeviceName = deviceName;
+            device.DeviceProvider = deviceProvider;
             device.Notes = notesTBox.Text;
             string after = device.ToStringForHistory();
             await context.History.AddAsync(new History() { Before = before, After = after });
@@ -220,6 +233,7 @@ namespace Hardware.Forms
         private async Task<string?> RemoveDevice()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            device = await context.Devices.FindAsync(device.Id);
             string before = device.ToStringForHistory();
             string after = string.Empty;
             context.Devices.Remove(device);

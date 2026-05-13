@@ -90,7 +90,9 @@ namespace Hardware.Forms
         private async Task<string?> AddComplect()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-            complect = new() { Name = nameTBox.Text, Cabinet = (Cabinet)cabinetCBox.SelectedItem };
+            Cabinet? cabinet = cabinetCBox.SelectedItem as Cabinet;
+            cabinet = await context.Cabinets.FindAsync(cabinet.Id);
+            complect = new() { Name = nameTBox.Text, Cabinet = cabinet };
             await context.Complects.AddAsync(complect);
             try
             {
@@ -106,18 +108,21 @@ namespace Hardware.Forms
         private async Task<string?> EditComplect()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            complect = await context.Complects.FindAsync(complect.Id);
             List<string> before = [];
             List<string> after = [];
             List<Device> devicesInComplect = complect?.Devices.ToList() ?? [];
             if (devicesInComplect.Count > 0)
             {
-                foreach (var device in devicesInComplect)
+                foreach (Device device in devicesInComplect)
                     before.Add(device.ToStringForHistory());
 
                 complect.Name = nameTBox.Text;
-                complect.Cabinet = (Cabinet)cabinetCBox.SelectedItem;
+                Cabinet? cabinet = cabinetCBox.SelectedItem as Cabinet;
+                cabinet = await context.Cabinets.FindAsync(cabinet.Id);
+                complect.Cabinet = cabinet;
 
-                foreach (var device in devicesInComplect)
+                foreach (Device device in devicesInComplect)
                     after.Add(device.ToStringForHistory());
 
                 for (int i = 0; i < devicesInComplect.Count; i++)
@@ -126,7 +131,9 @@ namespace Hardware.Forms
             else
             {
                 complect.Name = nameTBox.Text;
-                complect.Cabinet = (Cabinet)cabinetCBox.SelectedItem;
+                Cabinet? cabinet = cabinetCBox.SelectedItem as Cabinet;
+                cabinet = await context.Cabinets.FindAsync(cabinet.Id);
+                complect.Cabinet = cabinet;
             }
             try
             {
@@ -142,6 +149,7 @@ namespace Hardware.Forms
         private async Task<string?> RemoveComplect()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            complect = await context.Complects.FindAsync(complect.Id);
             context.Complects.Remove(complect);
             try
             {

@@ -49,7 +49,9 @@ namespace Hardware.Forms
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-            cabinet = new() { Name = nameTBox.Text, Building = (Building)buildingCBox.SelectedItem };
+            Building? building = buildingCBox.SelectedItem as Building;
+            building = await context.Buildings.FindAsync(building.Id);
+            cabinet = new() { Name = nameTBox.Text, Building = building };
             await context.Cabinets.AddAsync(cabinet);
             try
             {
@@ -65,19 +67,22 @@ namespace Hardware.Forms
         private async Task<string?> EditCabinet()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            cabinet = await context.Cabinets.FindAsync(cabinet.Id);
 
             List<string> before = [];
             List<string> after = [];
             List<Device> devicesInCabinet = cabinet?.Complects.SelectMany(c => c.Devices).ToList() ?? [];
             if (devicesInCabinet.Count > 0)
             {
-                foreach (var device in devicesInCabinet)
+                foreach (Device device in devicesInCabinet)
                     before.Add(device.ToStringForHistory());
 
                 cabinet.Name = nameTBox.Text;
-                cabinet.Building = (Building)buildingCBox.SelectedItem;
+                Building? building = buildingCBox.SelectedItem as Building;
+                building = await context.Buildings.FindAsync(building.Id);
+                cabinet.Building = building;
 
-                foreach (var device in devicesInCabinet)
+                foreach (Device device in devicesInCabinet)
                     after.Add(device.ToStringForHistory());
 
                 for (int i = 0; i < devicesInCabinet.Count; i++)
@@ -86,7 +91,9 @@ namespace Hardware.Forms
             else
             {
                 cabinet.Name = nameTBox.Text;
-                cabinet.Building = (Building)buildingCBox.SelectedItem;
+                Building? building = buildingCBox.SelectedItem as Building;
+                building = await context.Buildings.FindAsync(building.Id);
+                cabinet.Building = building;
             }
             try
             {
@@ -102,6 +109,7 @@ namespace Hardware.Forms
         private async Task<string?> RemoveCabinet()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            cabinet = await context.Cabinets.FindAsync(cabinet.Id);
             context.Cabinets.Remove(cabinet);
             try
             {

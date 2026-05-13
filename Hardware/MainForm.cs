@@ -429,12 +429,15 @@ namespace Hardware
             List<string> before = [];
             List<string> after = [];
             Cabinet? cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
+            cabinet = await context.Cabinets.FindAsync(cabinet.Id);
             List<Device> devicesInCabinet = cabinet?.Complects.SelectMany(c => c.Devices).ToList() ?? [];
 
             foreach (Device device in devicesInCabinet)
                 before.Add(device.ToStringForHistory());
 
-            cabinet.Building = buildingsLBoxRight.SelectedItem as Building;
+            Building newBuilding = buildingsLBoxRight.SelectedItem as Building;
+            newBuilding = await context.Buildings.FindAsync(newBuilding.Id);
+            cabinet.Building = newBuilding;
 
             foreach (Device device in devicesInCabinet)
                 after.Add(device.ToStringForHistory());
@@ -467,12 +470,15 @@ namespace Hardware
             List<string> before = [];
             List<string> after = [];
             Cabinet? cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
+            cabinet = await context.Cabinets.FindAsync(cabinet.Id);
             List<Device> devicesInCabinet = cabinet?.Complects.SelectMany(c => c.Devices).ToList() ?? [];
 
             foreach (Device device in devicesInCabinet)
                 before.Add(device.ToStringForHistory());
 
-            cabinet.Building = buildingsLBoxLeft.SelectedItem as Building;
+            Building newBuilding = buildingsLBoxLeft.SelectedItem as Building;
+            newBuilding = await context.Buildings.FindAsync(newBuilding.Id);
+            cabinet.Building = newBuilding;
 
             foreach (Device device in devicesInCabinet)
                 after.Add(device.ToStringForHistory());
@@ -659,12 +665,15 @@ namespace Hardware
             List<string> before = [];
             List<string> after = [];
             Complect? complect = complectsLBoxLeft.SelectedItem as Complect;
+            complect = await context.Complects.FindAsync(complect.Id);
             List<Device> devicesInComplect = complect?.Devices.ToList() ?? [];
 
             foreach (Device device in devicesInComplect)
                 before.Add(device.ToStringForHistory());
 
-            complect.Cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
+            Cabinet newCabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
+            newCabinet = await context.Cabinets.FindAsync(newCabinet.Id);
+            complect.Cabinet = newCabinet;
 
             foreach (Device device in devicesInComplect)
                 after.Add(device.ToStringForHistory());
@@ -697,12 +706,15 @@ namespace Hardware
             List<string> before = [];
             List<string> after = [];
             Complect? complect = complectsLBoxRight.SelectedItem as Complect;
+            complect = await context.Complects.FindAsync(complect.Id);
             List<Device> devicesInComplect = complect?.Devices.ToList() ?? [];
 
             foreach (Device device in devicesInComplect)
                 before.Add(device.ToStringForHistory());
 
-            complect.Cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
+            Cabinet newCabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
+            newCabinet = await context.Cabinets.FindAsync(newCabinet.Id);
+            complect.Cabinet = newCabinet;
 
             foreach (Device device in devicesInComplect)
                 after.Add(device.ToStringForHistory());
@@ -880,8 +892,11 @@ namespace Hardware
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
             Device? device = devicesLBoxLeft.SelectedItem as Device;
+            device = await context.Devices.FindAsync(device.Id);
             string before = device.ToStringForHistory();
-            device.Complect = complectsLBoxRight.SelectedItem as Complect;
+            Complect? newComplect = complectsLBoxRight.SelectedItem as Complect;
+            newComplect = await context.Complects.FindAsync(newComplect.Id);
+            device.Complect = newComplect;
             string after = device.ToStringForHistory();
             await context.History.AddAsync(new History()
             {
@@ -907,8 +922,11 @@ namespace Hardware
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
             Device? device = devicesLBoxRight.SelectedItem as Device;
+            device = await context.Devices.FindAsync(device.Id);
             string before = device.ToStringForHistory();
-            device.Complect = complectsLBoxLeft.SelectedItem as Complect;
+            Complect? newComplect = complectsLBoxLeft.SelectedItem as Complect;
+            newComplect = await context.Complects.FindAsync(newComplect.Id);
+            device.Complect = newComplect;
             string after = device.ToStringForHistory();
             await context.History.AddAsync(new History()
             {

@@ -47,6 +47,7 @@ namespace Hardware.Forms
         private async Task<string?> EditDeviceType()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            deviceType = await context.DeviceTypes.FindAsync(deviceType.Id);
             deviceType.Name = nameTBox.Text;
             try
             {
@@ -62,6 +63,7 @@ namespace Hardware.Forms
         private async Task<string?> RemoveDeviceType()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            deviceType = await context.DeviceTypes.FindAsync(deviceType.Id);
             context.DeviceTypes.Remove(deviceType);
             try
             {

@@ -55,7 +55,9 @@ namespace Hardware.Forms
         private async Task<string?> AddDeviceName()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-            deviceName = new() { Name = nameTBox.Text, DeviceType = (DeviceType)typeCBox.SelectedItem };
+            DeviceType? deviceType = typeCBox.SelectedItem as DeviceType;
+            deviceType = await context.DeviceTypes.FindAsync(deviceType.Id);
+            deviceName = new() { Name = nameTBox.Text, DeviceType = deviceType };
             await context.DeviceNames.AddAsync(deviceName);
             try
             {
@@ -71,8 +73,11 @@ namespace Hardware.Forms
         private async Task<string?> EditDeviceName()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            deviceName = await context.DeviceNames.FindAsync(deviceName.Id);
+            DeviceType? deviceType = typeCBox.SelectedItem as DeviceType;
+            deviceType = await context.DeviceTypes.FindAsync(deviceType.Id);
             deviceName.Name = nameTBox.Text;
-            deviceName.DeviceType = (DeviceType)typeCBox.SelectedItem;
+            deviceName.DeviceType = deviceType;
             try
             {
                 await context.SaveChangesAsync();
@@ -87,6 +92,7 @@ namespace Hardware.Forms
         private async Task<string?> RemoveDeviceName()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            deviceName = await context.DeviceNames.FindAsync(deviceName.Id);
             context.DeviceNames.Remove(deviceName);
             try
             {

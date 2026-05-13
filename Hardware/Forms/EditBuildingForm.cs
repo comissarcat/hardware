@@ -46,6 +46,7 @@ namespace Hardware.Forms
         private async Task<string?> EditBuilding()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            building = await context.Buildings.FindAsync(building.Id);
             building.Name = nameTBox.Text;
             try
             {
@@ -61,6 +62,7 @@ namespace Hardware.Forms
         private async Task<string?> RemoveBuilding()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            building = await context.Buildings.FindAsync(building.Id);
             context.Buildings.Remove(building);
             try
             {

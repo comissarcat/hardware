@@ -46,6 +46,7 @@ namespace Hardware.Forms
         private async Task<string?> EditDeviceProvider()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            deviceProvider = await context.DeviceProviders.FindAsync(deviceProvider.Id);
             deviceProvider.Name = nameTBox.Text;
             try
             {
@@ -61,6 +62,7 @@ namespace Hardware.Forms
         private async Task<string?> RemoveDeviceProvider()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            deviceProvider = await context.DeviceProviders.FindAsync(deviceProvider.Id);
             context.DeviceProviders.Remove(deviceProvider);
             try
             {
