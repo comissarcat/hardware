@@ -1,4 +1,5 @@
 ﻿using Hardware.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hardware.Forms
 {
@@ -67,7 +68,12 @@ namespace Hardware.Forms
         private async Task<string?> EditCabinet()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-            cabinet = await context.Cabinets.FindAsync(cabinet.Id);
+            cabinet = await context.Cabinets.Include(c => c.Complects)
+                                            .ThenInclude(c => c.Devices)
+                                            .ThenInclude(d => d.DeviceName)
+                                            .Include(c => c.Building)
+                                            .AsSplitQuery()
+                                            .FirstOrDefaultAsync(c => c.Id == cabinet.Id);
 
             List<string> before = [];
             List<string> after = [];

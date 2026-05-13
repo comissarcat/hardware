@@ -429,7 +429,12 @@ namespace Hardware
             List<string> before = [];
             List<string> after = [];
             Cabinet? cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
-            cabinet = await context.Cabinets.FindAsync(cabinet.Id);
+            cabinet = await context.Cabinets.Include(c => c.Complects)
+                                            .ThenInclude(c => c.Devices)
+                                            .ThenInclude(d => d.DeviceName)
+                                            .Include(c => c.Building)
+                                            .AsSplitQuery()
+                                            .FirstOrDefaultAsync(c => c.Id == cabinet.Id);
             List<Device> devicesInCabinet = cabinet?.Complects.SelectMany(c => c.Devices).ToList() ?? [];
 
             foreach (Device device in devicesInCabinet)
@@ -470,7 +475,12 @@ namespace Hardware
             List<string> before = [];
             List<string> after = [];
             Cabinet? cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
-            cabinet = await context.Cabinets.FindAsync(cabinet.Id);
+            cabinet = await context.Cabinets.Include(c => c.Complects)
+                                            .ThenInclude(c => c.Devices)
+                                            .ThenInclude(d => d.DeviceName)
+                                            .Include(c => c.Building)
+                                            .AsSplitQuery()
+                                            .FirstOrDefaultAsync(c => c.Id == cabinet.Id);
             List<Device> devicesInCabinet = cabinet?.Complects.SelectMany(c => c.Devices).ToList() ?? [];
 
             foreach (Device device in devicesInCabinet)
@@ -665,14 +675,19 @@ namespace Hardware
             List<string> before = [];
             List<string> after = [];
             Complect? complect = complectsLBoxLeft.SelectedItem as Complect;
-            complect = await context.Complects.FindAsync(complect.Id);
+            complect = await context.Complects.Include(c => c.Cabinet)
+                                              .ThenInclude(c => c.Building)
+                                              .Include(c => c.Devices)
+                                              .ThenInclude(d => d.DeviceName)
+                                              .AsSplitQuery()
+                                              .FirstOrDefaultAsync(c => c.Id == complect.Id);
             List<Device> devicesInComplect = complect?.Devices.ToList() ?? [];
 
             foreach (Device device in devicesInComplect)
                 before.Add(device.ToStringForHistory());
 
             Cabinet newCabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
-            newCabinet = await context.Cabinets.FindAsync(newCabinet.Id);
+            newCabinet = await context.Cabinets.Include(c => c.Building).FirstOrDefaultAsync(c => c.Id == newCabinet.Id);
             complect.Cabinet = newCabinet;
 
             foreach (Device device in devicesInComplect)
@@ -706,14 +721,19 @@ namespace Hardware
             List<string> before = [];
             List<string> after = [];
             Complect? complect = complectsLBoxRight.SelectedItem as Complect;
-            complect = await context.Complects.FindAsync(complect.Id);
+            complect = await context.Complects.Include(c => c.Cabinet)
+                                              .ThenInclude(c => c.Building)
+                                              .Include(c => c.Devices)
+                                              .ThenInclude(d => d.DeviceName)
+                                              .AsSplitQuery()
+                                              .FirstOrDefaultAsync(c => c.Id == complect.Id);
             List<Device> devicesInComplect = complect?.Devices.ToList() ?? [];
 
             foreach (Device device in devicesInComplect)
                 before.Add(device.ToStringForHistory());
 
             Cabinet newCabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
-            newCabinet = await context.Cabinets.FindAsync(newCabinet.Id);
+            newCabinet = await context.Cabinets.Include(c => c.Building).FirstOrDefaultAsync(c => c.Id == newCabinet.Id);
             complect.Cabinet = newCabinet;
 
             foreach (Device device in devicesInComplect)
@@ -892,10 +912,17 @@ namespace Hardware
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
             Device? device = devicesLBoxLeft.SelectedItem as Device;
-            device = await context.Devices.FindAsync(device.Id);
+            device = await context.Devices.Include(d => d.Complect)
+                                          .ThenInclude(c => c.Cabinet)
+                                          .ThenInclude(c => c.Building)
+                                          .Include(d => d.DeviceName)
+                                          .AsSplitQuery()
+                                          .FirstOrDefaultAsync(d => d.Id == device.Id);
             string before = device.ToStringForHistory();
             Complect? newComplect = complectsLBoxRight.SelectedItem as Complect;
-            newComplect = await context.Complects.FindAsync(newComplect.Id);
+            newComplect = await context.Complects.Include(c => c.Cabinet)
+                                                 .ThenInclude(c => c.Building)
+                                                 .FirstOrDefaultAsync(c => c.Id == newComplect.Id);
             device.Complect = newComplect;
             string after = device.ToStringForHistory();
             await context.History.AddAsync(new History()
@@ -922,10 +949,17 @@ namespace Hardware
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
             Device? device = devicesLBoxRight.SelectedItem as Device;
-            device = await context.Devices.FindAsync(device.Id);
+            device = await context.Devices.Include(d => d.Complect)
+                                          .ThenInclude(c => c.Cabinet)
+                                          .ThenInclude(c => c.Building)
+                                          .Include(d => d.DeviceName)
+                                          .AsSplitQuery()
+                                          .FirstOrDefaultAsync(d => d.Id == device.Id);
             string before = device.ToStringForHistory();
             Complect? newComplect = complectsLBoxLeft.SelectedItem as Complect;
-            newComplect = await context.Complects.FindAsync(newComplect.Id);
+            newComplect = await context.Complects.Include(c => c.Cabinet)
+                                                 .ThenInclude(c => c.Building)
+                                                 .FirstOrDefaultAsync(c => c.Id == newComplect.Id);
             device.Complect = newComplect;
             string after = device.ToStringForHistory();
             await context.History.AddAsync(new History()

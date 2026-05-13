@@ -172,7 +172,9 @@ namespace Hardware.Forms
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
             string before = string.Empty;
             Complect? complect = complectCBox.SelectedItem as Complect;
-            complect = await context.Complects.FindAsync(complect.Id);
+            complect = complect = await context.Complects.Include(c => c.Cabinet)
+                                              .ThenInclude(c => c.Building)
+                                              .FirstOrDefaultAsync(c => c.Id == complect.Id);
             DeviceName? deviceName = deviceNameCBox.SelectedItem as DeviceName;
             deviceName = await context.DeviceNames.FindAsync(deviceName.Id);
             DeviceProvider? deviceProvider = deviceProviderCBox.SelectedItem as DeviceProvider;
@@ -203,10 +205,17 @@ namespace Hardware.Forms
         private async Task<string?> EditDevice()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-            device = await context.Devices.FindAsync(device.Id);
+            device = await context.Devices.Include(d => d.Complect)
+                                          .ThenInclude(c => c.Cabinet)
+                                          .ThenInclude(c => c.Building)
+                                          .Include(d => d.DeviceName)
+                                          .AsSplitQuery()
+                                          .FirstOrDefaultAsync(d => d.Id == device.Id);
             string before = device.ToStringForHistory();
             Complect? complect = complectCBox.SelectedItem as Complect;
-            complect = await context.Complects.FindAsync(complect.Id);
+            complect = complect = await context.Complects.Include(c => c.Cabinet)
+                                              .ThenInclude(c => c.Building)
+                                              .FirstOrDefaultAsync(c => c.Id == complect.Id);
             DeviceName? deviceName = deviceNameCBox.SelectedItem as DeviceName;
             deviceName = await context.DeviceNames.FindAsync(deviceName.Id);
             DeviceProvider? deviceProvider = deviceProviderCBox.SelectedItem as DeviceProvider;
@@ -233,7 +242,12 @@ namespace Hardware.Forms
         private async Task<string?> RemoveDevice()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-            device = await context.Devices.FindAsync(device.Id);
+            device = await context.Devices.Include(d => d.Complect)
+                                          .ThenInclude(c => c.Cabinet)
+                                          .ThenInclude(c => c.Building)
+                                          .Include(d => d.DeviceName)
+                                          .AsSplitQuery()
+                                          .FirstOrDefaultAsync(d => d.Id == device.Id);
             string before = device.ToStringForHistory();
             string after = string.Empty;
             context.Devices.Remove(device);

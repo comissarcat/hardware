@@ -108,7 +108,12 @@ namespace Hardware.Forms
         private async Task<string?> EditComplect()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-            complect = await context.Complects.FindAsync(complect.Id);
+            complect = await context.Complects.Include(c => c.Cabinet)
+                                              .ThenInclude(c => c.Building)
+                                              .Include(c => c.Devices)
+                                              .ThenInclude(d => d.DeviceName)
+                                              .AsSplitQuery()
+                                              .FirstOrDefaultAsync(c => c.Id == complect.Id);
             List<string> before = [];
             List<string> after = [];
             List<Device> devicesInComplect = complect?.Devices.ToList() ?? [];
