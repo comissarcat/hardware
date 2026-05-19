@@ -10,6 +10,7 @@ namespace Hardware.Forms
         public UpdateEntityForm(object entity)
         {
             InitializeComponent();
+            Icon = Resources.inventarisation;
             DialogResult = DialogResult.Cancel;
             this.entity = entity;
 

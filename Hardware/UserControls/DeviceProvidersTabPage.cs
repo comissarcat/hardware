@@ -13,6 +13,8 @@ namespace Hardware.UserControls
         protected TextBox searchTBoxLeft;
         protected TextBox searchTBoxRight;
 
+        private ImageList treeImageList;
+
         private readonly ConfigManager configManager = new();
 
         private const int searchTimerDelayMS = 500;
@@ -31,6 +33,10 @@ namespace Hardware.UserControls
 
         private void InitializeBaseComponents()
         {
+            treeImageList = new() { ColorDepth = ColorDepth.Depth32Bit, ImageSize = new(16, 16) };
+            treeImageList.Images.Add("deviceprovider", Resources.deviceprovider);            
+            treeImageList.Images.Add("device", Resources.device);
+
             TableLayoutPanel mainTLP = new()
             {
                 Dock = DockStyle.Fill,
@@ -50,10 +56,10 @@ namespace Hardware.UserControls
                 }
             };
 
-            treeViewLeft = new() { Dock = DockStyle.Fill };
+            treeViewLeft = new() { Dock = DockStyle.Fill, ImageList = treeImageList };
             mainTLP.Controls.Add(treeViewLeft, 0, 0);
 
-            treeViewRight = new() { Dock = DockStyle.Fill };
+            treeViewRight = new() { Dock = DockStyle.Fill, ImageList = treeImageList };
             mainTLP.Controls.Add(treeViewRight, 2, 0);
 
             FlowLayoutPanel buttonsPanel = new()

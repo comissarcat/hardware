@@ -10,6 +10,7 @@ namespace Hardware.Forms
         public UpdateDeviceNotesForm(Device device)
         {
             InitializeComponent();
+            Icon = Resources.inventarisation;
             DialogResult = DialogResult.Cancel;
             this.device = device;
             oldNotesTBox.Text = device.Notes;

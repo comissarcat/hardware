@@ -1,5 +1,4 @@
 ﻿using Hardware.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Hardware.Forms
 {
@@ -11,6 +10,7 @@ namespace Hardware.Forms
         public UpdateDeviceForm(Device device)
         {
             InitializeComponent();
+            Icon = Resources.inventarisation;
             DialogResult = DialogResult.Cancel;
             this.device = device;
             oldSerialTBox.Text = device.Serial;

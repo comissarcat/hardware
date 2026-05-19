@@ -10,6 +10,7 @@ namespace Hardware.Forms
         public CreateEntityForm(Type entityType)
         {
             InitializeComponent();
+            Icon = Resources.inventarisation;
             DialogResult = DialogResult.Cancel;
             this.entityType = entityType;
 

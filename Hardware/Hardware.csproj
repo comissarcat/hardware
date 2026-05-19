@@ -9,6 +9,36 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="couriernew.ttf" />
+    <None Remove="Resources\building.png" />
+    <None Remove="Resources\cabinet.png" />
+    <None Remove="Resources\complect.png" />
+    <None Remove="Resources\connection.ico" />
+    <None Remove="Resources\couriernew.ttf" />
+    <None Remove="Resources\device.png" />
+    <None Remove="Resources\devicename.png" />
+    <None Remove="Resources\deviceprovider.png" />
+    <None Remove="Resources\devicetype.png" />
+    <None Remove="Resources\inventarisation.ico" />
+    <None Remove="Resources\inventarisation.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\building.png" />
+    <EmbeddedResource Include="Resources\cabinet.png" />
+    <EmbeddedResource Include="Resources\complect.png" />
+    <EmbeddedResource Include="Resources\connection.ico" />
+    <EmbeddedResource Include="Resources\couriernew.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\device.png" />
+    <EmbeddedResource Include="Resources\devicename.png" />
+    <EmbeddedResource Include="Resources\deviceprovider.png" />
+    <EmbeddedResource Include="Resources\devicetype.png" />
+    <EmbeddedResource Include="Resources\inventarisation.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EPPlus" Version="8.5.4" />
     <PackageReference Include="itext" Version="9.3.0" />
     <PackageReference Include="itext.bouncy-castle-adapter" Version="9.3.0" />
@@ -31,9 +61,6 @@
     <Compile Update="Forms\CreateForms\CreateDeviceForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\DeviceTypes\CreateDeviceTypeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Forms\UpdateForms\UpdateDeviceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -42,6 +69,11 @@
     </Compile>
     <Compile Update="Forms\UpdateForms\UpdateEntityForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -55,9 +87,6 @@
     <EmbeddedResource Update="Forms\CreateForms\CreateDeviceForm.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Update="Forms\DeviceTypes\CreateDeviceTypeForm.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Update="Forms\UpdateForms\UpdateDeviceForm.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -67,12 +96,10 @@
     <EmbeddedResource Update="Forms\UpdateForms\UpdateEntityForm.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="couriernew.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

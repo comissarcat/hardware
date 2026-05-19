@@ -8,6 +8,7 @@ namespace Hardware.Forms
         public SettingsForm()
         {
             InitializeComponent();
+            Icon = Resources.connection;
             configManager = new ConfigManager();
             InitTBoxes();
         }

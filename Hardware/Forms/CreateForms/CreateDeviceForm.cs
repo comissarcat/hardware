@@ -11,6 +11,7 @@ namespace Hardware.Forms
         public CreateDeviceForm(Complect complect)
         {
             InitializeComponent();
+            Icon = Resources.inventarisation;
             DialogResult = DialogResult.Cancel;
             this.complect = complect;
             Load += async (sender, e) => { OnLoad(); };

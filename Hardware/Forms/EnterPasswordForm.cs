@@ -5,7 +5,8 @@
 		public EnterPasswordForm()
 		{
 			InitializeComponent();
-			DialogResult = DialogResult.Cancel;			
+            Icon = Resources.inventarisation;
+            DialogResult = DialogResult.Cancel;			
 		}
 
 		private bool CheckPassword()

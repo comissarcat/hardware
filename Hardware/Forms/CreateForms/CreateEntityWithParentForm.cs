@@ -10,6 +10,7 @@ namespace Hardware.Forms
         public CreateEntityWithParentForm(object parent)
         {
             InitializeComponent();
+            Icon = Resources.inventarisation;
             DialogResult = DialogResult.Cancel;
             this.parent = parent;
 

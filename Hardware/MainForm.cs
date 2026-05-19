@@ -27,12 +27,7 @@ namespace Hardware
             EnterPasswordForm form = new();
             DialogResult result = form.ShowDialog();
             if (result == DialogResult.OK)
-            {
                 Init();
-                tabPage1.Controls.Add(new DevicesTabPage() { Dock = DockStyle.Fill });
-                tabPage2.Controls.Add(new DeviceTypesTabPage() { Dock = DockStyle.Fill });
-                tabPage3.Controls.Add(new DeviceProvidersTabPage() { Dock = DockStyle.Fill });
-            }
             else
                 Close();
         }
@@ -61,6 +56,12 @@ namespace Hardware
                 downloadQRsToolStripMenuItem,
                 downloadInventoryCardsToolStripMenuItem
             ];
+
+            tabPage1.Controls.Add(new DevicesTabPage() { Dock = DockStyle.Fill });
+            tabPage2.Controls.Add(new DeviceTypesTabPage() { Dock = DockStyle.Fill });
+            tabPage3.Controls.Add(new DeviceProvidersTabPage() { Dock = DockStyle.Fill });
+
+            Icon = Resources.inventarisation;
         }
 
         private void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
