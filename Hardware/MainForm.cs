@@ -1,34 +1,37 @@
 using Hardware.Forms;
 using Hardware.Models;
+using Hardware.UserControls;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Hardware
 {
     public partial class MainForm : Form
     {
-        private System.Windows.Forms.Timer searchTimerLeft;
-        private System.Windows.Forms.Timer searchTimerRight;
-        private System.Windows.Forms.Timer searchTimerHistory;
-        private System.Windows.Forms.Timer searchTimerFullTable;
+        private Timer searchTimerHistory = new();
+        private Timer searchTimerFullTable = new();
         private const int searchTimerDelayMS = 500;
         private readonly ConfigManager configManager = new();
-        private List<ToolStripMenuItem> downloadButtons;
+        private List<ToolStripMenuItem> downloadButtons = [];
 
         public MainForm()
         {
             InitializeComponent();
-            Load += OnLoad;
+            Load += (sender, e) => OnLoad();
         }
 
-        private void OnLoad(object sender, EventArgs e)
+        private void OnLoad()
         {
             EnterPasswordForm form = new();
             DialogResult result = form.ShowDialog();
             if (result == DialogResult.OK)
             {
                 Init();
+                tabPage1.Controls.Add(new DevicesTabPage() { Dock = DockStyle.Fill });
+                tabPage2.Controls.Add(new DeviceTypesTabPage() { Dock = DockStyle.Fill });
+                tabPage3.Controls.Add(new DeviceProvidersTabPage() { Dock = DockStyle.Fill });
             }
             else
                 Close();
@@ -36,120 +39,51 @@ namespace Hardware
 
         private void Init()
         {
-            InitializeButtons();
-            RefreshBuildings();
             InitializeHistoryDGW();
             InitializeFullListDGW();
-
-            searchTimerLeft = new()
-            {
-                Interval = searchTimerDelayMS
-            };
-            searchTimerLeft.Tick += SearchTimerTick;
-
-            searchTimerRight = new()
-            {
-                Interval = searchTimerDelayMS
-            };
-            searchTimerRight.Tick += SearchTimerTick;
 
             searchTimerHistory = new()
             {
                 Interval = searchTimerDelayMS
             };
-            searchTimerHistory.Tick += SearchTimerHistoryTick;
+            searchTimerHistory.Tick += (sender, e) => { SearchTimerHistoryTick(searchTimerHistory); };
 
             searchTimerFullTable = new()
             {
                 Interval = searchTimerDelayMS
             };
-            searchTimerFullTable.Tick += SearchTimerFullTableTick;
+            searchTimerFullTable.Tick += (sender, e) => { SearchTimerFullTableTick(searchTimerFullTable); };
 
             ProgressOff();
-            downloadButtons = [передатьВExcelToolStripMenuItem, выгрузитьQRкодыToolStripMenuItem, выгрузитьИнвентарныеКарточкиToolStripMenuItem];
+            downloadButtons =
+            [
+                downloadToExcelToolStripMenuItem,
+                downloadQRsToolStripMenuItem,
+                downloadInventoryCardsToolStripMenuItem
+            ];
         }
 
-        private void InitializeButtons()
-        {
-            editBuildingBtnLeft.Text = "Изменить";
-            addBuildingBtnLeft.Text = "Добавить";
-
-            editBuildingBtnRight.Text = "Изменить";
-            addBuildingBtnRight.Text = "Добавить";
-
-            editCabinetBtnLeft.Text = "Изменить";
-            addCabinetBtnLeft.Text = "Добавить";
-
-            editCabinetBtnRight.Text = "Изменить";
-            addCabinetBtnRight.Text = "Добавить";
-
-            editComplectBtnLeft.Text = "Изменить";
-            addComplectBtnLeft.Text = "Добавить";
-
-            editComplectBtnRight.Text = "Изменить";
-            addComplectBtnRight.Text = "Добавить";
-
-            editDeviceBtnLeft.Text = "Изменить";
-            addDeviceBtnLeft.Text = "Добавить";
-
-            editDeviceBtnRight.Text = "Изменить";
-            addDeviceBtnRight.Text = "Добавить";
-        }
-
-        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RefreshAll();
         }
 
-        private void searchTBox_TextChanged(object sender, EventArgs e)
+        private void SearchTimerHistoryTick(object sender)
         {
-            if (sender as TextBox == searchTBoxLeft)
-            {
-                searchTimerLeft.Stop();
-                searchTimerLeft.Start();
-            }
-            else if (sender as TextBox == searchTBoxRight)
-            {
-                searchTimerRight.Stop();
-                searchTimerRight.Start();
-            }
-        }
-
-        private void SearchTimerTick(object sender, EventArgs e)
-        {
-            (sender as System.Windows.Forms.Timer).Stop();
-            if (sender as System.Windows.Forms.Timer == searchTimerLeft)
-                RefreshBuildingsLBoxLeft();
-            else if (sender as System.Windows.Forms.Timer == searchTimerRight)
-                RefreshBuildingsLBoxRight();
-        }
-
-        private void SearchTimerHistoryTick(object sender, EventArgs e)
-        {
-            (sender as System.Windows.Forms.Timer).Stop();
+            ((Timer)sender).Stop();
             RefreshHistoryDGW();
         }
 
-        private void SearchTimerFullTableTick(object sender, EventArgs e)
+        private void SearchTimerFullTableTick(object sender)
         {
-            (sender as System.Windows.Forms.Timer).Stop();
+            ((Timer)sender).Stop();
             RefreshFullListDGW();
         }
 
         private void RefreshAll()
         {
-            RefreshBuildings();
-            RefreshDeviceTypes();
-            RefreshDeviceProviders();
             RefreshHistoryDGW();
             RefreshFullListDGW();
-        }
-
-        private void RestoreSelectedItem(ListBox lBox, object? selectedItem)
-        {
-            if (selectedItem is not null)
-                if (lBox.Items.Contains(selectedItem))
-                    lBox.SelectedItem = selectedItem;
         }
 
         private void SwitchDownloadButtons()
@@ -171,914 +105,6 @@ namespace Hardware
             progressBar1.Visible = true;
             progressLabel.Visible = true;
         }
-
-        #region Блок работы со списком зданий		
-        private void RefreshBuildings()
-        {
-            RefreshBuildingsLBoxLeft();
-            RefreshBuildingsLBoxRight();
-        }
-
-        private async Task<List<Building>> LoadBuildings(string filter)
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-            List<Building> buildings = await context.Buildings.OrderBy(b => b.Name)
-                                                              .Include(b => b.Cabinets)
-                                                              .Include(b => b.Cabinets)
-                                                              .ThenInclude(c => c.Complects)
-                                                              .ThenInclude(c => c.Devices)
-                                                              .ThenInclude(d => d.DeviceName)
-                                                              .OrderBy(b => b.Name)
-                                                              .AsSplitQuery()
-                                                              .ToListAsync();
-            if (filter.Length != 0)
-                buildings = [.. buildings.Where(b => b.Cabinets.Any(c => c.Complects.Any(c => c.Devices.Any(d => d.ToString().ToLower().Contains(filter)))))];
-            return buildings;
-        }
-
-        private async void RefreshBuildingsLBoxLeft()
-        {
-            object? selectedBuilding = buildingsLBoxLeft.SelectedItem;
-            object? selectedCabinet = cabinetsLBoxLeft.SelectedItem;
-            object? selectedComplect = complectsLBoxLeft.SelectedItem;
-            object? selectedDevice = devicesLBoxLeft.SelectedItem;
-
-            buildingsLBoxLeft.DataSource = await LoadBuildings(searchTBoxLeft.Text);
-
-            if (buildingsLBoxLeft.Items.Count == 0)
-                RefreshCabinetsLBoxLeft();
-
-            RestoreSelectedItem(buildingsLBoxLeft, selectedBuilding);
-            RestoreSelectedItem(cabinetsLBoxLeft, selectedCabinet);
-            RestoreSelectedItem(complectsLBoxLeft, selectedComplect);
-            RestoreSelectedItem(devicesLBoxLeft, selectedDevice);
-
-            SwitchEditCabinetBtnLeft();
-        }
-
-        private async void RefreshBuildingsLBoxRight()
-        {
-            object? selectedBuilding = buildingsLBoxRight.SelectedItem;
-            object? selectedCabinet = cabinetsLBoxRight.SelectedItem;
-            object? selectedComplect = complectsLBoxRight.SelectedItem;
-            object? selectedDevice = devicesLBoxRight.SelectedItem;
-
-            buildingsLBoxRight.DataSource = await LoadBuildings(searchTBoxRight.Text);
-
-            if (buildingsLBoxRight.Items.Count == 0)
-                RefreshCabinetsLBoxRight();
-
-            RestoreSelectedItem(buildingsLBoxRight, selectedBuilding);
-            RestoreSelectedItem(cabinetsLBoxRight, selectedCabinet);
-            RestoreSelectedItem(complectsLBoxRight, selectedComplect);
-            RestoreSelectedItem(devicesLBoxRight, selectedDevice);
-
-            SwitchEditCabinetBtnRight();
-        }
-
-        private void editBuildingBtn_Click(object sender, EventArgs e)
-        {
-            if (sender as Button == editBuildingBtnLeft)
-            {
-                Building? building = buildingsLBoxLeft.SelectedItem as Building;
-                EditBuilding(building);
-            }
-            else if (sender as Button == editBuildingBtnRight)
-            {
-                Building? building = buildingsLBoxRight.SelectedItem as Building;
-                EditBuilding(building);
-            }
-            else
-                EditBuilding(null);
-        }
-
-        private void EditBuilding(Building? building)
-        {
-            EditBuildingForm form = new(building);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
-                RefreshBuildings();
-        }
-
-        private void buildingsLBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if (sender as ListBox == buildingsLBoxLeft)
-                RefreshCabinetsLBoxLeft();
-            else if (sender as ListBox == buildingsLBoxRight)
-                RefreshCabinetsLBoxRight();
-        }
-        #endregion
-
-        #region Блок работы со списком кабинетов
-        private List<Cabinet> LoadCabinets(Building building, string filter)
-        {
-            List<Cabinet> cabinets = [.. building.Cabinets.OrderBy(c => c.Name)];
-            if (filter.Length != 0)
-                cabinets = cabinets.Where(c => c.Complects.Any(c => c.Devices.Any(d => d.ToString().ToLower().Contains(filter)))).ToList();
-            return cabinets;
-        }
-
-        private void RefreshCabinetsLBoxLeft()
-        {
-            if (buildingsLBoxLeft.SelectedIndex == -1)
-                cabinetsLBoxLeft.DataSource = new List<Cabinet>();
-            else
-                cabinetsLBoxLeft.DataSource = LoadCabinets(buildingsLBoxLeft.SelectedItem as Building, searchTBoxLeft.Text);
-
-            if (cabinetsLBoxLeft.Items.Count == 0)
-                RefreshComplectsLBoxLeft();
-
-            SwitchEditComplectBtnLeft();
-            SwitchMoveCabinetBtns();
-        }
-
-        private void RefreshCabinetsLBoxRight()
-        {
-            if (buildingsLBoxRight.SelectedIndex == -1)
-                cabinetsLBoxRight.DataSource = new List<Cabinet>();
-            else
-                cabinetsLBoxRight.DataSource = LoadCabinets(buildingsLBoxRight.SelectedItem as Building, searchTBoxRight.Text);
-
-            if (cabinetsLBoxRight.Items.Count == 0)
-                RefreshComplectsLBoxRight();
-
-            SwitchEditComplectBtnRight();
-            SwitchMoveCabinetBtns();
-        }
-
-        private void SwitchEditCabinetBtnLeft()
-        {
-            if (buildingsLBoxLeft.SelectedIndex != -1)
-            {
-                editCabinetBtnLeft.Enabled = true;
-                addCabinetBtnLeft.Enabled = true;
-            }
-            else
-            {
-                editCabinetBtnLeft.Enabled = false;
-                addCabinetBtnLeft.Enabled = false;
-            }
-        }
-
-        private void SwitchEditCabinetBtnRight()
-        {
-            if (buildingsLBoxRight.SelectedIndex != -1)
-            {
-                editCabinetBtnRight.Enabled = true;
-                addCabinetBtnRight.Enabled = true;
-            }
-            else
-            {
-                editCabinetBtnRight.Enabled = false;
-                addCabinetBtnRight.Enabled = false;
-            }
-        }
-
-        private void SwitchMoveCabinetBtns()
-        {
-            SwitchMoveCabinetToLeftBtn();
-            SwitchMoveCabinetToRightBtn();
-        }
-
-        private void SwitchMoveCabinetToRightBtn()
-        {
-            if (buildingsLBoxLeft.SelectedIndex == -1 || buildingsLBoxRight.SelectedIndex == -1)
-            {
-                moveCabinetToRightBtn.Enabled = false;
-                return;
-            }
-            if (cabinetsLBoxLeft.SelectedIndex == -1)
-            {
-                moveCabinetToRightBtn.Enabled = false;
-                return;
-            }
-            if (buildingsLBoxLeft.SelectedItem == buildingsLBoxRight.SelectedItem)
-            {
-                moveCabinetToRightBtn.Enabled = false;
-                return;
-            }
-            moveCabinetToRightBtn.Enabled = true;
-        }
-
-        private void SwitchMoveCabinetToLeftBtn()
-        {
-            if (buildingsLBoxLeft.SelectedIndex == -1 || buildingsLBoxRight.SelectedIndex == -1)
-            {
-                moveCabinetToLeftBtn.Enabled = false;
-                return;
-            }
-            if (cabinetsLBoxRight.SelectedIndex == -1)
-            {
-                moveCabinetToLeftBtn.Enabled = false;
-                return;
-            }
-            if (buildingsLBoxLeft.SelectedItem == buildingsLBoxRight.SelectedItem)
-            {
-                moveCabinetToLeftBtn.Enabled = false;
-                return;
-            }
-            moveCabinetToLeftBtn.Enabled = true;
-        }
-
-        private void editCabinetBtn_Click(object sender, EventArgs e)
-        {
-            if (sender as Button == editCabinetBtnLeft)
-            {
-                Cabinet? cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
-                Building? building = cabinet is null ? buildingsLBoxLeft.SelectedItem as Building : cabinet.Building;
-                EditCabinet(cabinet, building);
-            }
-            else if (sender as Button == editCabinetBtnRight)
-            {
-                Cabinet? cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
-                Building? building = cabinet is null ? buildingsLBoxRight.SelectedItem as Building : cabinet.Building;
-                EditCabinet(cabinet, building);
-            }
-            else if (sender as Button == addCabinetBtnLeft)
-            {
-                Building? building = buildingsLBoxLeft.SelectedItem as Building;
-                EditCabinet(null, building);
-            }
-            else
-            {
-                Building? building = buildingsLBoxRight.SelectedItem as Building;
-                EditCabinet(null, building);
-            }
-        }
-
-        private void EditCabinet(Cabinet? cabinet, Building building)
-        {
-            EditCabinetForm form = new(cabinet, building);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
-                RefreshBuildings();
-        }
-
-        private void cabinetsLBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if (sender as ListBox == cabinetsLBoxLeft)
-                RefreshComplectsLBoxLeft();
-            else if (sender as ListBox == cabinetsLBoxRight)
-                RefreshComplectsLBoxRight();
-        }
-
-        private async void moveCabinetToRightBtn_Click(object sender, EventArgs e)
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            List<string> before = [];
-            List<string> after = [];
-            Cabinet? cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
-            cabinet = await context.Cabinets.Include(c => c.Complects)
-                                            .ThenInclude(c => c.Devices)
-                                            .ThenInclude(d => d.DeviceName)
-                                            .Include(c => c.Building)
-                                            .AsSplitQuery()
-                                            .FirstOrDefaultAsync(c => c.Id == cabinet.Id);
-            List<Device> devicesInCabinet = cabinet?.Complects.SelectMany(c => c.Devices).ToList() ?? [];
-
-            foreach (Device device in devicesInCabinet)
-                before.Add(device.ToStringForHistory());
-
-            Building newBuilding = buildingsLBoxRight.SelectedItem as Building;
-            newBuilding = await context.Buildings.FindAsync(newBuilding.Id);
-            cabinet.Building = newBuilding;
-
-            foreach (Device device in devicesInCabinet)
-                after.Add(device.ToStringForHistory());
-
-            for (int i = 0; i < devicesInCabinet.Count; i++)
-                await context.History.AddAsync(new History()
-                {
-                    Before = before[i],
-                    After = after[i]
-                });
-
-            bool success;
-            try
-            {
-                await context.SaveChangesAsync();
-                success = true;
-            }
-            catch
-            {
-                success = false;
-            }
-            if (success)
-                RefreshBuildings();
-        }
-
-        private async void moveCabinetToLeftBtn_Click(object sender, EventArgs e)
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            List<string> before = [];
-            List<string> after = [];
-            Cabinet? cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
-            cabinet = await context.Cabinets.Include(c => c.Complects)
-                                            .ThenInclude(c => c.Devices)
-                                            .ThenInclude(d => d.DeviceName)
-                                            .Include(c => c.Building)
-                                            .AsSplitQuery()
-                                            .FirstOrDefaultAsync(c => c.Id == cabinet.Id);
-            List<Device> devicesInCabinet = cabinet?.Complects.SelectMany(c => c.Devices).ToList() ?? [];
-
-            foreach (Device device in devicesInCabinet)
-                before.Add(device.ToStringForHistory());
-
-            Building newBuilding = buildingsLBoxLeft.SelectedItem as Building;
-            newBuilding = await context.Buildings.FindAsync(newBuilding.Id);
-            cabinet.Building = newBuilding;
-
-            foreach (Device device in devicesInCabinet)
-                after.Add(device.ToStringForHistory());
-
-            for (int i = 0; i < devicesInCabinet.Count; i++)
-                await context.History.AddAsync(new History()
-                {
-                    Before = before[i],
-                    After = after[i]
-                });
-
-            bool success;
-            try
-            {
-                await context.SaveChangesAsync();
-                success = true;
-            }
-            catch
-            {
-                success = false;
-            }
-            if (success)
-                RefreshBuildings();
-        }
-        #endregion
-
-        #region Блок работы со списком комплектов
-        private List<Complect> LoadComplects(Cabinet cabinet, string filter)
-        {
-            List<Complect> complects = [.. cabinet.Complects.OrderBy(c => c.Name)];
-            if (filter.Length != 0)
-                complects = [.. complects.Where(c => c.Devices.Any(d => d.ToString().ToLower().Contains(filter)))];
-            return complects;
-        }
-
-        private void RefreshComplectsLBoxLeft()
-        {
-            if (cabinetsLBoxLeft.SelectedIndex == -1)
-                complectsLBoxLeft.DataSource = new List<Complect>();
-            else
-                complectsLBoxLeft.DataSource = LoadComplects(cabinetsLBoxLeft.SelectedItem as Cabinet, searchTBoxLeft.Text);
-
-            if (complectsLBoxLeft.Items.Count == 0)
-                RefreshDevicesLBoxLeft();
-
-            SwitchEditDeviceBtnLeft();
-            SwitchMoveComplectBtns();
-        }
-
-        private void RefreshComplectsLBoxRight()
-        {
-            if (cabinetsLBoxRight.SelectedIndex == -1)
-                complectsLBoxRight.DataSource = new List<Complect>();
-            else
-                complectsLBoxRight.DataSource = LoadComplects(cabinetsLBoxRight.SelectedItem as Cabinet, searchTBoxRight.Text);
-
-            if (complectsLBoxRight.Items.Count == 0)
-                RefreshDevicesLBoxRight();
-
-            SwitchEditDeviceBtnRight();
-            SwitchMoveComplectBtns();
-        }
-
-        private void SwitchEditComplectBtnLeft()
-        {
-            if (cabinetsLBoxLeft.SelectedIndex != -1)
-            {
-                editComplectBtnLeft.Enabled = true;
-                addComplectBtnLeft.Enabled = true;
-            }
-            else
-            {
-                editComplectBtnLeft.Enabled = false;
-                addComplectBtnLeft.Enabled = false;
-            }
-        }
-
-        private void SwitchEditComplectBtnRight()
-        {
-            if (cabinetsLBoxRight.SelectedIndex != -1)
-            {
-                editComplectBtnRight.Enabled = true;
-                addComplectBtnRight.Enabled = true;
-            }
-            else
-            {
-                editComplectBtnRight.Enabled = false;
-                addComplectBtnRight.Enabled = false;
-            }
-        }
-
-        private void SwitchMoveComplectBtns()
-        {
-            SwitchMoveComplectToLeftBtn();
-            SwitchMoveComplectToRightBtn();
-        }
-
-        private void SwitchMoveComplectToRightBtn()
-        {
-            if (cabinetsLBoxLeft.SelectedIndex == -1 || cabinetsLBoxRight.SelectedIndex == -1)
-            {
-                moveComplectToRightBtn.Enabled = false;
-                return;
-            }
-            if (complectsLBoxLeft.SelectedIndex == -1)
-            {
-                moveComplectToRightBtn.Enabled = false;
-                return;
-            }
-            if (cabinetsLBoxLeft.SelectedItem == cabinetsLBoxRight.SelectedItem)
-            {
-                moveComplectToRightBtn.Enabled = false;
-                return;
-            }
-            moveComplectToRightBtn.Enabled = true;
-        }
-
-        private void SwitchMoveComplectToLeftBtn()
-        {
-            if (cabinetsLBoxLeft.SelectedIndex == -1 || cabinetsLBoxRight.SelectedIndex == -1)
-            {
-                moveComplectToLeftBtn.Enabled = false;
-                return;
-            }
-            if (complectsLBoxRight.SelectedIndex == -1)
-            {
-                moveComplectToLeftBtn.Enabled = false;
-                return;
-            }
-            if (cabinetsLBoxLeft.SelectedItem == cabinetsLBoxRight.SelectedItem)
-            {
-                moveComplectToLeftBtn.Enabled = false;
-                return;
-            }
-            moveComplectToLeftBtn.Enabled = true;
-        }
-
-        private void editComplectBtn_Click(object sender, EventArgs e)
-        {
-            if (sender as Button == editComplectBtnLeft)
-            {
-                Complect? complect = complectsLBoxLeft.SelectedItem as Complect;
-                Cabinet? cabinet = complect is null ? cabinetsLBoxLeft.SelectedItem as Cabinet : complect.Cabinet;
-                EditComplect(complect, cabinet);
-            }
-            else if (sender as Button == editComplectBtnRight)
-            {
-                Complect? complect = complectsLBoxRight.SelectedItem as Complect;
-                Cabinet? cabinet = complect is null ? cabinetsLBoxRight.SelectedItem as Cabinet : complect.Cabinet;
-                EditComplect(complect, cabinet);
-            }
-            else if (sender as Button == addComplectBtnLeft)
-            {
-                Cabinet? cabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
-                EditComplect(null, cabinet);
-            }
-            else
-            {
-                Cabinet? cabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
-                EditComplect(null, cabinet);
-            }
-        }
-
-        private void EditComplect(Complect? complect, Cabinet cabinet)
-        {
-            EditComplectForm form = new(complect, cabinet);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
-                RefreshBuildings();
-        }
-
-        private void complectsLBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            if (sender as ListBox == complectsLBoxLeft)
-                RefreshDevicesLBoxLeft();
-            else if (sender as ListBox == complectsLBoxRight)
-                RefreshDevicesLBoxRight();
-        }
-
-        private async void moveComplectToRightBtn_Click(object sender, EventArgs e)
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            List<string> before = [];
-            List<string> after = [];
-            Complect? complect = complectsLBoxLeft.SelectedItem as Complect;
-            complect = await context.Complects.Include(c => c.Cabinet)
-                                              .ThenInclude(c => c.Building)
-                                              .Include(c => c.Devices)
-                                              .ThenInclude(d => d.DeviceName)
-                                              .AsSplitQuery()
-                                              .FirstOrDefaultAsync(c => c.Id == complect.Id);
-            List<Device> devicesInComplect = complect?.Devices.ToList() ?? [];
-
-            foreach (Device device in devicesInComplect)
-                before.Add(device.ToStringForHistory());
-
-            Cabinet newCabinet = cabinetsLBoxRight.SelectedItem as Cabinet;
-            newCabinet = await context.Cabinets.Include(c => c.Building).FirstOrDefaultAsync(c => c.Id == newCabinet.Id);
-            complect.Cabinet = newCabinet;
-
-            foreach (Device device in devicesInComplect)
-                after.Add(device.ToStringForHistory());
-
-            for (int i = 0; i < devicesInComplect.Count; i++)
-                await context.History.AddAsync(new History()
-                {
-                    Before = before[i],
-                    After = after[i]
-                });
-
-            bool success;
-            try
-            {
-                await context.SaveChangesAsync();
-                success = true;
-            }
-            catch
-            {
-                success = false;
-            }
-            if (success)
-                RefreshBuildings();
-        }
-
-        private async void moveComplectToLeftBtn_Click(object sender, EventArgs e)
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            List<string> before = [];
-            List<string> after = [];
-            Complect? complect = complectsLBoxRight.SelectedItem as Complect;
-            complect = await context.Complects.Include(c => c.Cabinet)
-                                              .ThenInclude(c => c.Building)
-                                              .Include(c => c.Devices)
-                                              .ThenInclude(d => d.DeviceName)
-                                              .AsSplitQuery()
-                                              .FirstOrDefaultAsync(c => c.Id == complect.Id);
-            List<Device> devicesInComplect = complect?.Devices.ToList() ?? [];
-
-            foreach (Device device in devicesInComplect)
-                before.Add(device.ToStringForHistory());
-
-            Cabinet newCabinet = cabinetsLBoxLeft.SelectedItem as Cabinet;
-            newCabinet = await context.Cabinets.Include(c => c.Building).FirstOrDefaultAsync(c => c.Id == newCabinet.Id);
-            complect.Cabinet = newCabinet;
-
-            foreach (Device device in devicesInComplect)
-                after.Add(device.ToStringForHistory());
-
-            for (int i = 0; i < devicesInComplect.Count; i++)
-                await context.History.AddAsync(new History()
-                {
-                    Before = before[i],
-                    After = after[i]
-                });
-
-            bool success;
-            try
-            {
-                await context.SaveChangesAsync();
-                success = true;
-            }
-            catch
-            {
-                success = false;
-            }
-            if (success)
-                RefreshBuildings();
-        }
-        #endregion
-
-        #region Блок работы со списком единиц техники
-        private List<Device> LoadDevices(Complect complect, string filter)
-        {
-            List<Device> devices = [.. complect.Devices.OrderBy(d => d.Serial)];
-            if (filter.Length != 0)
-                devices = [.. devices.Where(d => d.ToString().ToLower().Contains(filter))];
-            return devices;
-        }
-
-        private void RefreshDevicesLBoxLeft()
-        {
-            if (complectsLBoxLeft.SelectedIndex == -1)
-                devicesLBoxLeft.DataSource = new List<Device>();
-            else
-                devicesLBoxLeft.DataSource = LoadDevices(complectsLBoxLeft.SelectedItem as Complect, searchTBoxLeft.Text);
-
-            SwitchMoveDeviceBtns();
-        }
-
-        private void RefreshDevicesLBoxRight()
-        {
-            if (complectsLBoxRight.SelectedIndex == -1)
-                devicesLBoxRight.DataSource = new List<Device>();
-            else
-                devicesLBoxRight.DataSource = LoadDevices(complectsLBoxRight.SelectedItem as Complect, searchTBoxRight.Text);
-
-            SwitchMoveDeviceBtns();
-        }
-
-        private void SwitchEditDeviceBtnLeft()
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            if (complectsLBoxLeft.SelectedIndex != -1 && context.DeviceNames.Any() && context.DeviceProviders.Any())
-            {
-                editDeviceBtnLeft.Enabled = true;
-                addDeviceBtnLeft.Enabled = true;
-            }
-            else
-            {
-                editDeviceBtnLeft.Enabled = false;
-                addDeviceBtnLeft.Enabled = false;
-            }
-        }
-
-        private void SwitchEditDeviceBtnRight()
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            if (complectsLBoxRight.SelectedIndex != -1 && context.DeviceNames.Any() && context.DeviceProviders.Any())
-            {
-                editDeviceBtnRight.Enabled = true;
-                addDeviceBtnRight.Enabled = true;
-            }
-            else
-            {
-                editDeviceBtnRight.Enabled = false;
-                addDeviceBtnRight.Enabled = false;
-            }
-        }
-
-        private void SwitchMoveDeviceBtns()
-        {
-            SwitchMoveDeviceToLeftBtn();
-            SwitchMoveDeviceToRightBtn();
-        }
-
-        private void SwitchMoveDeviceToRightBtn()
-        {
-            if (complectsLBoxLeft.SelectedIndex == -1 || complectsLBoxRight.SelectedIndex == -1)
-            {
-                moveDeviceToRightBtn.Enabled = false;
-                return;
-            }
-            if (devicesLBoxLeft.SelectedIndex == -1)
-            {
-                moveDeviceToRightBtn.Enabled = false;
-                return;
-            }
-            if (complectsLBoxLeft.SelectedItem == complectsLBoxRight.SelectedItem)
-            {
-                moveDeviceToRightBtn.Enabled = false;
-                return;
-            }
-            moveDeviceToRightBtn.Enabled = true;
-        }
-
-        private void SwitchMoveDeviceToLeftBtn()
-        {
-            if (complectsLBoxLeft.SelectedIndex == -1 || complectsLBoxRight.SelectedIndex == -1)
-            {
-                moveDeviceToLeftBtn.Enabled = false;
-                return;
-            }
-            if (devicesLBoxRight.SelectedIndex == -1)
-            {
-                moveDeviceToLeftBtn.Enabled = false;
-                return;
-            }
-            if (complectsLBoxLeft.SelectedItem == complectsLBoxRight.SelectedItem)
-            {
-                moveDeviceToLeftBtn.Enabled = false;
-                return;
-            }
-            moveDeviceToLeftBtn.Enabled = true;
-        }
-
-        private void editDeviceBtn_Click(object sender, EventArgs e)
-        {
-            if (sender as Button == editDeviceBtnLeft)
-            {
-                Device? device = (Device?)devicesLBoxLeft.SelectedItem;
-                Complect? complect = device is null ? complectsLBoxLeft.SelectedItem as Complect : device.Complect;
-                EditDevice(device, complect);
-            }
-            else if (sender as Button == editDeviceBtnRight)
-            {
-                Device? device = (Device?)devicesLBoxRight.SelectedItem;
-                Complect? complect = device is null ? complectsLBoxRight.SelectedItem as Complect : device.Complect;
-                EditDevice(device, complect);
-            }
-            else if (sender as Button == addDeviceBtnLeft)
-            {
-                Complect? complect = complectsLBoxLeft.SelectedItem as Complect;
-                EditDevice(null, complect);
-            }
-            else
-            {
-                Complect? complect = complectsLBoxRight.SelectedItem as Complect;
-                EditDevice(null, complect);
-            }
-        }
-
-        private void EditDevice(Device? device, Complect complect)
-        {
-            EditDeviceForm form = new(device, complect);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
-                RefreshBuildings();
-        }
-
-        private void devicesLBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            SwitchMoveDeviceBtns();
-        }
-
-        private async void moveDeviceToRightBtn_Click(object sender, EventArgs e)
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            Device? device = devicesLBoxLeft.SelectedItem as Device;
-            device = await context.Devices.Include(d => d.Complect)
-                                          .ThenInclude(c => c.Cabinet)
-                                          .ThenInclude(c => c.Building)
-                                          .Include(d => d.DeviceName)
-                                          .AsSplitQuery()
-                                          .FirstOrDefaultAsync(d => d.Id == device.Id);
-            string before = device.ToStringForHistory();
-            Complect? newComplect = complectsLBoxRight.SelectedItem as Complect;
-            newComplect = await context.Complects.Include(c => c.Cabinet)
-                                                 .ThenInclude(c => c.Building)
-                                                 .FirstOrDefaultAsync(c => c.Id == newComplect.Id);
-            device.Complect = newComplect;
-            string after = device.ToStringForHistory();
-            await context.History.AddAsync(new History()
-            {
-                Before = before,
-                After = after
-            });
-            bool success;
-            try
-            {
-                await context.SaveChangesAsync();
-                success = true;
-            }
-            catch
-            {
-                success = false;
-            }
-            if (success)
-                RefreshBuildings();
-        }
-
-        private async void moveDeviceToLeftBtn_Click(object sender, EventArgs e)
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            Device? device = devicesLBoxRight.SelectedItem as Device;
-            device = await context.Devices.Include(d => d.Complect)
-                                          .ThenInclude(c => c.Cabinet)
-                                          .ThenInclude(c => c.Building)
-                                          .Include(d => d.DeviceName)
-                                          .AsSplitQuery()
-                                          .FirstOrDefaultAsync(d => d.Id == device.Id);
-            string before = device.ToStringForHistory();
-            Complect? newComplect = complectsLBoxLeft.SelectedItem as Complect;
-            newComplect = await context.Complects.Include(c => c.Cabinet)
-                                                 .ThenInclude(c => c.Building)
-                                                 .FirstOrDefaultAsync(c => c.Id == newComplect.Id);
-            device.Complect = newComplect;
-            string after = device.ToStringForHistory();
-            await context.History.AddAsync(new History()
-            {
-                Before = before,
-                After = after
-            });
-            bool success;
-            try
-            {
-                await context.SaveChangesAsync();
-                success = true;
-            }
-            catch
-            {
-                success = false;
-            }
-            if (success)
-                RefreshBuildings();
-        }
-        #endregion
-
-        #region Блок работы со списком типов техники
-        private void deviceTypeEditBtn_Click(object sender, EventArgs e)
-        {
-            DeviceType? deviceType = deviceTypesLBox.SelectedItem as DeviceType;
-            EditDeviceTypeForm form = new(deviceType);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
-                RefreshDeviceTypes();
-        }
-
-        private void RefreshDeviceTypes()
-        {
-            object? selectedDeviceType = deviceTypesLBox.SelectedItem;
-            object? selectedDeviceName = deviceNamesLBox.SelectedItem;
-
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-            deviceTypesLBox.DataSource = context.DeviceTypes.OrderBy(dt => dt.Name)
-                                                            .Include(dt => dt.DeviceNames)
-                                                            .ThenInclude(dn => dn.Devices)
-                                                            .ToList();
-
-            RefreshDeviceNames();
-
-            RestoreSelectedItem(deviceTypesLBox, selectedDeviceType);
-            RestoreSelectedItem(deviceNamesLBox, selectedDeviceName);
-
-            SwitchEditDeviceNameBtn();
-        }
-
-        private void SwitchEditDeviceNameBtn()
-        {
-            if (deviceTypesLBox.SelectedIndex != -1)
-                editDeviceNameBtn.Enabled = true;
-            else
-                editDeviceNameBtn.Enabled = false;
-        }
-
-        private void typesLBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            RefreshDeviceNames();
-        }
-        #endregion
-
-        #region Блок работы со списком названий техники
-        private void deviceNameEditBtn_Click(object sender, EventArgs e)
-        {
-            DeviceName? deviceName = deviceNamesLBox.SelectedItem as DeviceName;
-            DeviceType? deviceType = deviceName is null ? deviceTypesLBox.SelectedItem as DeviceType : deviceName.DeviceType;
-            EditDeviceNameForm form = new(deviceName, deviceType);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
-                RefreshDeviceTypes();
-        }
-
-        private void RefreshDeviceNames()
-        {
-            if (deviceTypesLBox.SelectedIndex == -1)
-                deviceNamesLBox.DataSource = new List<DeviceName>();
-            else
-                deviceNamesLBox.DataSource = (deviceTypesLBox.SelectedItem as DeviceType).DeviceNames.ToList();
-
-            SwitchEditDeviceBtnLeft();
-            SwitchEditDeviceBtnRight();
-        }
-        #endregion
-
-        #region Блок работы со списком предоставителей техники
-        private void deviceProviderEditBtn_Click(object sender, EventArgs e)
-        {
-            DeviceProvider? deviceProvider = deviceProvidersLBox.SelectedItem as DeviceProvider;
-            EditDeviceProviderForm form = new(deviceProvider);
-            DialogResult result = form.ShowDialog();
-            if (result == DialogResult.OK)
-                RefreshDeviceProviders();
-        }
-
-        private void RefreshDeviceProviders()
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            object? selectedItem = deviceProvidersLBox.SelectedItem;
-            deviceProvidersLBox.DataSource = context.DeviceProviders.OrderBy(dp => dp.Name)
-                                                                    .Include(dp => dp.Devices)
-                                                                    .ToList();
-
-            RestoreSelectedItem(deviceProvidersLBox, selectedItem);
-
-            SwitchEditDeviceBtnLeft();
-            SwitchEditDeviceBtnRight();
-        }
-
-        private void tabPage2_Enter(object sender, EventArgs e)
-        {
-            RefreshDeviceTypes();
-            RefreshDeviceProviders();
-        }
-        #endregion
 
         #region Блок работы с историей перемещений
         private async void InitializeHistoryDGW()
@@ -1210,7 +236,7 @@ namespace Hardware
         }
         #endregion
 
-        private async void передатьВExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void DownloadToExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SwitchDownloadButtons();
             ProgressOn();
@@ -1340,7 +366,7 @@ namespace Hardware
             return true;
         }
 
-        private async void выгрузитьQRкодыToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void DownloadQRsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SwitchDownloadButtons();
             ProgressOn();
@@ -1366,7 +392,7 @@ namespace Hardware
             }
         }
 
-        private async void выгрузитьИнвентарныеКарточкиToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void DownloadInventoryCardsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SwitchDownloadButtons();
             ProgressOn();

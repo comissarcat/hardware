@@ -40,7 +40,7 @@ namespace Hardware
         public Config GetConfig()
         {
             LoadConfig();
-            return config;
+            return config!;
         }
 
         public void SetConfig(string server, string user, string password, string database)
