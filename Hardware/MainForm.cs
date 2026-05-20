@@ -16,6 +16,8 @@ namespace Hardware
         private readonly ConfigManager configManager = new();
         private List<ToolStripMenuItem> downloadButtons = [];
 
+        private Repairman? repairman;
+
         public MainForm()
         {
             InitializeComponent();
@@ -27,7 +29,12 @@ namespace Hardware
             EnterPasswordForm form = new();
             DialogResult result = form.ShowDialog();
             if (result == DialogResult.OK)
+            {
+                repairman = form.Repairman;
+                if (repairman != null)
+                    Text = $"Инвентаризация - {repairman.Name}";
                 Init();
+            }
             else
                 Close();
         }
@@ -57,9 +64,11 @@ namespace Hardware
                 downloadInventoryCardsToolStripMenuItem
             ];
 
-            tabPage1.Controls.Add(new DevicesTabPage() { Dock = DockStyle.Fill });
+            tabPage1.Controls.Add(new DevicesTabPage(repairman) { Dock = DockStyle.Fill });
             tabPage2.Controls.Add(new DeviceTypesTabPage() { Dock = DockStyle.Fill });
             tabPage3.Controls.Add(new DeviceProvidersTabPage() { Dock = DockStyle.Fill });
+            tabPage6.Controls.Add(new RepairmenAndOperationsTabPage() { Dock = DockStyle.Fill });
+            tabPage7.Controls.Add(new RepairsTabPage() { Dock = DockStyle.Fill });
 
             Icon = Resources.inventarisation;
         }

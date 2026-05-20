@@ -15,11 +15,15 @@ namespace Hardware.Forms
             this.entityType = entityType;
 
             if (this.entityType == typeof(Building))
-                base.Text = "Добавление здания";
+                Text = "Добавление здания";
             else if (this.entityType == typeof(DeviceType))
-                base.Text = "Добавление типа техники";
+                Text = "Добавление типа техники";
             else if (this.entityType == typeof(DeviceProvider))
-                base.Text = "Добавление поставщика техники";
+                Text = "Добавление поставщика техники";
+            else if (this.entityType == typeof(Repairman))
+                Text = "Добавление ремонтника";
+            else if (this.entityType == typeof(RepairOperation))
+                Text = "Добавление операции по ремонту";
         }
 
         private async Task<(bool result, string message)> CreateEntity()

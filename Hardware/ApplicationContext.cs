@@ -18,6 +18,10 @@ namespace Hardware
         public DbSet<History> History { get; set; }
         public DbSet<DeviceProvider> DeviceProviders { get; set; }
 
+        public DbSet<Repairman> Repairmen { get; set; }
+        public DbSet<RepairOperation> RepairOperations { get; set; }
+        public DbSet<CompletedRepairOperation> CompletedRepairOperations { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             ConfigManager configManager = new();
@@ -64,6 +68,24 @@ namespace Hardware
             modelBuilder.Entity<Device>()
                         .HasIndex(d => d.Serial)
                         .IsUnique();
+
+            modelBuilder.Entity<Device>()
+                        .HasMany(d => d.CompletedRepairOperations)
+                        .WithOne(c => c.Device)
+                        .HasForeignKey(c => c.DeviceId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Repairman>()
+                        .HasMany(r => r.CompletedRepairOperations)
+                        .WithOne(c => c.Repairman)
+                        .HasForeignKey(c => c.RepairmanId)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<RepairOperation>()
+                        .HasMany(r => r.CompletedRepairOperations)
+                        .WithOne(c => c.RepairOperation)
+                        .HasForeignKey(c => c.RepairOperationId)
+                        .OnDelete(DeleteBehavior.Restrict);
         }
 
         #region Create
@@ -76,6 +98,10 @@ namespace Hardware
                 result = await CreateDeviceType(name);
             else if (entityType == typeof(DeviceProvider))
                 result = await CreateDeviceProvider(name);
+            else if (entityType == typeof(Repairman))
+                result = await CreateRepairman(name);
+            else if (entityType == typeof(RepairOperation))
+                result = await CreateRepairOperation(name);
             return result;
         }
 
@@ -217,6 +243,54 @@ namespace Hardware
             string after = newDevice.ToStringForHistory();
             await History.AddAsync(new History() { Before = before, After = after });
             await Devices.AddAsync(newDevice);
+            await SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> CreateRepairman(string name)
+        {
+            if (await Repairmen.AnyAsync(r => r.Name.ToLower() == name.ToLower()))
+                return false;
+
+            Repairman newRepairman = new() { Name = name };
+            await Repairmen.AddAsync(newRepairman);
+            await SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> CreateRepairOperation(string name)
+        {
+            if (await RepairOperations.AnyAsync(r => r.Name.ToLower() == name.ToLower()))
+                return false;
+
+            RepairOperation newRepairOperation = new() { Name = name };
+            await RepairOperations.AddAsync(newRepairOperation);
+            await SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> CreateCompletedRepairOperation(Device? device, Repairman? repairman, RepairOperation? repairOperation, DateOnly? date, string? notes)
+        {
+            if (device == null || repairman == null || repairOperation == null || date == null)
+                return false;
+
+            device = await Devices.FindAsync(device.Id);
+            repairman = await Repairmen.FindAsync(repairman.Id);
+            repairOperation = await RepairOperations.FindAsync(repairOperation.Id);
+
+            if (device == null || repairman == null || repairOperation == null || date == null)
+                return false;
+
+            CompletedRepairOperation newCompletedRepairOperation = new()
+            {
+                Device = device,
+                RepairOperation = repairOperation,
+                Repairman = repairman,
+                Date = date.Value,
+                Notes = notes
+            };
+
+            await CompletedRepairOperations.AddAsync(newCompletedRepairOperation);
             await SaveChangesAsync();
             return true;
         }

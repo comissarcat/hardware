@@ -58,6 +58,20 @@ namespace Hardware.Forms
                     oldNameTBox.Text = item.Name;
                 }
                 ,
+                Repairman item => () =>
+                {
+                    Text = "Редактирование ремонтника";
+                    idTBox.Text = item.Id.ToString();
+                    oldNameTBox.Text = item.Name;
+                }
+                ,
+                RepairOperation item => () =>
+                {
+                    Text = "Редактирование операции по ремонту";
+                    idTBox.Text = item.Id.ToString();
+                    oldNameTBox.Text = item.Name;
+                }
+                ,
                 _ => () =>
                 {
                     Text = "Ошибка";

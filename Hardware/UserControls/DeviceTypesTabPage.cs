@@ -333,7 +333,7 @@ namespace Hardware.UserControls
 
         private async void UpdateEntity(object entity, object newParent)
         {
-            ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
             await context.UpdateEntity(entity, newParent);
             LoadData();
         }
@@ -349,7 +349,7 @@ namespace Hardware.UserControls
             };
             if (MessageBox.Show($"Вы действительно хотите удалить \"{name}\"? Это действие нельзя отменить", $"Удаление \"{name}\"", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+                using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
                 bool result;
                 try
                 {

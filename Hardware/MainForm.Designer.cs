@@ -60,6 +60,7 @@
             fullListBuildingTBox = new TextBox();
             fullListDGW = new DataGridView();
             fullListNumberOfDevicesLabel = new Label();
+            tabPage6 = new TabPage();
             menuStrip = new MenuStrip();
             refreshToolStripMenuItem = new ToolStripMenuItem();
             downloadToExcelToolStripMenuItem = new ToolStripMenuItem();
@@ -68,6 +69,7 @@
             progressBar1 = new ProgressBar();
             progressLabel = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
+            tabPage7 = new TabPage();
             tabControl.SuspendLayout();
             tabPage4.SuspendLayout();
             historyTLP.SuspendLayout();
@@ -86,6 +88,8 @@
             tabControl.Controls.Add(tabPage3);
             tabControl.Controls.Add(tabPage4);
             tabControl.Controls.Add(tabPage5);
+            tabControl.Controls.Add(tabPage6);
+            tabControl.Controls.Add(tabPage7);
             tabControl.Dock = DockStyle.Fill;
             tabControl.Location = new Point(3, 27);
             tabControl.Name = "tabControl";
@@ -443,6 +447,16 @@
             fullListNumberOfDevicesLabel.TabIndex = 31;
             fullListNumberOfDevicesLabel.Text = "Всего единиц техники: 0";
             // 
+            // tabPage6
+            // 
+            tabPage6.Location = new Point(4, 24);
+            tabPage6.Name = "tabPage6";
+            tabPage6.Padding = new Padding(3);
+            tabPage6.Size = new Size(970, 353);
+            tabPage6.TabIndex = 7;
+            tabPage6.Text = "Ремонтники и операции";
+            tabPage6.UseVisualStyleBackColor = true;
+            // 
             // menuStrip
             // 
             menuStrip.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem, downloadToExcelToolStripMenuItem, downloadQRsToolStripMenuItem, downloadInventoryCardsToolStripMenuItem });
@@ -519,6 +533,16 @@
             tableLayoutPanel1.Size = new Size(984, 461);
             tableLayoutPanel1.TabIndex = 7;
             // 
+            // tabPage7
+            // 
+            tabPage7.Location = new Point(4, 24);
+            tabPage7.Name = "tabPage7";
+            tabPage7.Padding = new Padding(3);
+            tabPage7.Size = new Size(970, 353);
+            tabPage7.TabIndex = 8;
+            tabPage7.Text = "Список ремонтов";
+            tabPage7.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -588,5 +612,7 @@
         private Label progressLabel;
         private TabPage tabPage5;
         private TableLayoutPanel tableLayoutPanel1;
+        private TabPage tabPage6;
+        private TabPage tabPage7;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Hardware.Forms;
 using Hardware.Models;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Hardware.UserControls
@@ -25,10 +26,13 @@ namespace Hardware.UserControls
         private object? selectedEntityRight;
         private ContextMenuStrip contextMenu;
 
-        public DevicesTabPage()
+        private Repairman? repairman;
+
+        public DevicesTabPage(Repairman? repairman)
         {
             InitializeBaseComponents();
             LoadData();
+            this.repairman = repairman;
         }
 
         private void InitializeBaseComponents()
@@ -169,6 +173,12 @@ namespace Hardware.UserControls
                 SwitchMoveButtons();
             };
 
+            treeViewLeft.MouseDown += (sender, e) =>
+            {
+                if (e.Button == MouseButtons.Right)
+                    UpdateContextMenu(treeViewLeft);
+            };
+
             treeViewLeft.NodeMouseClick += (sender, e) =>
             {
                 if (e.Button == MouseButtons.Right)
@@ -178,6 +188,12 @@ namespace Hardware.UserControls
                     UpdateContextMenu(treeViewLeft, e.Node, e.Node.Tag);
                     SwitchMoveButtons();
                 }
+            };
+
+            treeViewRight.MouseDown += (sender, e) =>
+            {
+                if (e.Button == MouseButtons.Right)
+                    UpdateContextMenu(treeViewRight);
             };
 
             treeViewRight.NodeMouseClick += (sender, e) =>
@@ -227,6 +243,7 @@ namespace Hardware.UserControls
             ToolStripMenuItem menuUpdate = new("Изменить");
             ToolStripMenuItem menuDelete = new("Удалить");
             ToolStripMenuItem menuUpdateDeviceNotes = new("Изменить примечание");
+            ToolStripMenuItem menuRepairDevice = new("Сделать запись о ремонте");
 
             menuRead.Click += (sender, e) =>
             {
@@ -267,6 +284,7 @@ namespace Hardware.UserControls
                 menuUpdate.Text = "Изменить бортовые номера устройства";
                 menuUpdate.Click += (sender, e) => { UpdateDevice(device); };
                 menuUpdateDeviceNotes.Click += (sender, e) => { UpdateDeviceNotes(device); };
+                menuRepairDevice.Click += (sender, e) => { RepairDevice(device); };
                 menuDelete.Text = "Удалить устройство";
                 menuDelete.Click += (sender, e) => { DeleteEntity(device); };
             }
@@ -286,8 +304,43 @@ namespace Hardware.UserControls
             contextMenu.Items.Add(menuCreate);
             contextMenu.Items.Add(menuUpdate);
             if (selectedEntity is Device)
+            {
                 contextMenu.Items.Add(menuUpdateDeviceNotes);
+                if (repairman != null)
+                    contextMenu.Items.Add(menuRepairDevice);
+            }
             contextMenu.Items.Add(menuDelete);
+        }
+
+        private void UpdateContextMenu(TreeView treeView)
+        {
+            contextMenu.Items.Clear();
+
+            ToolStripMenuItem menuRead = new("Обновить");
+            ToolStripMenuItem menuExpandAll = new("Развернуть всё");
+            menuExpandAll.Click += (sender, e) =>
+            {
+                treeView.BeginUpdate();
+                treeView.ExpandAll();
+                treeView.EndUpdate();
+            };
+            ToolStripMenuItem menuCollapseAll = new("Свернуть всё");
+            menuCollapseAll.Click += (sender, e) => { treeView.CollapseAll(); };
+
+            ToolStripMenuItem menuCreateBuilding = new("Добавить здание");
+            menuCreateBuilding.Click += (sender, e) => { CreateEntity(typeof(Building)); };
+
+            menuRead.Click += (sender, e) =>
+            {
+                LoadData(treeViewLeft, searchTBoxLeft.Text);
+                LoadData(treeViewRight, searchTBoxRight.Text);
+            };
+
+            contextMenu.Items.Add(menuRead);
+            contextMenu.Items.Add(menuExpandAll);
+            contextMenu.Items.Add(menuCollapseAll);
+            contextMenu.Items.Add(new ToolStripSeparator());
+            contextMenu.Items.Add(menuCreateBuilding);
         }
 
         private void SwitchMoveButtons()
@@ -394,6 +447,12 @@ namespace Hardware.UserControls
             UpdateDeviceNotesForm form = new(device);
             if (form.ShowDialog() == DialogResult.OK)
                 LoadData();
+        }
+
+        private async void RepairDevice(Device device)
+        {
+            RecordRepairOperationForm form = new(repairman, device);
+            form.ShowDialog();
         }
 
         private async void DeleteEntity(object entity)

@@ -1,5 +1,4 @@
-﻿using iText.Kernel.Geom;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using QRCoder;
 using System.Drawing.Drawing2D;
 using Path = System.IO.Path;

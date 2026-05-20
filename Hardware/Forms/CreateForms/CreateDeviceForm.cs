@@ -19,7 +19,7 @@ namespace Hardware.Forms
 
         private async void OnLoad()
         {
-            ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
             complectTBox.Text = complect.Name;
             deviceNameCBox.DataSource = await context.ReadDeviceNames();
             deviceProviderCBox.DataSource = await context.DeviceProviders.OrderBy(dp => dp.Name)

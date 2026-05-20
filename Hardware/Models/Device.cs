@@ -17,6 +17,8 @@
 
         public string? Notes { get; set; }
 
+        public ICollection<CompletedRepairOperation> CompletedRepairOperations { get; set; } = [];
+
         public override string ToString()
         {
             return $"{DeviceName.Name} {Serial} {Inventory}";
