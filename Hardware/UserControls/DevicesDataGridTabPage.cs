@@ -21,8 +21,6 @@ namespace Hardware.UserControls
 
         private void OnLoad()
         {
-            LoadData();
-
             timer.Tick += (sender, e) =>
             {
                 timer.Stop();
@@ -46,6 +44,8 @@ namespace Hardware.UserControls
 
             InitDataGrid();
             mainlayout.Controls.Add(dataGridView, 0, 1);
+
+            LoadData();
         }
 
         private void InitDataGrid()

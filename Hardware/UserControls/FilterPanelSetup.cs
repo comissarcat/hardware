@@ -37,5 +37,26 @@ namespace Hardware.UserControls
 
             filters.Add(textBox);
         }
+
+        public static void AddFilter(TableLayoutPanel parent, ref CheckBox checkBox, string labelText, ref DateTimePicker dtp, Action action)
+        {
+            checkBox = new()
+            {
+                Anchor = AnchorStyles.Left,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Text = $"{labelText}:",
+                AutoSize = true
+            };
+            checkBox.CheckedChanged += (sender, e) => action();
+
+            dtp = new() { Format = DateTimePickerFormat.Short };
+            dtp.ValueChanged += (sender, e) => action();
+
+            int rowIndex = parent.RowCount++;
+            parent.RowStyles.Add(new(SizeType.AutoSize));
+
+            parent.Controls.Add(checkBox, 0, rowIndex);
+            parent.Controls.Add(dtp, 1, rowIndex);
+        }
     }
 }

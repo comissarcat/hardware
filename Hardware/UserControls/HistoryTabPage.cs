@@ -15,6 +15,11 @@ namespace Hardware.UserControls
         private readonly Timer timer = new() { Interval = 500 };
         private ContextMenuStrip contextMenu;
 
+        private CheckBox startCheckBox;
+        private DateTimePicker startDTP;
+        private CheckBox endCheckBox;
+        private DateTimePicker endDTP;
+
         public HistoryTabPage()
         {
             Load += (sender, e) => OnLoad();
@@ -22,8 +27,6 @@ namespace Hardware.UserControls
 
         private void OnLoad()
         {
-            LoadData();
-
             timer.Tick += (sender, e) =>
             {
                 timer.Stop();
@@ -47,6 +50,8 @@ namespace Hardware.UserControls
 
             InitDataGrid();
             mainlayout.Controls.Add(dataGridView, 0, 1);
+
+            LoadData();
         }
 
         private void InitDataGrid()
@@ -130,6 +135,8 @@ namespace Hardware.UserControls
             };
             FilterPanelSetup.AddFilter(filterPanel, "Было", "Before", timer, filters);
             FilterPanelSetup.AddFilter(filterPanel, "Стало", "After", timer, filters);
+            FilterPanelSetup.AddFilter(filterPanel, ref startCheckBox, "Начало периода", ref startDTP, FilterData);
+            FilterPanelSetup.AddFilter(filterPanel, ref endCheckBox, "Конец периода", ref endDTP, FilterData);
 
             return filterPanel;
         }
@@ -162,6 +169,12 @@ namespace Hardware.UserControls
                         break;
                 }
             }
+
+            if (startCheckBox.Checked)
+                filtered = filtered.Where(f => f.ChangedAt >= startDTP.Value);
+            if (endCheckBox.Checked)
+                filtered = filtered.Where(f => f.ChangedAt <= endDTP.Value);
+
             dataGridView.DataSource = new SortableBindingList<History>([.. filtered]);
         }
     }
