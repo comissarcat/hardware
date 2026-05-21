@@ -1,6 +1,5 @@
 ﻿using Hardware.Models;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.WebRequestMethods;
 
 namespace Hardware
 {
@@ -125,7 +124,7 @@ namespace Hardware
             return result;
         }
 
-        public async Task<bool> CreateBuilding(string name)
+        private async Task<bool> CreateBuilding(string name)
         {
             if (await Buildings.AnyAsync(b => b.Name.ToLower() == name.ToLower()))
                 return false;
@@ -136,7 +135,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> CreateCabinet(Building? building, string name)
+        private async Task<bool> CreateCabinet(Building? building, string name)
         {
             if (building == null)
                 return false;
@@ -155,7 +154,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> CreateComplect(Cabinet? cabinet, string name)
+        private async Task<bool> CreateComplect(Cabinet? cabinet, string name)
         {
             if (cabinet == null)
                 return false;
@@ -174,7 +173,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> CreateDeviceType(string name)
+        private async Task<bool> CreateDeviceType(string name)
         {
             if (await DeviceTypes.AnyAsync(b => b.Name.ToLower() == name.ToLower()))
                 return false;
@@ -185,7 +184,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> CreateDeviceName(DeviceType? deviceType, string name)
+        private async Task<bool> CreateDeviceName(DeviceType? deviceType, string name)
         {
             if (deviceType == null)
                 return false;
@@ -204,7 +203,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> CreateDeviceProvider(string name)
+        private async Task<bool> CreateDeviceProvider(string name)
         {
             if (await DeviceProviders.AnyAsync(b => b.Name.ToLower() == name.ToLower()))
                 return false;
@@ -247,7 +246,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> CreateRepairman(string name)
+        private async Task<bool> CreateRepairman(string name)
         {
             if (await Repairmen.AnyAsync(r => r.Name.ToLower() == name.ToLower()))
                 return false;
@@ -258,7 +257,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> CreateRepairOperation(string name)
+        private async Task<bool> CreateRepairOperation(string name)
         {
             if (await RepairOperations.AnyAsync(r => r.Name.ToLower() == name.ToLower()))
                 return false;
@@ -457,7 +456,7 @@ namespace Hardware
             return result;
         }
 
-        public async Task<bool> UpdateBuilding(Building? building, string newName)
+        private async Task<bool> UpdateBuilding(Building? building, string newName)
         {
             if (building == null)
                 return false;
@@ -474,7 +473,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateCabinet(Cabinet? cabinet, string name)
+        private async Task<bool> UpdateCabinet(Cabinet? cabinet, string name)
         {
             if (cabinet == null)
                 return false;
@@ -513,7 +512,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateCabinet(Cabinet? cabinet, Building? building)
+        private async Task<bool> UpdateCabinet(Cabinet? cabinet, Building? building)
         {
             if (cabinet == null || building == null)
                 return false;
@@ -554,7 +553,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateComplect(Complect? complect, string name)
+        private async Task<bool> UpdateComplect(Complect? complect, string name)
         {
             if (complect == null)
                 return false;
@@ -593,7 +592,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateComplect(Complect? complect, Cabinet? cabinet)
+        private async Task<bool> UpdateComplect(Complect? complect, Cabinet? cabinet)
         {
             if (complect == null || cabinet == null)
                 return false;
@@ -635,7 +634,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateDeviceType(DeviceType? deviceType, string newName)
+        private async Task<bool> UpdateDeviceType(DeviceType? deviceType, string newName)
         {
             if (deviceType == null)
                 return false;
@@ -652,7 +651,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateDeviceName(DeviceName? deviceName, string name)
+        private async Task<bool> UpdateDeviceName(DeviceName? deviceName, string name)
         {
             if (deviceName == null)
                 return false;
@@ -670,7 +669,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateDeviceName(DeviceName? deviceName, DeviceType? deviceType)
+        private async Task<bool> UpdateDeviceName(DeviceName? deviceName, DeviceType? deviceType)
         {
             if (deviceName == null || deviceType == null)
                 return false;
@@ -689,7 +688,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateDeviceProvider(DeviceProvider? deviceProvider, string newName)
+        private async Task<bool> UpdateDeviceProvider(DeviceProvider? deviceProvider, string newName)
         {
             if (deviceProvider == null)
                 return false;
@@ -706,7 +705,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateDevice(Device? device, Complect? complect)
+        private async Task<bool> UpdateDevice(Device? device, Complect? complect)
         {
             if (device == null || complect == null)
                 return false;
@@ -788,7 +787,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateDevice(Device? device, DeviceProvider? deviceProvider)
+        private async Task<bool> UpdateDevice(Device? device, DeviceProvider? deviceProvider)
         {
             if (device == null || deviceProvider == null)
                 return false;
@@ -810,7 +809,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> UpdateDevice(Device? device, DeviceName? deviceName)
+        private async Task<bool> UpdateDevice(Device? device, DeviceName? deviceName)
         {
             if (device == null || deviceName == null)
                 return false;
@@ -866,7 +865,7 @@ namespace Hardware
             return result;
         }
 
-        public async Task<bool> DeleteBuilding(Building? building)
+        private async Task<bool> DeleteBuilding(Building? building)
         {
             if (building == null)
                 return false;
@@ -887,7 +886,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> DeleteCabinet(Cabinet? cabinet)
+        private async Task<bool> DeleteCabinet(Cabinet? cabinet)
         {
             if (cabinet == null)
                 return false;
@@ -907,7 +906,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> DeleteComplect(Complect? complect)
+        private async Task<bool> DeleteComplect(Complect? complect)
         {
             if (complect == null)
                 return false;
@@ -926,7 +925,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> DeleteDeviceProvider(DeviceProvider? deviceProvider)
+        private async Task<bool> DeleteDeviceProvider(DeviceProvider? deviceProvider)
         {
             if (deviceProvider == null)
                 return false;
@@ -943,7 +942,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> DeleteDeviceType(DeviceType? deviceType)
+        private async Task<bool> DeleteDeviceType(DeviceType? deviceType)
         {
             if (deviceType == null)
                 return false;
@@ -963,7 +962,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> DeleteDeviceName(DeviceName? deviceName)
+        private async Task<bool> DeleteDeviceName(DeviceName? deviceName)
         {
             if (deviceName == null)
                 return false;
@@ -982,7 +981,7 @@ namespace Hardware
             return true;
         }
 
-        public async Task<bool> DeleteDevice(Device? device)
+        private async Task<bool> DeleteDevice(Device? device)
         {
             if (device == null)
                 return false;
@@ -1001,6 +1000,17 @@ namespace Hardware
             string after = "УДАЛЕНО";
             Devices.Remove(device);
             await History.AddAsync(new History() { Before = before, After = after });
+            await SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteCompletedRepairOperation(int id)
+        {
+            CompletedRepairOperation? operation = await CompletedRepairOperations.FindAsync(id);
+            if (operation == null)
+                return false;
+
+            CompletedRepairOperations.Remove(operation);
             await SaveChangesAsync();
             return true;
         }

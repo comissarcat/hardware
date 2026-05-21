@@ -72,12 +72,7 @@ namespace Hardware
 
             Icon = Resources.inventarisation;
         }
-
-        private void RefreshToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RefreshAll();
-        }
-
+        
         private void SearchTimerHistoryTick(object sender)
         {
             ((Timer)sender).Stop();
@@ -88,13 +83,7 @@ namespace Hardware
         {
             ((Timer)sender).Stop();
             RefreshFullListDGW();
-        }
-
-        private void RefreshAll()
-        {
-            RefreshHistoryDGW();
-            RefreshFullListDGW();
-        }
+        }        
 
         private void SwitchDownloadButtons()
         {

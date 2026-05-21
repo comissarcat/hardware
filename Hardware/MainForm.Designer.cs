@@ -61,15 +61,14 @@
             fullListDGW = new DataGridView();
             fullListNumberOfDevicesLabel = new Label();
             tabPage6 = new TabPage();
+            tabPage7 = new TabPage();
             menuStrip = new MenuStrip();
-            refreshToolStripMenuItem = new ToolStripMenuItem();
             downloadToExcelToolStripMenuItem = new ToolStripMenuItem();
             downloadQRsToolStripMenuItem = new ToolStripMenuItem();
             downloadInventoryCardsToolStripMenuItem = new ToolStripMenuItem();
             progressBar1 = new ProgressBar();
             progressLabel = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
-            tabPage7 = new TabPage();
             tabControl.SuspendLayout();
             tabPage4.SuspendLayout();
             historyTLP.SuspendLayout();
@@ -457,21 +456,24 @@
             tabPage6.Text = "Ремонтники и операции";
             tabPage6.UseVisualStyleBackColor = true;
             // 
+            // tabPage7
+            // 
+            tabPage7.Location = new Point(4, 24);
+            tabPage7.Name = "tabPage7";
+            tabPage7.Padding = new Padding(3);
+            tabPage7.Size = new Size(970, 353);
+            tabPage7.TabIndex = 8;
+            tabPage7.Text = "Список ремонтов";
+            tabPage7.UseVisualStyleBackColor = true;
+            // 
             // menuStrip
             // 
-            menuStrip.Items.AddRange(new ToolStripItem[] { refreshToolStripMenuItem, downloadToExcelToolStripMenuItem, downloadQRsToolStripMenuItem, downloadInventoryCardsToolStripMenuItem });
+            menuStrip.Items.AddRange(new ToolStripItem[] { downloadToExcelToolStripMenuItem, downloadQRsToolStripMenuItem, downloadInventoryCardsToolStripMenuItem });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.Size = new Size(984, 24);
             menuStrip.TabIndex = 1;
             menuStrip.Text = "menuStrip1";
-            // 
-            // refreshToolStripMenuItem
-            // 
-            refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            refreshToolStripMenuItem.Size = new Size(73, 20);
-            refreshToolStripMenuItem.Text = "Обновить";
-            refreshToolStripMenuItem.Click += RefreshToolStripMenuItem_Click;
             // 
             // downloadToExcelToolStripMenuItem
             // 
@@ -533,16 +535,6 @@
             tableLayoutPanel1.Size = new Size(984, 461);
             tableLayoutPanel1.TabIndex = 7;
             // 
-            // tabPage7
-            // 
-            tabPage7.Location = new Point(4, 24);
-            tabPage7.Name = "tabPage7";
-            tabPage7.Padding = new Padding(3);
-            tabPage7.Size = new Size(970, 353);
-            tabPage7.TabIndex = 8;
-            tabPage7.Text = "Список ремонтов";
-            tabPage7.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -577,7 +569,6 @@
         private TabPage tabPage1;
         private TabPage tabPage2;
         private MenuStrip menuStrip;
-        private ToolStripMenuItem refreshToolStripMenuItem;
         private TabPage tabPage3;
         private TableLayoutPanel historyTLP;
         private TextBox historySearchTBox;

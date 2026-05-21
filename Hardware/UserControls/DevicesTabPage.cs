@@ -1,6 +1,5 @@
 ﻿using Hardware.Forms;
 using Hardware.Models;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Hardware.UserControls
@@ -26,7 +25,7 @@ namespace Hardware.UserControls
         private object? selectedEntityRight;
         private ContextMenuStrip contextMenu;
 
-        private Repairman? repairman;
+        private readonly Repairman? repairman;
 
         public DevicesTabPage(Repairman? repairman)
         {
@@ -37,11 +36,16 @@ namespace Hardware.UserControls
 
         private void InitializeBaseComponents()
         {
-            treeImageList = new() { ColorDepth = ColorDepth.Depth32Bit, ImageSize = new(16, 16) };
+            treeImageList = new()
+            {
+                ColorDepth = ColorDepth.Depth32Bit,
+                ImageSize = new(16, 16)
+            };
             treeImageList.Images.Add("building", Resources.building);
             treeImageList.Images.Add("cabinet", Resources.cabinet);
             treeImageList.Images.Add("complect", Resources.complect);
             treeImageList.Images.Add("device", Resources.device);
+            treeImageList.Images.Add("selected", Resources.selected);
 
             TableLayoutPanel mainTLP = new()
             {
@@ -62,10 +66,18 @@ namespace Hardware.UserControls
                 }
             };
 
-            treeViewLeft = new() { Dock = DockStyle.Fill, ImageList = treeImageList };
+            treeViewLeft = new()
+            {
+                Dock = DockStyle.Fill,
+                ImageList = treeImageList
+            };
             mainTLP.Controls.Add(treeViewLeft, 0, 0);
 
-            treeViewRight = new() { Dock = DockStyle.Fill, ImageList = treeImageList };
+            treeViewRight = new()
+            {
+                Dock = DockStyle.Fill,
+                ImageList = treeImageList
+            };
             mainTLP.Controls.Add(treeViewRight, 2, 0);
 
             FlowLayoutPanel buttonsPanel = new()
@@ -75,8 +87,18 @@ namespace Hardware.UserControls
                 FlowDirection = FlowDirection.TopDown
             };
 
-            moveEntityToRightBtn = new() { AutoSize = true, Text = ">>>", Margin = new(3, 3, 3, 3) };
-            moveEntityToLeftBtn = new() { AutoSize = true, Text = "<<<", Margin = new(3, 3, 3, 3) };
+            moveEntityToRightBtn = new()
+            {
+                AutoSize = true,
+                Text = ">>>",
+                Margin = new(3, 3, 3, 3)
+            };
+            moveEntityToLeftBtn = new()
+            {
+                AutoSize = true,
+                Text = "<<<",
+                Margin = new(3, 3, 3, 3)
+            };
 
             buttonsPanel.Controls.AddRange([moveEntityToRightBtn, moveEntityToLeftBtn]);
             mainTLP.Controls.Add(buttonsPanel, 1, 0);
@@ -207,14 +229,9 @@ namespace Hardware.UserControls
                 }
             };
 
-            CreateContextMenu();
+            contextMenu = new();
             treeViewLeft.ContextMenuStrip = contextMenu;
             treeViewRight.ContextMenuStrip = contextMenu;
-        }
-
-        private void CreateContextMenu()
-        {
-            contextMenu = new();
         }
 
         private void UpdateContextMenu(TreeView treeView, TreeNode selectedNode, object selectedEntity)
@@ -230,14 +247,14 @@ namespace Hardware.UserControls
                 treeView.EndUpdate();
             };
             ToolStripMenuItem menuCollapseAll = new("Свернуть всё");
-            menuCollapseAll.Click += (sender, e) => { treeView.CollapseAll(); };
+            menuCollapseAll.Click += (sender, e) => treeView.CollapseAll();
             ToolStripMenuItem menuExpandNode = new("Развернуть ветку");
-            menuExpandNode.Click += (sender, e) => { selectedNode.ExpandAll(); };
+            menuExpandNode.Click += (sender, e) => selectedNode.ExpandAll();
             ToolStripMenuItem menuCollapseNode = new("Свернуть ветку");
-            menuCollapseNode.Click += (sender, e) => { selectedNode.Collapse(); };
+            menuCollapseNode.Click += (sender, e) => selectedNode.Collapse();
 
             ToolStripMenuItem menuCreateBuilding = new("Добавить здание");
-            menuCreateBuilding.Click += (sender, e) => { CreateEntity(typeof(Building)); };
+            menuCreateBuilding.Click += (sender, e) => CreateEntity(typeof(Building));
 
             ToolStripMenuItem menuCreate = new("Добавить");
             ToolStripMenuItem menuUpdate = new("Изменить");
@@ -254,39 +271,39 @@ namespace Hardware.UserControls
             if (selectedEntity is Building building)
             {
                 menuCreate.Text = "Добавить кабинет";
-                menuCreate.Click += (sender, e) => { CreateEntity(building); };
+                menuCreate.Click += (sender, e) => CreateEntity(building);
                 menuUpdate.Text = "Изменить здание";
-                menuUpdate.Click += (sender, e) => { UpdateEntity(building); };
+                menuUpdate.Click += (sender, e) => UpdateEntity(building);
                 menuDelete.Text = "Удалить здание";
-                menuDelete.Click += (sender, e) => { DeleteEntity(building); };
+                menuDelete.Click += (sender, e) => DeleteEntity(building);
             }
             else if (selectedEntity is Cabinet cabinet)
             {
                 menuCreate.Text = "Добавить комплект";
-                menuCreate.Click += (sender, e) => { CreateEntity(cabinet); };
+                menuCreate.Click += (sender, e) => CreateEntity(cabinet);
                 menuUpdate.Text = "Изменить кабинет";
-                menuUpdate.Click += (sender, e) => { UpdateEntity(cabinet); };
+                menuUpdate.Click += (sender, e) => UpdateEntity(cabinet);
                 menuDelete.Text = "Удалить кабинет";
-                menuDelete.Click += (sender, e) => { DeleteEntity(cabinet); };
+                menuDelete.Click += (sender, e) => DeleteEntity(cabinet);
             }
             else if (selectedEntity is Complect complect)
             {
                 menuCreate.Text = "Добавить устройство";
-                menuCreate.Click += (sender, e) => { CreateDevice(complect); };
+                menuCreate.Click += (sender, e) => CreateDevice(complect);
                 menuUpdate.Text = "Изменить комплект";
-                menuUpdate.Click += (sender, e) => { UpdateEntity(complect); };
+                menuUpdate.Click += (sender, e) => UpdateEntity(complect);
                 menuDelete.Text = "Удалить комплект";
-                menuDelete.Click += (sender, e) => { DeleteEntity(complect); };
+                menuDelete.Click += (sender, e) => DeleteEntity(complect);
             }
             else if (selectedEntity is Device device)
             {
                 menuCreate.Visible = false;
                 menuUpdate.Text = "Изменить бортовые номера устройства";
-                menuUpdate.Click += (sender, e) => { UpdateDevice(device); };
-                menuUpdateDeviceNotes.Click += (sender, e) => { UpdateDeviceNotes(device); };
-                menuRepairDevice.Click += (sender, e) => { RepairDevice(device); };
+                menuUpdate.Click += (sender, e) => UpdateDevice(device);
+                menuUpdateDeviceNotes.Click += (sender, e) => UpdateDeviceNotes(device);
+                menuRepairDevice.Click += (sender, e) => RepairDevice(device);
                 menuDelete.Text = "Удалить устройство";
-                menuDelete.Click += (sender, e) => { DeleteEntity(device); };
+                menuDelete.Click += (sender, e) => DeleteEntity(device);
             }
 
             contextMenu.Items.Add(menuRead);
@@ -325,10 +342,10 @@ namespace Hardware.UserControls
                 treeView.EndUpdate();
             };
             ToolStripMenuItem menuCollapseAll = new("Свернуть всё");
-            menuCollapseAll.Click += (sender, e) => { treeView.CollapseAll(); };
+            menuCollapseAll.Click += (sender, e) => treeView.CollapseAll();
 
             ToolStripMenuItem menuCreateBuilding = new("Добавить здание");
-            menuCreateBuilding.Click += (sender, e) => { CreateEntity(typeof(Building)); };
+            menuCreateBuilding.Click += (sender, e) => CreateEntity(typeof(Building));
 
             menuRead.Click += (sender, e) =>
             {
@@ -343,61 +360,77 @@ namespace Hardware.UserControls
             contextMenu.Items.Add(menuCreateBuilding);
         }
 
+        private EventHandler? toRightClick;
+        private EventHandler? toLeftClick;
+
         private void SwitchMoveButtons()
         {
+            if (toRightClick != null) moveEntityToRightBtn.Click -= toRightClick;
+            if (toLeftClick != null) moveEntityToLeftBtn.Click -= toLeftClick;
+
             moveEntityToRightBtn.Enabled = false;
             moveEntityToRightBtn.Text = ">>>";
             moveEntityToLeftBtn.Enabled = false;
             moveEntityToLeftBtn.Text = "<<<";
 
-            if (selectedEntityLeft is Cabinet cabinet && selectedEntityRight is Building building)
-                if (cabinet.BuildingId != building.Id)
-                {
-                    moveEntityToRightBtn.Enabled = true;
-                    moveEntityToRightBtn.Text = $"{cabinet.Name} >>> {building.Name}";
-                    moveEntityToRightBtn.Click += (sender, e) => { UpdateEntity(cabinet, building); };
-                }
-            if (selectedEntityLeft is Complect complect && selectedEntityRight is Cabinet cabinet1)
-                if (complect.CabinetId != cabinet1.Id)
-                {
-                    moveEntityToRightBtn.Enabled = true;
-                    moveEntityToRightBtn.Text = $"{complect.Name} >>> {cabinet1.Name}";
-                    moveEntityToRightBtn.Click += (sender, e) => { UpdateEntity(complect, cabinet1); };
-                }
-            if (selectedEntityLeft is Device device && selectedEntityRight is Complect complect1)
-                if (device.ComplectId != complect1.Id)
-                {
-                    moveEntityToRightBtn.Enabled = true;
-                    moveEntityToRightBtn.Text = $"{device.Serial} >>> {complect1.Name}";
-                    moveEntityToRightBtn.Click += (sender, e) => { UpdateEntity(device, complect1); };
-                }
+            toRightClick = null;
+            toLeftClick = null;
 
-            if (selectedEntityRight is Cabinet cabinet2 && selectedEntityLeft is Building building1)
-                if (cabinet2.BuildingId != building1.Id)
-                {
-                    moveEntityToLeftBtn.Enabled = true;
-                    moveEntityToLeftBtn.Text = $"{building1.Name} <<< {cabinet2.Name}";
-                    moveEntityToLeftBtn.Click += (sender, e) => { UpdateEntity(cabinet2, building1); };
-                }
-            if (selectedEntityRight is Complect complect2 && selectedEntityLeft is Cabinet cabinet3)
-                if (complect2.CabinetId != cabinet3.Id)
-                {
-                    moveEntityToLeftBtn.Enabled = true;
-                    moveEntityToLeftBtn.Text = $"{cabinet3.Name} <<< {complect2.Name}";
-                    moveEntityToLeftBtn.Click += (sender, e) => { UpdateEntity(complect2, cabinet3); };
-                }
-            if (selectedEntityRight is Device device1 && selectedEntityLeft is Complect complect3)
-                if (device1.ComplectId != complect3.Id)
-                {
-                    moveEntityToLeftBtn.Enabled = true;
-                    moveEntityToLeftBtn.Text = $"{complect3.Name} <<< {device1.Serial}";
-                    moveEntityToLeftBtn.Click += (sender, e) => { UpdateEntity(device1, complect3); };
-                }
+            switch ((selectedEntityLeft, selectedEntityRight))
+            {
+                case (Cabinet cabinet, Building building) when cabinet.BuildingId != building.Id:
+                    SetButton(moveEntityToRightBtn,
+                              $"{cabinet.Name} >>> {building.Name}",
+                              ref toRightClick,
+                              () => UpdateEntity(cabinet, building));
+                    break;
+                case (Complect complect, Cabinet cabinet) when complect.CabinetId != cabinet.Id:
+                    SetButton(moveEntityToRightBtn,
+                              $"{complect.Name} >>> {cabinet.Name}",
+                              ref toRightClick,
+                              () => UpdateEntity(complect, cabinet));
+                    break;
+                case (Device device, Complect complect) when device.ComplectId != complect.Id:
+                    SetButton(moveEntityToRightBtn,
+                              $"{device.Serial} >>> {complect.Name}",
+                              ref toRightClick,
+                              () => UpdateEntity(device, complect));
+                    break;
+            }
 
-            if (moveEntityToRightBtn.Width > moveEntityToLeftBtn.Width)
-                moveEntityToLeftBtn.Width = moveEntityToRightBtn.Width;
-            else if (moveEntityToLeftBtn.Width > moveEntityToRightBtn.Width)
-                moveEntityToRightBtn.Width = moveEntityToLeftBtn.Width;
+            switch ((selectedEntityRight, selectedEntityLeft))
+            {
+                case (Cabinet cabinet, Building building) when cabinet.BuildingId != building.Id:
+                    SetButton(moveEntityToLeftBtn,
+                              $"{building.Name} <<< {cabinet.Name}",
+                              ref toLeftClick,
+                              () => UpdateEntity(cabinet, building));
+                    break;
+                case (Complect complect, Cabinet cabinet) when complect.CabinetId != cabinet.Id:
+                    SetButton(moveEntityToLeftBtn,
+                              $"{cabinet.Name} <<< {complect.Name}",
+                              ref toLeftClick,
+                              () => UpdateEntity(complect, cabinet));
+                    break;
+                case (Device device, Complect complect) when device.ComplectId != complect.Id:
+                    SetButton(moveEntityToLeftBtn,
+                              $"{complect.Name} <<< {device.Serial}",
+                              ref toLeftClick,
+                              () => UpdateEntity(device, complect));
+                    break;
+            }
+
+            int maxWidth = Math.Max(moveEntityToRightBtn.Width, moveEntityToLeftBtn.Width);
+            moveEntityToRightBtn.Width = maxWidth;
+            moveEntityToLeftBtn.Width = maxWidth;
+        }
+
+        private void SetButton(Button btn, string text, ref EventHandler? handler, Action action)
+        {
+            btn.Enabled = true;
+            btn.Text = text;
+            handler = (s, e) => action();
+            btn.Click += handler;
         }
 
         private void CreateEntity(Type entityType)
@@ -472,19 +505,19 @@ namespace Hardware.UserControls
                 try
                 {
                     result = await context.DeleteEntity(entity);
+                    if (result)
+                        MessageBox.Show($"{name} успешно удалено", "Успех", MessageBoxButtons.OK);
+                    else
+                        MessageBox.Show($"{name} не удалено. Возможно, внутри имеются устройства", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"{ex.Message}\n{ex.InnerException}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
                 }
-                if (result)
+                finally
                 {
-                    MessageBox.Show($"{name} успешно удалено", "Успех", MessageBoxButtons.OK);
                     LoadData();
                 }
-                else
-                    MessageBox.Show($"{name} не удалено. Возможно, внутри имеются устройства", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -511,6 +544,7 @@ namespace Hardware.UserControls
                     Text = building.Name,
                     Tag = building,
                     ImageKey = "building",
+                    SelectedImageKey = "selected",
                     ToolTipText = $"Здание: {building.Name}"
                 };
 
@@ -521,6 +555,7 @@ namespace Hardware.UserControls
                         Text = cabinet.Name,
                         Tag = cabinet,
                         ImageKey = "cabinet",
+                        SelectedImageKey = "selected",
                         ToolTipText = $"Кабинет: {cabinet.Name}"
                     };
 
@@ -531,6 +566,7 @@ namespace Hardware.UserControls
                             Text = complect.Name,
                             Tag = complect,
                             ImageKey = "complect",
+                            SelectedImageKey = "selected",
                             ToolTipText = $"Комплект: {complect.Name}"
                         };
 
@@ -541,6 +577,7 @@ namespace Hardware.UserControls
                                 Text = $"{device.DeviceName.Name} {device.Serial} {device.Inventory}",
                                 Tag = device,
                                 ImageKey = "device",
+                                SelectedImageKey = "selected",
                                 ToolTipText = $"Устройство: {device.DeviceName.Name} {device.Serial} {device.Inventory}"
                             };
                             complectNode.Nodes.Add(deviceNode);

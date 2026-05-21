@@ -1,15 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using static iText.IO.Util.IntHashtable;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Hardware.UserControls
 {
     public partial class RepairsTabPage : UserControl
     {
-        private List<RepairsDTO> repairs;
         private readonly ConfigManager configManager = new();
-        private DataGridView dataGridView;
+
+        private List<RepairsDTO> repairs;
         private readonly List<TextBox> filters = [];
+
+        private DataGridView dataGridView;
         private readonly Timer timer = new() { Interval = 500 };
+        private ContextMenuStrip contextMenu;
 
         public RepairsTabPage()
         {
@@ -120,6 +124,52 @@ namespace Hardware.UserControls
                 SortMode = DataGridViewColumnSortMode.Automatic,
                 CellTemplate = new DataGridViewTextBoxCell()
             }]);
+
+            CreateContextMenu();
+            dataGridView.ContextMenuStrip = contextMenu;
+        }
+
+        private void CreateContextMenu()
+        {
+            contextMenu = new();
+
+            ToolStripMenuItem menuRead = new("Обновить");
+            menuRead.Click += (sender, e) => LoadData();
+
+            ToolStripMenuItem menuDelete = new("Удалить");
+            menuDelete.Click += (sender, e) => DeleteRow();
+
+            contextMenu.Items.AddRange([menuRead, menuDelete]);
+        }
+
+        private async void DeleteRow()
+        {
+            if (dataGridView.SelectedRows.Count == 0)
+                return;
+
+            DataGridViewRow row = dataGridView.SelectedRows[0];
+            int id = (int)row.Cells[0].Value;
+            if (MessageBox.Show($"Вы действительно хотите удалить эту запись? Это действие нельзя отменить", $"Удаление", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
+                bool result;
+                try
+                {
+                    result = await context.DeleteCompletedRepairOperation(id);
+                    if (result)
+                        MessageBox.Show($"Запись успешно удалена", "Успех", MessageBoxButtons.OK);
+                    else
+                        MessageBox.Show($"Запись не удалена", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message}\n{ex.InnerException}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    LoadData();
+                }
+            }
         }
 
         private FlowLayoutPanel InitFilterPanel()
@@ -209,8 +259,7 @@ namespace Hardware.UserControls
                         break;
                 }
             }
-
-            dataGridView.DataSource = filtered.ToList();
+            dataGridView.DataSource = new SortableBindingList<RepairsDTO>([.. filtered]);
         }
 
         public class RepairsDTO(int id,
