@@ -114,51 +114,24 @@ namespace Hardware.UserControls
             contextMenu.Items.Add(menuRead);
         }
 
-        private FlowLayoutPanel InitFilterPanel()
+        private TableLayoutPanel InitFilterPanel()
         {
-            FlowLayoutPanel filterPanel = new()
+            TableLayoutPanel filterPanel = new()
             {
-                Dock = DockStyle.Top,
-                FlowDirection = FlowDirection.TopDown,
+                Dock = DockStyle.Left,
                 AutoSize = true,
-                Padding = new Padding(5)
+                ColumnCount = 2,
+                ColumnStyles =
+                {
+                    new(SizeType.AutoSize),
+                    new(SizeType.Percent,100)
+                },
+                RowCount = 0
             };
-            AddFilter(filterPanel, "Было", "Before");
-            AddFilter(filterPanel, "Стало", "After");
+            FilterPanelSetup.AddFilter(filterPanel, "Было", "Before", timer, filters);
+            FilterPanelSetup.AddFilter(filterPanel, "Стало", "After", timer, filters);
 
             return filterPanel;
-        }
-
-        private void AddFilter(FlowLayoutPanel parent, string labelText, string tag)
-        {
-            FlowLayoutPanel filterRow = new()
-            {
-                AutoSize = true,
-                FlowDirection = FlowDirection.LeftToRight,
-                Margin = new Padding(3)
-            };
-            parent.Controls.Add(filterRow);
-
-            Label label = new()
-            {
-                Anchor = AnchorStyles.Left,
-                TextAlign = ContentAlignment.MiddleLeft,
-                Text = $"{labelText}:"
-            };
-            filterRow.Controls.Add(label);
-
-            TextBox textBox = new()
-            {
-                Width = 150,
-                Tag = tag
-            };
-            textBox.TextChanged += (sender, e) =>
-            {
-                timer.Stop();
-                timer.Start();
-            };
-            filterRow.Controls.Add(textBox);
-            filters.Add(textBox);
         }
 
         private async void LoadData()

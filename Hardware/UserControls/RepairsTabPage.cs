@@ -7,7 +7,7 @@ namespace Hardware.UserControls
     {
         private readonly ConfigManager configManager = new();
 
-        private List<RepairsDTO> repairs;
+        private List<RepairDTO> repairs;
         private readonly List<TextBox> filters = [];
 
         private DataGridView dataGridView;
@@ -174,68 +174,41 @@ namespace Hardware.UserControls
             }
         }
 
-        private FlowLayoutPanel InitFilterPanel()
+        private TableLayoutPanel InitFilterPanel()
         {
-            FlowLayoutPanel filterPanel = new()
+            TableLayoutPanel filterPanel = new()
             {
-                Dock = DockStyle.Top,
-                FlowDirection = FlowDirection.TopDown,
+                Dock = DockStyle.Left,
                 AutoSize = true,
-                Padding = new Padding(5)
+                ColumnCount = 2,
+                ColumnStyles =
+                {
+                    new(SizeType.AutoSize),
+                    new(SizeType.Percent,100)
+                },
+                RowCount = 0
             };
-            AddFilter(filterPanel, "Название устройства", "DeviceName");
-            AddFilter(filterPanel, "Серийный номер", "Serial");
-            AddFilter(filterPanel, "Инвентарный номер", "Inventory");
-            AddFilter(filterPanel, "Операция", "Operation");
-            AddFilter(filterPanel, "Ремонтник", "Repairman");
+            FilterPanelSetup.AddFilter(filterPanel, "Название устройства", "DeviceName", timer, filters);
+            FilterPanelSetup.AddFilter(filterPanel, "Серийный номер", "Serial", timer, filters);
+            FilterPanelSetup.AddFilter(filterPanel, "Инвентарный номер", "Inventory", timer, filters);
+            FilterPanelSetup.AddFilter(filterPanel, "Операция", "Operation", timer, filters);
+            FilterPanelSetup.AddFilter(filterPanel, "Ремонтник", "Repairman", timer, filters);
 
             return filterPanel;
-        }
-
-        private void AddFilter(FlowLayoutPanel parent, string labelText, string tag)
-        {
-            FlowLayoutPanel filterRow = new()
-            {
-                AutoSize = true,
-                FlowDirection = FlowDirection.LeftToRight,
-                Margin = new Padding(3)
-            };
-            parent.Controls.Add(filterRow);
-
-            Label label = new()
-            {
-                Anchor = AnchorStyles.Left,
-                TextAlign = ContentAlignment.MiddleLeft,
-                Text = $"{labelText}:"
-            };
-            filterRow.Controls.Add(label);
-
-            TextBox textBox = new()
-            {
-                Width = 150,
-                Tag = tag
-            };
-            textBox.TextChanged += (sender, e) =>
-            {
-                timer.Stop();
-                timer.Start();
-            };
-            filterRow.Controls.Add(textBox);
-            filters.Add(textBox);
         }
 
         private async void LoadData()
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-            repairs = await context.CompletedRepairOperations.Include(r => r.Device).Include(r => r.RepairOperation).Include(r => r.Repairman).OrderBy(r => r.Device.Inventory).ThenBy(r => r.Device.Serial).ThenByDescending(r => r.Date).ThenBy(r => r.Repairman.Name).Select(r => new RepairsDTO(r.Id, r.Device.DeviceName.Name, r.Device.Serial, r.Device.Inventory, r.RepairOperation.Name, r.Repairman.Name, r.Date, r.Notes)).AsSplitQuery().AsNoTracking().ToListAsync();
+            repairs = await context.CompletedRepairOperations.Include(r => r.Device).Include(r => r.RepairOperation).Include(r => r.Repairman).OrderBy(r => r.Device.Inventory).ThenBy(r => r.Device.Serial).ThenByDescending(r => r.Date).ThenBy(r => r.Repairman.Name).Select(r => new RepairDTO(r.Id, r.Device.DeviceName.Name, r.Device.Serial, r.Device.Inventory, r.RepairOperation.Name, r.Repairman.Name, r.Date, r.Notes)).AsSplitQuery().AsNoTracking().ToListAsync();
 
             FilterData();
         }
 
         private void FilterData()
         {
-            IEnumerable<RepairsDTO> filtered = repairs;
+            IEnumerable<RepairDTO> filtered = repairs;
 
             foreach (TextBox textBox in filters)
             {
@@ -261,10 +234,10 @@ namespace Hardware.UserControls
                         break;
                 }
             }
-            dataGridView.DataSource = new SortableBindingList<RepairsDTO>([.. filtered]);
+            dataGridView.DataSource = new SortableBindingList<RepairDTO>([.. filtered]);
         }
 
-        public class RepairsDTO(int id,
+        public class RepairDTO(int id,
                                 string deviceName,
                                 string serial,
                                 string? inventory,

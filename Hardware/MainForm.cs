@@ -4,14 +4,11 @@ using Hardware.UserControls;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
-using Timer = System.Windows.Forms.Timer;
 
 namespace Hardware
 {
     public partial class MainForm : Form
     {
-        private Timer searchTimerFullTable = new();
-        private const int searchTimerDelayMS = 500;
         private readonly ConfigManager configManager = new();
         private List<ToolStripMenuItem> downloadButtons = [];
 
@@ -40,14 +37,6 @@ namespace Hardware
 
         private void Init()
         {
-            InitializeFullListDGW();
-
-            searchTimerFullTable = new()
-            {
-                Interval = searchTimerDelayMS
-            };
-            searchTimerFullTable.Tick += (sender, e) => { SearchTimerFullTableTick(searchTimerFullTable); };
-
             ProgressOff();
             downloadButtons =
             [
@@ -58,18 +47,13 @@ namespace Hardware
 
             tabPage1.Controls.Add(new DevicesTabPage(repairman) { Dock = DockStyle.Fill });
             tabPage2.Controls.Add(new DeviceTypesTabPage() { Dock = DockStyle.Fill });
-            tabPage4.Controls.Add(new HistoryTabPage() { Dock = DockStyle.Fill });
             tabPage3.Controls.Add(new DeviceProvidersTabPage() { Dock = DockStyle.Fill });
+            tabPage4.Controls.Add(new HistoryTabPage() { Dock = DockStyle.Fill });
+            tabPage5.Controls.Add(new DevicesDataGridTabPage() { Dock = DockStyle.Fill });
             tabPage6.Controls.Add(new RepairmenAndOperationsTabPage() { Dock = DockStyle.Fill });
             tabPage7.Controls.Add(new RepairsTabPage() { Dock = DockStyle.Fill });
 
             Icon = Resources.inventarisation;
-        }
-
-        private void SearchTimerFullTableTick(object sender)
-        {
-            ((Timer)sender).Stop();
-            RefreshFullListDGW();
         }
 
         private void SwitchDownloadButtons()
@@ -91,97 +75,6 @@ namespace Hardware
             progressBar1.Visible = true;
             progressLabel.Visible = true;
         }
-
-        #region Блок работы с полным списком техники
-        private async void InitializeFullListDGW()
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            fullListDGW.DataSource = await context.Devices.Select(d => new
-            {
-                BuildingName = d.Complect.Cabinet.Building.Name,
-                CabinetName = d.Complect.Cabinet.Name,
-                ComplectName = d.Complect.Name,
-                DeviceTypeName = d.DeviceName.DeviceType.Name,
-                DeviceName = d.DeviceName.Name,
-                DeviceProviderName = d.DeviceProvider.Name,
-                d.Serial,
-                d.Inventory,
-                d.Notes
-            }).OrderBy(d => d.BuildingName)
-            .ThenBy(d => d.CabinetName)
-            .ThenBy(d => d.ComplectName)
-            .ThenBy(d => d.Inventory)
-            .ToListAsync();
-
-            fullListDGW.Columns[0].HeaderText = "Здание";
-            fullListDGW.Columns[1].HeaderText = "Кабинет";
-            fullListDGW.Columns[2].HeaderText = "Комплект";
-            fullListDGW.Columns[3].HeaderText = "Тип";
-            fullListDGW.Columns[4].HeaderText = "Название";
-            fullListDGW.Columns[5].HeaderText = "Получено от";
-            fullListDGW.Columns[6].HeaderText = "Серийный номер";
-            fullListDGW.Columns[7].HeaderText = "Инвентарный номер";
-            fullListDGW.Columns[8].HeaderText = "Примечание";
-
-            fullListNumberOfDevicesLabel.Text = $"Всего единиц техники: {fullListDGW.RowCount}";
-        }
-
-        private async void RefreshFullListDGW()
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            var list = await context.Devices.Select(d => new
-            {
-                BuildingName = d.Complect.Cabinet.Building.Name,
-                CabinetName = d.Complect.Cabinet.Name,
-                ComplectName = d.Complect.Name,
-                DeviceTypeName = d.DeviceName.DeviceType.Name,
-                DeviceName = d.DeviceName.Name,
-                DeviceProviderName = d.DeviceProvider.Name,
-                d.Serial,
-                d.Inventory,
-                d.Notes
-            }).OrderBy(d => d.BuildingName)
-            .ThenBy(d => d.CabinetName)
-            .ThenBy(d => d.ComplectName)
-            .ThenBy(d => d.Inventory)
-            .ToListAsync();
-
-            if (fullListBuildingTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.BuildingName.ToLower().Contains(fullListBuildingTBox.Text.ToLower()))];
-            if (fullListCabinetTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.CabinetName.ToLower().Contains(fullListCabinetTBox.Text.ToLower()))];
-            if (fullListComplectTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.ComplectName.ToLower().Contains(fullListComplectTBox.Text.ToLower()))];
-            if (fullListDeviceTypeTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.DeviceTypeName.ToLower().Contains(fullListDeviceTypeTBox.Text.ToLower()))];
-            if (fullListDeviceNameTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.DeviceName.ToLower().Contains(fullListDeviceNameTBox.Text.ToLower()))];
-            if (fullListDeviceProviderTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.DeviceProviderName.ToLower().Contains(fullListDeviceProviderTBox.Text.ToLower()))];
-            if (fullListSerialTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.Serial.ToLower().Contains(fullListSerialTBox.Text.ToLower()))];
-            if (fullListInventoryTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.Inventory.ToLower().Contains(fullListInventoryTBox.Text.ToLower()))];
-            if (fullListNotesTBox.Text.Length != 0)
-                list = [.. list.Where(d => d.Notes.ToLower().Contains(fullListNotesTBox.Text.ToLower()))];
-
-            fullListDGW.DataSource = list;
-            fullListNumberOfDevicesLabel.Text = $"Всего единиц техники: {fullListDGW.RowCount}";
-        }
-
-        private void fullListSearchTBox_TextChanged(object sender, EventArgs e)
-        {
-            searchTimerFullTable.Stop();
-            searchTimerFullTable.Start();
-        }
-
-        private void tabPage4_Enter(object sender, EventArgs e)
-        {
-            RefreshFullListDGW();
-        }
-        #endregion
 
         private async void DownloadToExcelToolStripMenuItem_Click(object sender, EventArgs e)
         {
