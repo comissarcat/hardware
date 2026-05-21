@@ -34,10 +34,6 @@
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            historyTLP = new TableLayoutPanel();
-            historySearchLabel = new Label();
-            historySearchTBox = new TextBox();
-            historyDGW = new DataGridView();
             tabPage5 = new TabPage();
             fullListTLP = new TableLayoutPanel();
             fullListNotesTBox = new TextBox();
@@ -70,9 +66,6 @@
             progressLabel = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             tabControl.SuspendLayout();
-            tabPage4.SuspendLayout();
-            historyTLP.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)historyDGW).BeginInit();
             tabPage5.SuspendLayout();
             fullListTLP.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)fullListDGW).BeginInit();
@@ -125,11 +118,9 @@
             tabPage3.TabIndex = 4;
             tabPage3.Text = "Поставщики техники";
             tabPage3.UseVisualStyleBackColor = true;
-            tabPage3.Enter += tabPage3_Enter;
             // 
             // tabPage4
             // 
-            tabPage4.Controls.Add(historyTLP);
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
@@ -138,60 +129,6 @@
             tabPage4.Text = "История перемещений";
             tabPage4.UseVisualStyleBackColor = true;
             tabPage4.Enter += tabPage4_Enter;
-            // 
-            // historyTLP
-            // 
-            historyTLP.ColumnCount = 2;
-            historyTLP.ColumnStyles.Add(new ColumnStyle());
-            historyTLP.ColumnStyles.Add(new ColumnStyle());
-            historyTLP.Controls.Add(historySearchLabel, 0, 0);
-            historyTLP.Controls.Add(historySearchTBox, 1, 0);
-            historyTLP.Controls.Add(historyDGW, 0, 1);
-            historyTLP.Dock = DockStyle.Fill;
-            historyTLP.Location = new Point(3, 3);
-            historyTLP.Name = "historyTLP";
-            historyTLP.RowCount = 2;
-            historyTLP.RowStyles.Add(new RowStyle());
-            historyTLP.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            historyTLP.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            historyTLP.Size = new Size(964, 347);
-            historyTLP.TabIndex = 0;
-            // 
-            // historySearchLabel
-            // 
-            historySearchLabel.Anchor = AnchorStyles.None;
-            historySearchLabel.AutoSize = true;
-            historySearchLabel.Location = new Point(3, 7);
-            historySearchLabel.Name = "historySearchLabel";
-            historySearchLabel.Size = new Size(42, 15);
-            historySearchLabel.TabIndex = 14;
-            historySearchLabel.Text = "Поиск";
-            // 
-            // historySearchTBox
-            // 
-            historySearchTBox.Dock = DockStyle.Fill;
-            historySearchTBox.Location = new Point(51, 3);
-            historySearchTBox.Name = "historySearchTBox";
-            historySearchTBox.Size = new Size(1410, 23);
-            historySearchTBox.TabIndex = 15;
-            historySearchTBox.TextChanged += historySearchTBox_TextChanged;
-            // 
-            // historyDGW
-            // 
-            historyDGW.AllowUserToAddRows = false;
-            historyDGW.AllowUserToDeleteRows = false;
-            historyDGW.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            historyDGW.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-            historyDGW.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            historyTLP.SetColumnSpan(historyDGW, 2);
-            historyDGW.Dock = DockStyle.Fill;
-            historyDGW.Location = new Point(3, 32);
-            historyDGW.MultiSelect = false;
-            historyDGW.Name = "historyDGW";
-            historyDGW.ReadOnly = true;
-            historyDGW.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            historyDGW.Size = new Size(1458, 312);
-            historyDGW.TabIndex = 16;
             // 
             // tabPage5
             // 
@@ -548,10 +485,6 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Инвентаризация";
             tabControl.ResumeLayout(false);
-            tabPage4.ResumeLayout(false);
-            historyTLP.ResumeLayout(false);
-            historyTLP.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)historyDGW).EndInit();
             tabPage5.ResumeLayout(false);
             fullListTLP.ResumeLayout(false);
             fullListTLP.PerformLayout();
@@ -570,10 +503,6 @@
         private TabPage tabPage2;
         private MenuStrip menuStrip;
         private TabPage tabPage3;
-        private TableLayoutPanel historyTLP;
-        private TextBox historySearchTBox;
-        private Label historySearchLabel;
-        private DataGridView historyDGW;
         private TabPage tabPage4;
         private TableLayoutPanel fullListTLP;
         private TextBox fullListBuildingTBox;

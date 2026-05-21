@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using static iText.IO.Util.IntHashtable;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Hardware.UserControls
@@ -62,6 +61,9 @@ namespace Hardware.UserControls
                 MultiSelect = true,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             };
+
+            dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
 
             dataGridView.Columns.AddRange([new()
             {

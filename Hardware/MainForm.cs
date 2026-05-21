@@ -10,7 +10,6 @@ namespace Hardware
 {
     public partial class MainForm : Form
     {
-        private Timer searchTimerHistory = new();
         private Timer searchTimerFullTable = new();
         private const int searchTimerDelayMS = 500;
         private readonly ConfigManager configManager = new();
@@ -41,14 +40,7 @@ namespace Hardware
 
         private void Init()
         {
-            InitializeHistoryDGW();
             InitializeFullListDGW();
-
-            searchTimerHistory = new()
-            {
-                Interval = searchTimerDelayMS
-            };
-            searchTimerHistory.Tick += (sender, e) => { SearchTimerHistoryTick(searchTimerHistory); };
 
             searchTimerFullTable = new()
             {
@@ -66,24 +58,19 @@ namespace Hardware
 
             tabPage1.Controls.Add(new DevicesTabPage(repairman) { Dock = DockStyle.Fill });
             tabPage2.Controls.Add(new DeviceTypesTabPage() { Dock = DockStyle.Fill });
+            tabPage4.Controls.Add(new HistoryTabPage() { Dock = DockStyle.Fill });
             tabPage3.Controls.Add(new DeviceProvidersTabPage() { Dock = DockStyle.Fill });
             tabPage6.Controls.Add(new RepairmenAndOperationsTabPage() { Dock = DockStyle.Fill });
             tabPage7.Controls.Add(new RepairsTabPage() { Dock = DockStyle.Fill });
 
             Icon = Resources.inventarisation;
         }
-        
-        private void SearchTimerHistoryTick(object sender)
-        {
-            ((Timer)sender).Stop();
-            RefreshHistoryDGW();
-        }
 
         private void SearchTimerFullTableTick(object sender)
         {
             ((Timer)sender).Stop();
             RefreshFullListDGW();
-        }        
+        }
 
         private void SwitchDownloadButtons()
         {
@@ -104,45 +91,6 @@ namespace Hardware
             progressBar1.Visible = true;
             progressLabel.Visible = true;
         }
-
-        #region Блок работы с историей перемещений
-        private async void InitializeHistoryDGW()
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            historyDGW.DataSource = await context.History.OrderByDescending(h => h.ChangedAt).ToListAsync();
-            historyDGW.Columns[0].Visible = false;
-            historyDGW.Columns[1].HeaderText = "Было";
-            historyDGW.Columns[2].HeaderText = "Стало";
-            historyDGW.Columns[3].HeaderText = "Дата и время изменения";
-        }
-
-        private async void RefreshHistoryDGW()
-        {
-            using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
-
-            if (historySearchTBox.Text.Length == 0)
-                historyDGW.DataSource = await context.History.OrderByDescending(h => h.ChangedAt).ToListAsync();
-            else
-            {
-                string text = historySearchTBox.Text.ToLower();
-                historyDGW.DataSource = await context.History.Where(h => h.Before.ToLower().Contains(text) || h.After.ToLower().Contains(text))
-                    .OrderByDescending(h => h.ChangedAt)
-                    .ToListAsync();
-            }
-        }
-
-        private void historySearchTBox_TextChanged(object sender, EventArgs e)
-        {
-            searchTimerHistory.Stop();
-            searchTimerHistory.Start();
-        }
-
-        private void tabPage3_Enter(object sender, EventArgs e)
-        {
-            RefreshHistoryDGW();
-        }
-        #endregion
 
         #region Блок работы с полным списком техники
         private async void InitializeFullListDGW()
