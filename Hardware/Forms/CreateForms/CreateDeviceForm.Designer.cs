@@ -164,6 +164,7 @@
             // deviceProviderCBox
             // 
             deviceProviderCBox.Dock = DockStyle.Fill;
+            deviceProviderCBox.DropDownStyle = ComboBoxStyle.DropDownList;
             deviceProviderCBox.FormattingEnabled = true;
             deviceProviderCBox.Location = new Point(131, 61);
             deviceProviderCBox.Name = "deviceProviderCBox";
@@ -183,6 +184,7 @@
             // deviceNameCBox
             // 
             deviceNameCBox.Dock = DockStyle.Fill;
+            deviceNameCBox.DropDownStyle = ComboBoxStyle.DropDownList;
             deviceNameCBox.FormattingEnabled = true;
             deviceNameCBox.Location = new Point(131, 32);
             deviceNameCBox.Name = "deviceNameCBox";

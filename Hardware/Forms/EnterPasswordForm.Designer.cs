@@ -177,6 +177,7 @@
             // repairmanCBox
             // 
             repairmanCBox.Dock = DockStyle.Fill;
+            repairmanCBox.DropDownStyle = ComboBoxStyle.DropDownList;
             repairmanCBox.FormattingEnabled = true;
             repairmanCBox.Location = new Point(3, 3);
             repairmanCBox.Name = "repairmanCBox";

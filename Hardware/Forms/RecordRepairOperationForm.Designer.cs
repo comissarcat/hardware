@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
+            notesTBox = new TextBox();
+            label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             tableLayoutPanel2 = new TableLayoutPanel();
@@ -38,10 +40,8 @@
             deviceTBox = new TextBox();
             repairOperationsCBox = new ComboBox();
             label1 = new Label();
-            label4 = new Label();
             label5 = new Label();
             dateTimePicker = new DateTimePicker();
-            notesTBox = new TextBox();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             SuspendLayout();
@@ -74,6 +74,25 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.Size = new Size(484, 186);
             tableLayoutPanel1.TabIndex = 0;
+            // 
+            // notesTBox
+            // 
+            notesTBox.Dock = DockStyle.Fill;
+            notesTBox.Location = new Point(132, 119);
+            notesTBox.Name = "notesTBox";
+            notesTBox.Size = new Size(349, 23);
+            notesTBox.TabIndex = 9;
+            // 
+            // label4
+            // 
+            label4.Anchor = AnchorStyles.Left;
+            label4.AutoSize = true;
+            label4.Location = new Point(3, 94);
+            label4.Name = "label4";
+            label4.Size = new Size(32, 15);
+            label4.TabIndex = 6;
+            label4.Text = "Дата";
+            label4.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label3
             // 
@@ -159,6 +178,7 @@
             // repairOperationsCBox
             // 
             repairOperationsCBox.Dock = DockStyle.Fill;
+            repairOperationsCBox.DropDownStyle = ComboBoxStyle.DropDownList;
             repairOperationsCBox.FormattingEnabled = true;
             repairOperationsCBox.Location = new Point(132, 61);
             repairOperationsCBox.Name = "repairOperationsCBox";
@@ -175,17 +195,6 @@
             label1.TabIndex = 3;
             label1.Text = "Ремонтник";
             label1.TextAlign = ContentAlignment.MiddleLeft;
-            // 
-            // label4
-            // 
-            label4.Anchor = AnchorStyles.Left;
-            label4.AutoSize = true;
-            label4.Location = new Point(3, 94);
-            label4.Name = "label4";
-            label4.Size = new Size(32, 15);
-            label4.TabIndex = 6;
-            label4.Text = "Дата";
-            label4.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label5
             // 
@@ -207,14 +216,6 @@
             dateTimePicker.Size = new Size(349, 23);
             dateTimePicker.TabIndex = 8;
             dateTimePicker.Value = new DateTime(2026, 5, 20, 11, 42, 32, 0);
-            // 
-            // notesTBox
-            // 
-            notesTBox.Dock = DockStyle.Fill;
-            notesTBox.Location = new Point(132, 119);
-            notesTBox.Name = "notesTBox";
-            notesTBox.Size = new Size(349, 23);
-            notesTBox.TabIndex = 9;
             // 
             // RecordRepairOperationForm
             // 
