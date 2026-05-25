@@ -41,8 +41,6 @@
             downloadToExcelToolStripMenuItem = new ToolStripMenuItem();
             downloadQRsToolStripMenuItem = new ToolStripMenuItem();
             downloadInventoryCardsToolStripMenuItem = new ToolStripMenuItem();
-            progressBar1 = new ProgressBar();
-            progressLabel = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
             tabControl.SuspendLayout();
             menuStrip.SuspendLayout();
@@ -62,7 +60,7 @@
             tabControl.Location = new Point(3, 27);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(978, 381);
+            tabControl.Size = new Size(978, 431);
             tabControl.TabIndex = 0;
             // 
             // tabPage1
@@ -70,7 +68,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(970, 353);
+            tabPage1.Size = new Size(970, 403);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Перемещение техники";
             tabPage1.UseVisualStyleBackColor = true;
@@ -165,42 +163,20 @@
             downloadInventoryCardsToolStripMenuItem.Text = "Выгрузить инвентарные карточки";
             downloadInventoryCardsToolStripMenuItem.Click += DownloadInventoryCardsToolStripMenuItem_Click;
             // 
-            // progressBar1
-            // 
-            progressBar1.Dock = DockStyle.Top;
-            progressBar1.Location = new Point(3, 414);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(978, 23);
-            progressBar1.TabIndex = 2;
-            // 
-            // progressLabel
-            // 
-            progressLabel.AutoSize = true;
-            progressLabel.Dock = DockStyle.Top;
-            progressLabel.Location = new Point(3, 443);
-            progressLabel.Margin = new Padding(3);
-            progressLabel.Name = "progressLabel";
-            progressLabel.Size = new Size(978, 15);
-            progressLabel.TabIndex = 3;
-            progressLabel.Text = "label9";
-            progressLabel.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(menuStrip, 0, 0);
             tableLayoutPanel1.Controls.Add(tabControl, 0, 1);
-            tableLayoutPanel1.Controls.Add(progressBar1, 0, 2);
-            tableLayoutPanel1.Controls.Add(progressLabel, 0, 3);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 4;
+            tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle());
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(984, 461);
             tableLayoutPanel1.TabIndex = 7;
             // 
@@ -235,8 +211,6 @@
         private ToolStripMenuItem downloadToExcelToolStripMenuItem;
         private ToolStripMenuItem downloadQRsToolStripMenuItem;
         private ToolStripMenuItem downloadInventoryCardsToolStripMenuItem;
-        private ProgressBar progressBar1;
-        private Label progressLabel;
         private TabPage tabPage5;
         private TableLayoutPanel tableLayoutPanel1;
         private TabPage tabPage6;
