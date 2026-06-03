@@ -422,6 +422,12 @@ namespace Hardware
                 case DeviceProvider item:
                     result = await UpdateDeviceProvider(item, newName);
                     break;
+                case Repairman item:
+                    result = await UpdateRepairman(item, newName);
+                    break;
+                case RepairOperation item:
+                    result = await UpdateRepairOperation(item, newName);
+                    break;
             }
 
             return result;
@@ -830,6 +836,40 @@ namespace Hardware
             await SaveChangesAsync();
             return true;
         }
+
+        private async Task<bool> UpdateRepairman(Repairman? repairman, string newName)
+        {
+            if (repairman == null)
+                return false;
+
+            if (await Repairmen.AnyAsync(b => b.Name.ToLower() == newName.ToLower()))
+                return false;
+
+            repairman = await Repairmen.FindAsync(repairman.Id);
+            if (repairman == null)
+                return false;
+
+            repairman.Name = newName;
+            await SaveChangesAsync();
+            return true;
+        }
+
+        private async Task<bool> UpdateRepairOperation(RepairOperation? repairOperation, string newName)
+        {
+            if (repairOperation == null)
+                return false;
+
+            if (await RepairOperations.AnyAsync(b => b.Name.ToLower() == newName.ToLower()))
+                return false;
+
+            repairOperation = await RepairOperations.FindAsync(repairOperation.Id);
+            if (repairOperation == null)
+                return false;
+
+            repairOperation.Name = newName;
+            await SaveChangesAsync();
+            return true;
+        }
         #endregion
 
         #region Delete
@@ -859,6 +899,12 @@ namespace Hardware
                     break;
                 case Device:
                     result = await DeleteDevice(entity as Device);
+                    break;
+                case Repairman:
+                    result = await DeleteRepairman(entity as Repairman); ;
+                    break;
+                case RepairOperation:
+                    result = await DeleteRepairOperation(entity as RepairOperation);
                     break;
             }
 
@@ -1011,6 +1057,42 @@ namespace Hardware
                 return false;
 
             CompletedRepairOperations.Remove(operation);
+            await SaveChangesAsync();
+            return true;
+        }
+
+        private async Task<bool> DeleteRepairman(Repairman? repairman)
+        {
+            if (repairman == null)
+                return false;
+
+            repairman = await Repairmen.Include(r => r.CompletedRepairOperations)
+                                       .FirstOrDefaultAsync(r => r.Id == repairman.Id);
+            if (repairman == null)
+                return false;
+
+            if (repairman.CompletedRepairOperations.Count != 0)
+                return false;
+
+            Repairmen.Remove(repairman);
+            await SaveChangesAsync();
+            return true;
+        }
+
+        private async Task<bool> DeleteRepairOperation(RepairOperation? repairOperation)
+        {
+            if (repairOperation == null)
+                return false;
+
+            repairOperation = await RepairOperations.Include(r => r.CompletedRepairOperations)
+                                                    .FirstOrDefaultAsync(r => r.Id == repairOperation.Id);
+            if (repairOperation == null)
+                return false;
+
+            if (repairOperation.CompletedRepairOperations.Count != 0)
+                return false;
+
+            RepairOperations.Remove(repairOperation);
             await SaveChangesAsync();
             return true;
         }
