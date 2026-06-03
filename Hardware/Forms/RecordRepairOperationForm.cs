@@ -33,6 +33,7 @@ namespace Hardware.Forms
             dateTimePicker.Value = DateTime.Now;
 
             repairOperationsCBox.DataSource = await context.RepairOperations.OrderBy(r => r.Name).ToListAsync();
+            repairOperationsCBox.SelectedIndex = -1;
             if (repairOperationsCBox.Items.Count == 0)
             {
                 MessageBox.Show("Нет ни одной доступной операции", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -42,15 +43,17 @@ namespace Hardware.Forms
 
         private async Task<(bool result, string message)> Save()
         {
+            if (repairOperationsCBox.SelectedIndex == -1)
+                return (false, "Не выбрана никакая операция");
             ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
             bool result = false;
             try
             {
                 result = await context.CreateCompletedRepairOperation(device,
-                                                         repairman,
-                                                         repairOperationsCBox.SelectedItem as RepairOperation,
-                                                         DateOnly.FromDateTime(dateTimePicker.Value),
-                                                         notesTBox.Text);
+                                                                      repairman,
+                                                                      repairOperationsCBox.SelectedItem as RepairOperation,
+                                                                      DateOnly.FromDateTime(dateTimePicker.Value),
+                                                                      notesTBox.Text);
             }
             catch (Exception ex)
             {
