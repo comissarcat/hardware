@@ -5,6 +5,7 @@ using OfficeOpenXml.Table;
 using QRCoder;
 using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
+using static Hardware.UserControls.RepairsTabPage;
 
 namespace Hardware
 {
@@ -543,5 +544,78 @@ namespace Hardware
 
         [GeneratedRegex(@"[^\p{L}\p{N}\s]")]
         private static partial Regex NonAlphabetNoNumberNoSpace();
+
+        public static async Task DownloadRepairs(IProgress<(int percent, string message)> progress, string path, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, $"Выполненные ремонты {DateTime.Now.ToShortDateString().Replace('.', '-')}.xlsx");
+            if (File.Exists(path))
+                File.Delete(path);
+
+            using ApplicationContext context = new ApplicationContextFactory(new ConfigManager()).CreateDbContext();
+
+            List<RepairDTO> repairs = await context.CompletedRepairOperations.Include(r => r.Device)
+                                                             .Include(r => r.RepairOperation)
+                                                             .Include(r => r.Repairman)
+                                                             .OrderBy(r => r.Device.Inventory)
+                                                             .ThenBy(r => r.Device.Serial)
+                                                             .ThenByDescending(r => r.Date)
+                                                             .ThenBy(r => r.Repairman.Name)
+                                                             .Select(r => new RepairDTO(r.Id, r.Device.DeviceName.Name, r.Device.Serial, r.Device.Inventory, r.RepairOperation.Name, r.Repairman.Name, r.Date, r.Notes))
+                                                             .AsSplitQuery()
+                                                             .AsNoTracking()
+                                                             .ToListAsync(token);
+
+            using ExcelPackage package = new(path);
+            using ExcelWorkbook workbook = package.Workbook;
+            using ExcelWorksheet worksheet = workbook.Worksheets.Add("Техника");
+
+            worksheet.Cells.Style.Font.Name = "Courier New";
+            worksheet.Cells.Style.Font.Size = 12;
+            worksheet.Cells.Style.WrapText = true;
+            worksheet.Cells.Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+
+            worksheet.Cells[1, 1].Value = "Название";
+            worksheet.Cells[1, 2].Value = "С/н";
+            worksheet.Cells[1, 3].Value = "И/н";
+            worksheet.Cells[1, 4].Value = "Операция";
+            worksheet.Cells[1, 5].Value = "ФИО";
+            worksheet.Cells[1, 6].Value = "Дата";
+            worksheet.Cells[1, 7].Value = "Примечание";
+
+            int row = 2;
+            int iterator = 0;
+            int devicesCount = await context.Devices.CountAsync(token);
+
+            foreach (RepairDTO repair in repairs)
+            {
+                token.ThrowIfCancellationRequested();
+
+                worksheet.Cells[row, 1].Value = repair.DeviceName;
+                worksheet.Cells[row, 2].Value = repair.Serial;
+                worksheet.Cells[row, 3].Value = repair.Inventory;
+                worksheet.Cells[row, 4].Value = repair.Operation;
+                worksheet.Cells[row, 5].Value = repair.Repairman;
+                worksheet.Cells[row, 6].Value = repair.Date;
+                worksheet.Cells[row, 7].Value = repair.Notes;
+
+                worksheet.Cells[row, 6].Style.Numberformat.Format = "dd.MM.yyyy";
+
+                double percent = ++iterator / (double)devicesCount * 100;
+                string message = $"Формирование таблицы {iterator} из {devicesCount}";
+                progress.Report(((int)percent, message));
+
+                row++;
+            }
+
+            using ExcelRange range = worksheet.Cells[1, 1, row - 1, 7];
+            ExcelTable table = worksheet.Tables.Add(range, "Ремонты");
+            table.TableStyle = TableStyles.Light16;
+            range.AutoFitColumns();
+            await package.SaveAsync(token);
+        }
     }
 }

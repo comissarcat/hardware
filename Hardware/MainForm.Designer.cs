@@ -39,6 +39,8 @@
             tabPage7 = new TabPage();
             menuStrip = new MenuStrip();
             downloadToExcelToolStripMenuItem = new ToolStripMenuItem();
+            полныйСписокТехникиToolStripMenuItem = new ToolStripMenuItem();
+            списокРемонтовToolStripMenuItem = new ToolStripMenuItem();
             downloadQRsToolStripMenuItem = new ToolStripMenuItem();
             downloadInventoryCardsToolStripMenuItem = new ToolStripMenuItem();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -78,7 +80,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(970, 353);
+            tabPage2.Size = new Size(970, 403);
             tabPage2.TabIndex = 3;
             tabPage2.Text = "Типы и названия техники";
             tabPage2.UseVisualStyleBackColor = true;
@@ -88,7 +90,7 @@
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
-            tabPage3.Size = new Size(970, 353);
+            tabPage3.Size = new Size(970, 403);
             tabPage3.TabIndex = 4;
             tabPage3.Text = "Поставщики техники";
             tabPage3.UseVisualStyleBackColor = true;
@@ -98,7 +100,7 @@
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(970, 353);
+            tabPage4.Size = new Size(970, 403);
             tabPage4.TabIndex = 5;
             tabPage4.Text = "История перемещений";
             tabPage4.UseVisualStyleBackColor = true;
@@ -108,7 +110,7 @@
             tabPage5.Location = new Point(4, 24);
             tabPage5.Name = "tabPage5";
             tabPage5.Padding = new Padding(3);
-            tabPage5.Size = new Size(970, 353);
+            tabPage5.Size = new Size(970, 403);
             tabPage5.TabIndex = 6;
             tabPage5.Text = "Полный список (только чтение)";
             tabPage5.UseVisualStyleBackColor = true;
@@ -118,7 +120,7 @@
             tabPage6.Location = new Point(4, 24);
             tabPage6.Name = "tabPage6";
             tabPage6.Padding = new Padding(3);
-            tabPage6.Size = new Size(970, 353);
+            tabPage6.Size = new Size(970, 403);
             tabPage6.TabIndex = 7;
             tabPage6.Text = "Ремонтники и операции";
             tabPage6.UseVisualStyleBackColor = true;
@@ -128,7 +130,7 @@
             tabPage7.Location = new Point(4, 24);
             tabPage7.Name = "tabPage7";
             tabPage7.Padding = new Padding(3);
-            tabPage7.Size = new Size(970, 353);
+            tabPage7.Size = new Size(970, 403);
             tabPage7.TabIndex = 8;
             tabPage7.Text = "Список ремонтов";
             tabPage7.UseVisualStyleBackColor = true;
@@ -144,24 +146,38 @@
             // 
             // downloadToExcelToolStripMenuItem
             // 
+            downloadToExcelToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { полныйСписокТехникиToolStripMenuItem, списокРемонтовToolStripMenuItem });
             downloadToExcelToolStripMenuItem.Name = "downloadToExcelToolStripMenuItem";
             downloadToExcelToolStripMenuItem.Size = new Size(108, 20);
             downloadToExcelToolStripMenuItem.Text = "Передать в Excel";
-            downloadToExcelToolStripMenuItem.Click += DownloadToExcelToolStripMenuItem_Click;
+            // 
+            // полныйСписокТехникиToolStripMenuItem
+            // 
+            полныйСписокТехникиToolStripMenuItem.Name = "полныйСписокТехникиToolStripMenuItem";
+            полныйСписокТехникиToolStripMenuItem.Size = new Size(208, 22);
+            полныйСписокТехникиToolStripMenuItem.Text = "Полный список техники";
+            полныйСписокТехникиToolStripMenuItem.Click += DownloadFullTable;
+            // 
+            // списокРемонтовToolStripMenuItem
+            // 
+            списокРемонтовToolStripMenuItem.Name = "списокРемонтовToolStripMenuItem";
+            списокРемонтовToolStripMenuItem.Size = new Size(208, 22);
+            списокРемонтовToolStripMenuItem.Text = "Список ремонтов";
+            списокРемонтовToolStripMenuItem.Click += DownloadRepairs;
             // 
             // downloadQRsToolStripMenuItem
             // 
             downloadQRsToolStripMenuItem.Name = "downloadQRsToolStripMenuItem";
             downloadQRsToolStripMenuItem.Size = new Size(128, 20);
             downloadQRsToolStripMenuItem.Text = "Выгрузить QR-коды";
-            downloadQRsToolStripMenuItem.Click += DownloadQRsToolStripMenuItem_Click;
+            downloadQRsToolStripMenuItem.Click += DownloadQRs;
             // 
             // downloadInventoryCardsToolStripMenuItem
             // 
             downloadInventoryCardsToolStripMenuItem.Name = "downloadInventoryCardsToolStripMenuItem";
             downloadInventoryCardsToolStripMenuItem.Size = new Size(206, 20);
             downloadInventoryCardsToolStripMenuItem.Text = "Выгрузить инвентарные карточки";
-            downloadInventoryCardsToolStripMenuItem.Click += DownloadInventoryCardsToolStripMenuItem_Click;
+            downloadInventoryCardsToolStripMenuItem.Click += DownloadInventoryCards;
             // 
             // tableLayoutPanel1
             // 
@@ -215,5 +231,7 @@
         private TableLayoutPanel tableLayoutPanel1;
         private TabPage tabPage6;
         private TabPage tabPage7;
+        private ToolStripMenuItem полныйСписокТехникиToolStripMenuItem;
+        private ToolStripMenuItem списокРемонтовToolStripMenuItem;
     }
 }

@@ -2,7 +2,7 @@
 {
     public partial class DownloadForm : Form
     {
-        public enum ExportType { ALL_DEVICES_TO_EXCEL, QRs, INVENTORY_CARDS }
+        public enum ExportType { ALL_DEVICES, QRs, INVENTORY_CARDS, REPAIRS }
 
         private readonly ProgressBar progressBar;
         private readonly Label progressLabel;
@@ -66,7 +66,7 @@
             {
                 switch (type)
                 {
-                    case ExportType.ALL_DEVICES_TO_EXCEL:
+                    case ExportType.ALL_DEVICES:
                         await ExportManager.DownloadFullTable(progress, path, cancellationTokenSource.Token);
                         break;
                     case ExportType.QRs:
@@ -74,6 +74,9 @@
                         break;
                     case ExportType.INVENTORY_CARDS:
                         await ExportManager.DownloadInventoryCards(progress, path, cancellationTokenSource.Token);
+                        break;
+                    case ExportType.REPAIRS:
+                        await ExportManager.DownloadRepairs(progress, path, cancellationTokenSource.Token);
                         break;
                 }
                 ((IProgress<(int percent, string message)>)progress).Report((100, "Завершено"));

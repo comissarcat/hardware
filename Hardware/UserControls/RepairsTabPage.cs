@@ -208,7 +208,17 @@ namespace Hardware.UserControls
         {
             using ApplicationContext context = new ApplicationContextFactory(configManager).CreateDbContext();
 
-            repairs = await context.CompletedRepairOperations.Include(r => r.Device).Include(r => r.RepairOperation).Include(r => r.Repairman).OrderBy(r => r.Device.Inventory).ThenBy(r => r.Device.Serial).ThenByDescending(r => r.Date).ThenBy(r => r.Repairman.Name).Select(r => new RepairDTO(r.Id, r.Device.DeviceName.Name, r.Device.Serial, r.Device.Inventory, r.RepairOperation.Name, r.Repairman.Name, r.Date, r.Notes)).AsSplitQuery().AsNoTracking().ToListAsync();
+            repairs = await context.CompletedRepairOperations.Include(r => r.Device)
+                                                             .Include(r => r.RepairOperation)
+                                                             .Include(r => r.Repairman)
+                                                             .OrderBy(r => r.Device.Inventory)
+                                                             .ThenBy(r => r.Device.Serial)
+                                                             .ThenByDescending(r => r.Date)
+                                                             .ThenBy(r => r.Repairman.Name)
+                                                             .Select(r => new RepairDTO(r.Id, r.Device.DeviceName.Name, r.Device.Serial, r.Device.Inventory, r.RepairOperation.Name, r.Repairman.Name, r.Date, r.Notes))
+                                                             .AsSplitQuery()
+                                                             .AsNoTracking()
+                                                             .ToListAsync();
 
             FilterData();
         }
@@ -251,13 +261,13 @@ namespace Hardware.UserControls
         }
 
         public class RepairDTO(int id,
-                                string deviceName,
-                                string serial,
-                                string? inventory,
-                                string operation,
-                                string repairman,
-                                DateOnly date,
-                                string? notes)
+                               string deviceName,
+                               string serial,
+                               string? inventory,
+                               string operation,
+                               string repairman,
+                               DateOnly date,
+                               string? notes)
         {
             public int Id { get; set; } = id;
             public string DeviceName { get; set; } = deviceName;

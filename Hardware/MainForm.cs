@@ -42,19 +42,31 @@ namespace Hardware
             Icon = Resources.inventarisation;
         }
 
-        private async void DownloadToExcelToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void DownloadFullTable(object sender, EventArgs e)
         {
             using FolderBrowserDialog dialog = new();
             dialog.Description = "Выберите папку для сохранения";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string path = dialog.SelectedPath;
-                DownloadForm form = new(path, DownloadForm.ExportType.ALL_DEVICES_TO_EXCEL);
+                DownloadForm form = new(path, DownloadForm.ExportType.ALL_DEVICES);
                 form.ShowDialog();
             }
         }
 
-        private async void DownloadQRsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void DownloadRepairs(object sender, EventArgs e)
+        {
+            using FolderBrowserDialog dialog = new();
+            dialog.Description = "Выберите папку для сохранения";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string path = dialog.SelectedPath;
+                DownloadForm form = new(path, DownloadForm.ExportType.REPAIRS);
+                form.ShowDialog();
+            }
+        }
+
+        private async void DownloadQRs(object sender, EventArgs e)
         {
             using FolderBrowserDialog dialog = new();
             dialog.Description = "Выберите папку для сохранения";
@@ -66,7 +78,7 @@ namespace Hardware
             }
         }
 
-        private async void DownloadInventoryCardsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void DownloadInventoryCards(object sender, EventArgs e)
         {
             using FolderBrowserDialog dialog = new();
             dialog.Description = "Выберите папку для сохранения";
