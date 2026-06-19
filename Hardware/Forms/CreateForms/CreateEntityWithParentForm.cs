@@ -20,21 +20,21 @@ namespace Hardware.Forms
                 {
                     Text = "Добавление кабинета";
                     parentTBox.Text = item.Name;
-                    parentTBox.Text = "Здание";
+                    label2.Text = "Здание";
                 }
                 ,
                 Cabinet item => () =>
                 {
                     Text = "Добавление комплекта";
                     parentTBox.Text = item.Name;
-                    parentTBox.Text = "Кабинет";
+                    label2.Text = "Кабинет";
                 }
                 ,
                 DeviceType item => () =>
                 {
                     Text = "Добавление названия техники";
                     parentTBox.Text = item.Name;
-                    parentTBox.Text = "Тип устройства";
+                    label2.Text = "Тип устройства";
                 }
                 ,
                 _ => () =>

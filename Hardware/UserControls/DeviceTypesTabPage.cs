@@ -261,10 +261,10 @@ namespace Hardware.UserControls
             }
             contextMenu.Items.Add(new ToolStripSeparator());
             contextMenu.Items.Add(menuCreateDeviceType);
-            contextMenu.Items.Add(new ToolStripSeparator());
 
             if (selectedEntity is DeviceType || selectedEntity is DeviceName)
             {
+                contextMenu.Items.Add(new ToolStripSeparator());
                 contextMenu.Items.Add(menuCreate);
                 contextMenu.Items.Add(menuUpdate);
                 contextMenu.Items.Add(menuDelete);
