@@ -21,14 +21,6 @@ namespace Hardware
         public DbSet<RepairOperation> RepairOperations { get; set; }
         public DbSet<CompletedRepairOperation> CompletedRepairOperations { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            ConfigManager configManager = new();
-            Config config = configManager.GetConfig();
-            string connectionString = $"server = 192.168.1.18; user = root; password = aN271828; database = hardware";
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Building>()
